@@ -1,0 +1,301 @@
+\documentclass[a4paper,oneside,12pt]{article}
+
+%\usepackage{natbib}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+
+
+% Packages
+\usepackage{amsmath,amsfonts,amssymb,amsopn,amscd,amsthm}
+\usepackage{comment}
+\usepackage{dsfont}
+\usepackage{graphicx,float}
+\usepackage{color}
+\usepackage[colorlinks]{hyperref}
+\usepackage{epigraph}
+\usepackage{todonotes}
+\usepackage[left=2cm,top=2cm,bottom=2cm,right=2cm]{geometry}
+\usepackage{tikz-cd}
+\usepackage{caption}
+\usepackage{subcaption}
+
+\hypersetup{
+  colorlinks,
+  citecolor=blue,
+  linkcolor=red
+}
+
+
+
+\DeclareCaptionFormat{custom}
+{%
+    \textbf{#1#2}\textit{\small #3}
+}
+\captionsetup{format=custom}
+
+%\usepackage{geometry}
+%\usepackage{enumitem}
+%\usepackage[babel]{csquotes}
+%\usepackage{graphicx}
+\usepackage{bbm}
+%\usepackage{tikz}
+%\usepackage{pgfplots}
+%\usepackage{dsfont}
+\usepackage{faktor}
+%\usepackage{amsthm}
+\usepackage{cancel}
+\usepackage{indentfirst}
+%\usepackage{comment}
+\usepackage{stmaryrd}
+%\MakeAutoQuote{«}{»}
+%\geometry{dvips,a4paper,hmargin=2cm,vmargin=2.5cm}
+
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{assumption}[definition]{Assumption}
+\newtheorem*{remark}{Remarque}
+\newtheorem*{ex}{Example}
+
+%\numberwithin{algorithm}{section}
+% \numberwithin{equation}{section}
+% \numberwithin{figure}{section}
+% \numberwithin{table}{section}
+
+\usepackage{pstricks,pstricks-add,pst-node,pst-tree}
+%\pgfplotsset{compat=1.16}
+
+
+\title{TD4 - L2 BCP}
+\author{}
+\date{}
+
+%Ordinals
+\def\N{{\mathbb N}}
+\def\Z{{\mathbb Z}}
+\def\Q{{\mathbb Q}}
+\def\R{{\mathbb R}}
+\def\C{{\mathbb C}}
+\def\H{{\mathbb H}}
+\def\S{{\mathbb S}}
+\def\T{{\mathbb T}}
+\def\K{{\mathbb K}}
+\def\W{\mathbb{W}}
+\def\D{\mathbb{D}}
+\def\V{\mathbb{V}}
+
+%Probability
+\def\P{{\mathbb P}}
+\def\E{{\mathbb E}}
+\def\F{{\mathbb F}}
+\def\X{{\mathbb X}}
+\def\Y{{\mathbb Y}}
+\def\F{{\mathcal F}}
+\def\U{{\mathcal U}}
+\def\Cov{{\mbox Cov}}
+
+%Index
+\def\u{{\textbf{u}}}
+\def\v{{\textbf{v}}}
+
+
+
+
+\begin{document}
+
+
+
+\maketitle
+
+\section*{Exercice 1}
+Notons $\pi_1$ la proportion d'intentions de votes pour Trump et $\pi_2$ la proportion d'intentions de votes Clinton.
+
+Remarquons que la réalisation des proportions empiriques sont les suivantes :
+\begin{itemize}
+    \item $p_1 = \frac{454}{1055} \approx 43.03\%$
+    \item $p_2 = \frac{506}{1055} \approx 47.96\%$
+\end{itemize}
+
+Comme $n = 1055$ est grand ($n\ge 30$), on peut estimer que $p_1$ et $p_2$ sont de bonnes estimations pour $\pi_1$ et $\pi_2$.
+
+Pour donner un intervalle de confiance d'une proportion, on utilise la statistique :
+$$T_1 = \frac{P_1-\pi_1}{\sqrt{\frac{P_1(1-P_1)}{n}}}$$
+puisque si $n>30$, $n\pi_1\ge 5$ et $n(1-\pi_1)\ge 5$, alors $T_1 \sim \mathcal{N}(0,1)$.
+
+Or, d'après la table des valeurs extrêmes de la loi normale centrée réduite, on a (prendre $\alpha = 5\%$) :
+$$\P(|T|>1.96) = 0.05 \Rightarrow \P(|T|<1.96) = 0.95$$
+
+Or :
+\begin{align*}
+    |T|<1.96 &\Rightarrow -1.96 < T < 1.96\\
+    & \Rightarrow -1.96\sqrt{\frac{P_1(1-P_1)}{n}}<P_1-\pi_1<1.96\sqrt{\frac{P_1(1-P_1)}{n}}\\
+    & \Rightarrow P_1 -1.96\sqrt{\frac{P_1(1-P_1)}{n}}<\pi_1<P_1+1.96\sqrt{\frac{P_1(1-P_1)}{n}}
+\end{align*}
+
+d'où $$\P\left( P_1 -1.96\sqrt{\frac{P_1(1-P_1)}{n}}<\pi_1<P_1+1.96\sqrt{\frac{P_1(1-P_1)}{n}}\right) = 0.95$$
+
+En regardant la réalisation de cet intervalle dans notre situation on a que :
+$$\mbox{IC}_{95\%}(\pi_1) = \left[p_1-1.96\sqrt{\frac{p_1(1-p_1)}{n}} ; p_1+1.96\sqrt{\frac{p_1(1-p_1)}{n}}\right]$$
+et en terminant les calculs :
+$$\mbox{IC}_{95\%}(\pi_1) = [40.04\%;46.02\%]$$
+
+Pour conclure notre raisonnement, il reste à vérifier que les hypothèses de départ sont bien cohérentes (ce qui nous permet d'affirmer que nous avions bien le droit de faire ce raisonnement), c'est à dire si $n>30$, $n\pi_1\ge 5$ et $n(1-\pi_1)\ge 5$.
+
+Il n'y a aucun doute sur la première. Pour les deux autres, on va utiliser l'intervalle de confiance que l'on vient juste de calculer :
+\begin{itemize}
+    \item $n\pi_1 > n\times0.4004 = 422.42$ et on a bien $422.42 \ge 5$;
+    \item $n(1-\pi_1) > n \times (1-0.4602) = 569.49$ et on a bien $569.49 \ge 5$
+\end{itemize}
+
+Pour le second intervalle de confiance, on raisonne de la même façon, mais avec :
+$$T_2 = \frac{P_2-\pi_2}{\sqrt{\frac{P_2(1-P_2)}{n}}}$$
+Sous les hypothèses $n>30$, $n\pi_2\ge 5$ et $n(1-\pi_2)\ge 5$, on a que $T_2 \sim \mathcal{N}(0,1)$.
+
+Ainsi, en reproduisant le même raisonnement que précédemment :
+$$\P\left( P_2 -1.96\sqrt{\frac{P_2(1-P_2)}{n}}<\pi_2<P_2+1.96\sqrt{\frac{P_2(1-P_2)}{n}}\right) = 0.95$$
+ce qui donne l'intervalle de confiance suivant sur $\pi_2$ :
+\begin{align*}
+    \mbox{IC}_{95\%}(\pi_2) &= \left[p_2-1.96\sqrt{\frac{p_2(1-p_2)}{n}} ; p_2+1.96\sqrt{\frac{p_2(1-p_2)}{n}}\right]\\
+    &=[44.96\%;50.97\%]
+\end{align*}
+
+On vérifie enfin la cohérence de nos hypothèses :
+\begin{itemize}
+    \item $n\pi_2 > n\times0.4496 = 474.33$ et on a bien $474.33 \ge 5$;
+    \item $n(1-\pi_2) > n \times (1-0.5097) = 517.27$ et on a bien $517.27 \ge 5$
+\end{itemize}
+
+
+
+\section*{Exercice 2}
+
+On note $\pi_0 = 18\%$ la part de français souffrant d'allergie au gluten. Concluons l'étude de l'exercice par un test statistique.\\
+
+\textit{\textbf{Étape 0 : Identifier les phénomènes et les outils en jeu}}\\
+On modélise ici le fait d'être allergique au gluten en ville par une variable aléatoire $X$ (que l'on pourrait se représenter comme suivant une certaine loi de Bernoulli). On note $\pi$ la proportion de $X$ sur l'ensemble de la population (i.e. l'ensemble des citadins) de personnes allergiques au gluten (en d'autres termes, $\pi = \P(X = \mbox{allergique au gluten})$).\\
+    
+Il y a $n = 250>30$ individus (=échantillons) et on peut en déduire la réalisation de la proportion d'allergique au gluten sur cette population par le calcul de la proportion empirique:
+$$p = \frac{52}{250} = 20.8\% $$
+    
+\textit{\textbf{Étape 1 : Identifier le problème}}\\\
+Nous sommes face à un problème de conformité d'une proportion. Nous allons donc chercher à rejeter l'hypothèse nulle :
+$$H_0) \;\pi=\pi_0$$ 
+au travers d'un test statistique, ce qui signifiera que l'allergie est bien liée aux conditions de vie (du moins, on pourra dire que c'est lié au fait de vivre ou non à la ville).\\
+    
+\textit{\textbf{Étape 2 : Identifier le cadre de travail (i.e. la taille de l'échantillon)}}\\
+Nous pouvons considérer que nous travaillons avec une grande taille d'échantillon, puisque $n>30$. De plus, on remarque que $n\pi_0 =45\ge 5$ et $n(1-\pi_0) = 205 \ge 5$.\\
+    
+\textit{\textbf{Étape 3 : Identifier si la différence entre les valeurs en jeu est unilatérale}}\\
+On n'a aucune raison de penser qu'ou bien $\pi\le \pi_0$ ou bien $\pi\ge \pi_0$. C'est pourquoi on va rester dans un cadre bilatéral pour l'hypothèse alternative : $$H_1) \;\pi \neq \pi_0$$
+    
+\textit{\textbf{Étape 4 : Faire le test}}\\
+Supposons $H_0$. Alors sous cette hypothèse et étant en grande taille d'échantillon, on sait que :
+$$ T = \frac{P-\pi_0}{\sqrt{\frac{\pi_0(1-\pi_0)}{n}}} \sim \mathcal{N}(0;1)$$
+à la condition que $n\pi_0\ge 5$ et $n(1-\pi_0)\ge 5$, ce qui est le cas ici.
+
+
+D'après les tables des valeurs extrêmes de la loi normale centrée réduite, 
+$$\P(-z_\alpha<T<z_\alpha) = \P(|T|<z_\alpha) = 1-\alpha$$
+ce qui donne pour une erreur $\alpha = 5\%$ que :
+$$\P(-1,96 < T < 1,96) = 0.95$$
+    
+En d'autres termes, les réalisations de $T$ doivent appartenir à $[-1.96;1.96]$ (avec un risque de se tromper de $\alpha = 5\%$). Calculons la réalisation de $T$ dans notre cas :
+$$ t = \frac{p-\pi_0}{\sqrt{\frac{\pi_0(1-\pi_0)}{n}}} =  \frac{0.208-0.18}{\sqrt{\frac{0.18\times(1-0.18)}{250}}} =1.152$$
+    
+On observe que $t\in [-1.96;1.96]$, ce qui (à $\alpha = 5\%$ d'erreur près) est censé être cohérent... On ne peut donc pas rejeter l'hypothèse $H_0$ avec une erreur de $\alpha = 5\%$. Pour arriver à conclure le test, il fait particulièrement sens de s'intéresser au degré de signification.\\
+    
+    
+    
+\textit{\textbf{Étape 5 : Identifier le degré de signification}}\\
+Pour trouver le degré de signification, on augmente l'erreur jusqu'à temps de pouvoir enfin rejeter $H_0$. On peut remarquer que l'on continue de rien pouvoir dire pour $\alpha = 20\%$, puisque :
+$$|t|< z_{20\%} = 1.282$$
+En revanche, on peut enfin rejeter l'hypothèse $H_0$, avec une erreur $\alpha = 25\%$, puisque :
+$$|t|> z_{25\%} = 1.150$$
+Le degré de signification est donc compris entre 20\% et 25\%. En particulier, en prenant le risque de se tromper de 25\% (c'est à dire une chance sur quatre), on peut conclure que la proportion d'allergique au gluten est réellement sensible aux conditions de vie citadine.\\
+
+
+
+\section*{Exercice 3}
+
+
+\textit{\textbf{Étape 0 : Identifier les phénomènes et les outils en jeu}}\\
+On modélise ici :
+\begin{itemize}
+    \item le fait qu'une personne n'utilisant pas de répulsif se fasse piquer par une variable aléatoire $X_1$, et note $\pi_1$ la proportion de $X_1$ (sur l'ensemble de sa population) de personnes piquées par des moustiques.
+    \item le fait qu'une personne utilisant le répulsif se fasse piquer par une variable aléatoire $X_2$, et note $\pi_2$ la proportion de $X_2$ (sur l'ensemble de sa population) de personnes piquées par des moustiques.
+\end{itemize}
+    
+Pour la population n'utilisant pas le répulsif, il y a $n_1 = 90$ individus (=échantillons) qui sont testés, et on peut en déduire la réalisation de la proportion de personnes piquées empirique pour cette population :
+$$p_1 = \frac{63}{90} = 70\%$$
+    
+Pour la population n'utilisant pas le répulsif, il y a $n_2 = 85$ individus (=échantillons) qui sont testés, et on peut en déduire la réalisation de la proportion de personnes piquées empirique pour cette population:
+$$p_1 = \frac{58}{85}\approx 68.24\%$$
+    
+\textit{\textbf{Étape 1 : Identifier le problème}}\\
+Nous sommes face à un problème d'homogénéité des proportions. Nous allons donc chercher à rejeter l'hypothèse nulle :
+$$H_0) \;\pi_1=\pi_2$$ 
+au travers d'un test statistique, ce qui signifiera que le répulsif a un impact significatif sur le phénomène de piqûre de moustiques\\
+    
+\textit{\textbf{Étape 2 : Identifier le cadre de travail (i.e. la taille de l'échantillon)}}\\
+Nous pouvons considérer que nous travaillons avec une grande taille d'échantillon, puisque $n_1>30$ et $n_2>30$.\\
+
+\textit{\textbf{Étape 3 : Identifier si la différence entre les valeurs en jeu est unilatérale}}\\
+Il n'y a aucune raison pour que le répulsif attire en fait les moustiques... soit il les repousse, soit il ne fait rien. Il n'y a donc aucune raison logique pour que la proportion $\pi_2$ soit plus grande que la proportion $\pi_1$. On va donc se diriger vers une hypothèse alternative unilatérale:
+$$H_1) \;\pi_1>\pi_2$$ 
+    
+\textit{\textbf{Étape 4 : Faire le test}}\\
+Supposons $H_0$. Alors sous cette hypothèse et étant en grande taille d'échantillon, on sait que :
+$$ T = \frac{P_1 -P_2}{\sqrt{P(1-P)}\sqrt{\frac{1}{n_1}+\frac{1}{n_2}}} \sim \mathcal{N}(0;1)$$
+$$\mbox{où } P = \frac{n_1P_1 + n_2P_2}{n_1+n_2}$$ 
+à la condition que $n_1\pi_1 \ge 5$,  $n_1(1-\pi_1) \ge 5$,  $n_2\pi_2 \ge 5$ et $n_2(1-\pi_2) \ge 5$. N'ayant aucune idée des vrais valeurs de $\pi_1$ et $\pi_2$, on peut à défaut les remplacer par leurs estimations respectives, $p_1$ et $p_2$, pour vérifier ces inégalités :
+\begin{itemize}
+    \item $n_1p_1 = 63 \ge 5$
+    \item $n_1(1-p_1) = 27 \ge 5$
+    \item $n_2p_2 = 58 \ge 5$
+    \item $n_2(1-p_2) = 27 \ge 5$
+\end{itemize}
+
+
+\begin{remark}
+On aurait pu faire une vérification plus poussée de ces hypothèses, en calculant les intervalles de confiances de $\pi_1$ et $\pi_2$.
+\end{remark}
+
+Revenons au test à proprement parlé.
+D'après le cadre unilatéral que nous utilisons, $T$ ne devrait prendre que des valeurs positives, on va donc chercher un intervalle de confiance de la forme $]-\infty;z_\alpha]$. Or cette valeur est donnée par la tables de la fonction de répartition de la loi normale centrée réduite : 
+$$\P(T<z_\alpha) = 1-\alpha$$
+ce qui donne pour une erreur $\alpha = 5\%$ que :
+$$\P(T < 1,645) = 0.95$$
+    
+En d'autres termes, les réalisations de $T$ doivent appartenir à $]-\infty;1.645]$ (avec un risque de se tromper de $\alpha = 5\%$). Calculons la réalisation de $T$ dans notre cas, en commençant par la réalisation de $P$ :
+$$ p = \frac{n_1p_1 + n_2p_2}{n_1+n_2} = \frac{63 + 58}{85+90} \approx 69.14\%$$
+$$ t = \frac{p_1 -p_2}{\sqrt{p(1-p)}\sqrt{\frac{1}{n_1}+\frac{1}{n_2}}} =  \frac{0.7 -0.6824}{\sqrt{0.6914(1-0.6914)}\sqrt{\frac{1}{90}+\frac{1}{85}}} = 0.252$$
+    
+On observe que $t\in ]-\infty;1.645]$, ce qui (à $\alpha = 5\%$ d'erreur près) est censé être cohérent... On ne peut donc pas rejeter l'hypothèse $H_0$ avec une erreur de $\alpha = 5\%$. Pour arriver à conclure le test, il fait particulièrement sens de s'intéresser au degré de signification.\\
+    
+\textit{\textbf{Étape 5 : Identifier le degré de signification}}\\
+Pour trouver le degré de signification, on augmente l'erreur jusqu'à temps de pouvoir enfin rejeter $H_0$. On peut remarquer que l'on continue de rien pouvoir dire pour $\alpha = 39.74\%$ (i.e. $1-\alpha = 60.26\%$), puisque 
+$$t< z_{39.74\%} = 0.26$$
+
+En revanche on peut enfin rejeter l'hypothèse $H_0$, avec une erreur $\alpha = 40.13\%$ (i.e. $1-\alpha = 59.87\%$), puisque cette fois: 
+$$t> z_{40.13\%} = 0.25$$
+Le degré de signification est donc compris entre 39.74\% et 40.13\%. 
+    
+En particulier, en prenant le risque de se tromper de 40.13\%, on peut conclure que le répulsif est en effet intéressant pour repousser les moustiques ...
+
+
+\begin{remark}
+Pour trouver le degré de signification dans le cadre unilatéral (ou de façon générale, à l'aide de la fonction de répartition), une autre façon de faire pourrait être de chercher les valeurs encadrant $t$ (ou $|t|$ si $t<0$) au plus proche, dans la table de la fonction de répartition, puis de revenir à la notion d'erreur usuelle en utilisant que $$F(z_\alpha) = 1-\alpha$$
+
+Dans notre cas :
+$$0.25<t<0.26$$
+Or $F(0.25) = 59.87\%$, donc avec erreur $\alpha = 1-59.87\% = 40.13\%$, on a que $t>z_\alpha$($=0.25$), donc on peut rejeter $H_0$.
+
+\noindent Et $F(0.26) = 60.26\%$, donc avec erreur $\alpha = 1-60.26\% = 39.74\%$, on a que $t<z_\alpha$($=0.26$), donc on ne peut pas rejeter $H_0$.
+\end{remark}
+\end{document}

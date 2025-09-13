@@ -1,0 +1,350 @@
+\documentclass{article}
+\usepackage{amsfonts,amssymb,epsfig}
+%\usepackage[latin1]{inputenc}
+\usepackage[all]{xy}
+\usepackage{amsmath}
+\usepackage{delarray}
+\usepackage{pdfpages}
+\usepackage[frenchb]{babel}
+
+\usepackage[utf8]{inputenc} 
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+%\theoremstyle{definition}
+\newtheorem{defn}[thm]{Definition}
+%\theoremstyle{remark}
+\newtheorem{rem}[thm]{Remark}
+\numberwithin{equation}{section}
+\newtheorem{example}[thm]{Example}
+
+\newcommand{\D}{\displaystyle}
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\K}{{\mathbb K}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+
+\setlength{\textwidth}{17.2cm}
+\setlength{\textheight}{25cm}
+\hoffset=-2.2cm
+\voffset=-2.5cm
+
+\pagestyle{empty}
+
+%-----------------------------------------------------------------------------
+\begin{document}
+\noindent Université Paul Sabatier -- Toulouse III
+\hfill L2 BCP \\
+\noindent Introduction aux Statistiques
+%\hfill Année 2022-2023
+
+\bigskip
+\bigskip
+
+
+\begin{center}
+{\bf \large Feuille de TD 4 : Tests du $\chi^2$}
+\end{center}
+
+\bigskip
+\bigskip
+
+\noindent {\bf Exercice 1 : Test du $\chi^2$ standard} 
+(L'expérience de Mendel) 
+
+La différence de couleur entre deux lignées de pois considérées est contrôlée par un seul gène, ou de manière 
+équivalente, un seul couple d'allèles C et c : la couleur jaune étant dominante (C) et le vert récessif (c).
+
+De la même manière, la forme des pois (rond ou ridé), est portée par un autre gène à deux allèles R (dominant) pour la 
+forme ronde et r (récessif) pour la forme ridée. 
+
+On observe alors les descendances d'hétérozygotes CcRr. Les lois de Mendel prévoient la répartition théorique :
+9/16 de pois jaunes et ronds ([CR]), 3/16 de pois jaunes et ridés ([Cr]), 3/16 de pois verts et ronds ([cR]) et enfin, 
+1/16 de pois verts et ridés ([cr]).
+Dans ses expériences, Mendel a obtenu les résultats suivants :
+
+315 jaunes ronds, 101 jaunes ridés, 108 verts ronds et 32 verts ridés.\\
+\noindent  En utilisant un test du $\chi^2$, on peut vérifier que les lois de Mendel s'appliquent bien ici. 
+
+{\bf 1)} L'hypothèse : on note $\pi_{CR}$ la proportion de pois [CR] dans la {\it population} de pois, de même $\pi_{Cr}$,
+$\pi_{cR}$ et $\pi_{cr}$. L'hypothèse que l'on teste est alors :
+$$
+(H_0)\quad \pi_{CR}=9/16\quad \pi_{Cr}=3/16\quad  \pi_{cR}=3/16\quad  \pi_{cr}=1/16
+$$
+c'est-à-dire, les lois de Mendel s'appliquent. Quelle est l'hypothèse alternative ?
+
+{\bf 2)} On note $\Omega$ l'ensemble des échantillons de $n$ pois et $Q : \Omega \longrightarrow \mathbb{R}$ la variable aléatoire définie par
+$$
+Q(echantillon)=\sum_{{\mbox {les phénotypes}}} \frac{ ({\mbox { effectif observé }} -  {\mbox { effectif théorique }})^2}
+ { {\mbox { effectif théorique }}} \,.
+$$
+
+où, pour le phénotype [CR] (par exemple), {\it l'effectif observé} de l'échantillon est le nombre de pois de l'échantillon qui sont
+ [CR],  et  {\it l'effectif théorique} est le nombre de pois de type [CR] qu'on peut s'attendre \`a trouver théoriquement 
+dans un échantillon de taille $n$.
+
+On peut démontrer que si $n\times \frac{9}{16} >5$, $n\times \frac{3}{16} >5$ et $n\times \frac{1}{16} >5$ alors la
+ variable aléatoire $Q$ suit une loi du $\chi^2$ \`a $4-1=3$ degrés de liberté.
+
+Faites un tableau qui répertorie les effectifs théoriques et observés pour notre échantillon. Reformulez les conditions
+de validité données ci-dessus.
+
+{\bf 3)} Si on prend le risque d'erreur $\alpha=0.05$, quel est le seuil critique $K_{0.05}$ défini par $Pr(Q>K_{0.05})=0.05$ ? Calculez la valeur $q$ de $Q$ correspondant \`a notre échantillon et concluez.\\
+
+\bigskip
+
+
+\noindent {\bf Exercice 2 : Test d'ajustement}
+
+On sait qu'après ensemencement d'une boîte de Pétri avec un ml d'une dilution bactérienne comprenant en moyenne
+$\lambda$ bactéries par ml, le nombre de colonies qui sera observé suivra, si l'ensemble des manipulations a été bien 
+fait, une loi de Poisson de paramètre $\lambda$. On note $X$ la variable aléatoire représentant le nombre de colonies
+dans une boîte de Pétri.
+
+On ensemence 100 boîtes de Pétri et on observe les résultats suivants :\\
+\begin{center}
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+nombre de colonies & 0 & 1 & 2 & au moins 3 \\
+\hline
+nombre correspondant de bo\^{\i}tes & 25 & 35 & 20 & 20\\
+\hline 
+\end{tabular}
+\end{center}
+
+{\bf 1)} On propose d'utiliser un test du $\chi^2$ pour tester l'hypothèse : 
+{\it $X$ suit une loi de Poisson $\mathcal{P}(2)$}. Les étapes seront les suivantes : 
+\begin{itemize}
+\item formulez mathématiquement l'hypothèse 
+\item donnez dans un tableau les effectifs théoriques et observés de l'échantillon
+\item donnez le degré de liberté du $\chi^2$ ainsi que le seuil critique correspondant au risque d'erreur $\alpha=0.05$
+\item concluez
+\end{itemize}
+
+{\bf 2)} De la même manière, testez l'hypothèse : {\it $X$ suit une loi de Poisson  $\mathcal{P}(\lambda)$ où
+$\lambda$ est un paramètre \`a estimer}.\\
+
+\bigskip
+
+\noindent {\bf Exercice 3 : Test du $\chi^2$ d'homogénéité} 
+
+On souhaite étudier la différence de la répartition des groupes sanguins entre deux populations humaines.
+On note $\pi_{A}$, $\pi_{B}$, $\pi_{O}$ et $\pi_{AB}$ les proportions dans la première population et 
+$\pi_{A}'$, $\pi_{B}'$, $\pi_{O}'$ et $\pi_{AB}'$ les proportions dans la seconde population.\\
+L'hypothèse qu'on va tester est
+
+$(H_0)\quad \pi_{A}=\pi_{A}' \quad \pi_{B}=\pi_{B}'\quad \pi_{O}=\pi_{O}'\quad \pi_{AB}=\pi_{AB}'$.
+
+On a déterminé les groupes sanguins des individus de deux échantillons choisis respectivement dans les deux 
+populations. Complétez  le tableau suivant :\\
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+     & A & O & B & AB \\
+\hline
+Effectifs Observés échantillon 1 & 42 & 45 & 10 & 14 \\  
+\hline
+Effectif théoriques échantillon 1 &     &       &      &     \\
+\hline
+Effectifs Observés échantillon 2 &  60 & 57 & 18 & 11 \\ 
+\hline
+Effectif théoriques échantillon 2 &      &      &       &      \\
+\hline
+\end{tabular}
+\end{center}
+\smallskip
+Donnez le degré de liberté du test, le seuil critique et écrivez la formule du paramètre $q$ du test 
+donné par les valeurs du tableau. 
+Dites si cette étude a mis en évidence une différence significative de la répartition des groupes 
+sanguins entre les deux populations.\\
+
+
+\bigskip
+
+
+
+ 
+\noindent {\bf Exercice 4 : Indépendance entre deux variables qualitatives}
+
+On se demande s'il y a un lien entre l'intensité de l'asthme ("Fort", "Moyen" et "Léger") et la présence d'eczéma
+("Présent", "Passé" et "Jamais"). On va utiliser un test du $\chi^2$ pour tester l'indépendance entre les deux 
+variables qualitatives : l'intensité de l'asthme et la présence d'eczéma.
+
+Sur un échantillon de 200 enfants asthmatiques, on a observé les données suivantes :\\
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+                         & Asthme fort & Asthme moyen & Asthme léger & Total \\
+\hline
+Eczema présent &  24  & 6  & 5  &  35 \\
+\hline
+Eczema passé & 30  &  30  &  10  &  70 \\
+\hline
+Jamais d'eczema & 18 & 54 & 23 & 95 \\
+\hline
+Total & 72 & 90 & 38 & 200\\
+\hline
+\end{tabular}
+\end{center}
+
+{\bf 1)} L'hypothèse qu'on va tester est :  {\it l'intensité de l'asthme et la présence d'eczéma sont deux variables indépendantes}.
+Comment peut-on écrire mathématiquement cette hypothèse ?
+
+{\bf 2)} Donnez les effectifs théoriques.
+
+{\bf 3)} Donnez le degré de liberté et le seuil critique correspondant au risque d'erreur $\alpha=0.05$.
+
+{\bf 4)} Concluez.\\
+
+\bigskip
+
+
+\noindent {\bf Exercice 5 : Comparaison de $k$ proportions avec $k\geq 2$} 
+
+Quatre hôpitaux appliquent une méthode différente pour traiter la même maladie. 
+On souhaite savoir si ces quatre traitements ont la même efficacité. On note $\pi_1$, $\pi_2$, $\pi_3$ et $\pi_4$
+les taux de guérison des quatre traitements. L'hypothèse qu'on va tester est 
+$(H_0)\quad \pi_1=\pi_2=\pi_3=\pi_4$.\\  
+
+{\bf 1)} Quelle est l'hypothèse alternative ?
+
+{\bf 2)}  Une étude statistique peut être résumée dans 
+le tableau suivant :\\
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+               & Guérison & Non guérison & Total \\
+\hline
+Hôpital 1 & 123 & 28 & 151 \\
+\hline
+Hôpital 2 & 95 & 19 & 114 \\
+\hline
+Hôpital 3 & 152 & 63 & 215 \\
+\hline
+Hôpital 4 & 132 & 53 & 185 \\
+\hline
+Total & 502 & 163 & 665\\
+\hline
+\end{tabular}
+\end{center}
+Utilisez un test du $\chi^2$ pour tester $(H_0)$. \\
+
+
+
+\iffalse %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\bigskip
+
+\begin{center}
+\bf \large Pour s'entrainer  
+\end{center}
+\bigskip
+
+\noindent {\bf Exercice 6 :}
+
+Dans une population d'une plante diploïde annuelle, on a observé la composition génotypique d'un échantillon d'individus pour un locus autosomal. Cette composition a été déterminée par électrophorèse. Trois allèles F, S et C ont été mis en évidence. On a obtenu les résultats suivants :
+
+
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline 
+FF&FS&FC&SS&SC&CC\\
+\hline 
+18&76&24&13&10&5\\
+\hline
+\end{tabular}
+\end{center}
+{\bf 1)} La population présente-t-elle des proportions conformes à celle de Hardy-Weinberg ? Autrement dit, est-ce-que les proportions observées sont celles attendues si les croisements se sont faits au hasard ?
+
+    La même population a été analysée l'année suivante ; la structure génotypique est telle que :
+    
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline 
+FF&FS&FC&SS&SC&CC\\
+\hline 
+12&60&22&11& 8& 6\\
+\hline 
+\end{tabular}
+\end{center}
+{\bf 2)}
+La distribution génotypique de la population a-t-elle changé depuis l'année précédente ?\\
+
+\bigskip
+
+\noindent {\bf Exercice 7  (examen juin 2018) :} 
+
+
+Dans un élevage de larves de diptères, on a observé une souche de larves plus sombres.
+La mutation responsable de cette couleur pourrait avoir un lien avec le risque d'être contaminé par une bactérie. Chez les larves ne présentant pas la mutation, 85\% ne sont pas contaminées, 13.6\% le sont légèrement, 0.8\% sont moyennement contaminées et 0.6\% le sont fortement.  Sur 500 larves présentant la mutation, 
+430 ne sont pas contaminées,  58 le sont légèrement, 7 le sont moyennement et  5 sont fortement contaminées.
+
+\begin{enumerate}
+\item Pourquoi ne peut-on pas utiliser ces données telles quelles pour étudier l'effet de la mutation sur la sensibilité à la contamination ?
+\item  Regrouper les cas de contamination moyenne et forte et conclure quand à l'effet de la mutation. Préciser le degré de signification si nécessaire. 
+\end{enumerate}
+
+\bigskip
+
+
+\noindent {\bf Exercice 8  (examen juin 2017) :}
+
+L'âge du père peut  avoir une influence sur la santé de l'enfant. Cela a en particulier été étudié pour l'autisme. Une étude a porté sur 10000 enfants.  Les enfants ont été regroupés en quatre groupes en fonction de la gravité de leurs symptomes. Le tableau ci-dessous donne le nombre d'enfants atteints d'autisme pour les pères de plus de 35 ans et ceux de moins de 35  ans.
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Troubles & absents & légers&moyens & sévères\\
+\hline
+Pères jeunes & 550 & 20 & 4 & 3\\
+\hline
+Pères vieux &430 & 12 & 22 & 8\\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{enumerate}
+\item Pourquoi ne peut-on pas utiliser ces données telles quelles ?
+\item Donner le tableau obtenu en regroupant les troubles moyens et sévères. Conclure sur l'impact éventuel de l'âge du père sur les troubles autistiques de l'enfant. Précisez le degré de signification si nécessaire. 
+\end{enumerate}
+
+
+
+%\iffalse %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+\iffalse %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\noindent {\bf Exercice 6 : Indépendances de deux variables quantitatives}
+
+On souhaite étudier la relation éventuelle entre la concentration de gamma glutamyl transférase (GGT) et la 
+consommation d'alcool. 
+On note $X$ la variable aléatoire représentant la consommation $X$ d'alcool en grammes par jour  et $Y$ 
+la variable aléatoire représentant la concentration $Y$ de GGT en $mU/ml$.
+
+La GGT est une enzyme hépatique qui intervient dans le catabolisme des aliments. Une augmentation de la GGT est un 
+signe indirect d'alcoolisme chronique (mais peu spécifique, car la GGT augmente également fortement en cas 
+de diabète et d'hyperthyrodie).
+
+On  note $\rho(X,Y)$ le coefficient de corrélation linaire de $(X,Y)$
+
+Sur un échantillon de $n=620$ individus, on a mesuré la consommation d'alcool ainsi que la concentration en GGT.
+On a ainsi obtenu une série statistique double $(x_1,y_1),\hdots, (x_n,y_n)$. On a alors calcul
+$\overline{x}=43.5$, $\overline{y}=26.71$, $\sigma_x=27.57$, $\sigma_y=25.17$ et $cov(x,y)=229.41$.
+
+{\bf 1)} Donnez une estimation de $\rho(X,Y)$ (on note $R$ l'estimateur de $\rho(X,Y)$).
+
+{\bf 2)} Testez l'hypothèse $(H_0) : \rho(X,Y)=0$ contre $(H_1) : \rho(X,Y)\neq 0$. Les deux variables $X$ et $Y$
+sont-elles indépendantes ?
+
+\fi
+
+\fi
+
+
+\end{document}

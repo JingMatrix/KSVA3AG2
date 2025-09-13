@@ -1,0 +1,144 @@
+\documentclass{article}
+\usepackage{amsfonts,amssymb,epsfig}
+%\usepackage[latin1]{inputenc}
+\usepackage[all]{xy}
+\usepackage{amsmath}
+\usepackage{delarray}
+\usepackage{pdfpages}
+\usepackage[frenchb]{babel}
+
+\usepackage[utf8]{inputenc} 
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+%\theoremstyle{definition}
+\newtheorem{defn}[thm]{Definition}
+%\theoremstyle{remark}
+\newtheorem{rem}[thm]{Remark}
+\numberwithin{equation}{section}
+\newtheorem{example}[thm]{Example}
+
+\newcommand{\D}{\displaystyle}
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\K}{{\mathbb K}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+
+\setlength{\textwidth}{17.2cm}
+\setlength{\textheight}{24cm}
+\hoffset=-2.2cm
+\voffset=-2.5cm
+
+%-----------------------------------------------------------------------------
+\begin{document}
+\noindent Université Paul Sabatier -- Toulouse III
+\hfill L2 BCP\\
+\noindent Introduction aux Statistiques
+%\hfill Année 2022-2023
+
+\bigskip
+\bigskip
+
+
+\begin{center}
+{\bf \large TD 3 : Estimations et tests de comparaison de proportions}\\
+{\bf \large }
+\end{center}
+
+\bigskip
+\bigskip
+
+
+\subsection*{ Exercice 1 : } 
+De nombreux sondages sont réalisés en politique au moment des élections. Par exemple, pour les élections américaines de 2016, le dernier sondage sur les intentions de vote a donné les résultats suivants : sur $1055$ personnes interrogées, $506$ déclarent qu'ils voteront pour Clinton, et 454 pour Trump. \\
+Estimez la proportion d'intentions de votes pour chaque candidat, et donnez un intervalle de confiance à $95 \%$ correspondant.\\
+Au vu des résultats de ce sondage, les journalistes donnent Clinton gagnante. Qu'en pensez-vous ?  \\
+
+\bigskip 
+
+\subsection*{ Exercice 2 : } 
+On sait que $18\%$ des fran\c{c}ais souffrent d'allergie (plus ou moins grave) au gluten. 
+On souhaite savoir si cette allergie peut être liée aux conditions de vie. On se demande, par exemple,
+si les citadins sont différemment exposés. 
+Pour ce faire, on a pris un échantillon de 250 individus vivant dans de grandes agglomérations
+et on a répertorié 52 personnes allergiques au gluten. \\
+Concluez cette étude en utilisant un test statistique. 
+Donnez le degré de signification si nécessaire. \\
+
+\bigskip 
+
+
+\subsection*{ Exercice 3 : }
+On souhaite tester l'efficacité d'un répulsif à moustiques proposé sur le marché. 
+On considère un échantillon de 90 individus pris au hasard et on les expose à des moustiques pendant 30 minutes. On remarque que 63 de ces individus ont été piqués.
+On considère ensuite un échantillon de 85 individus pris au hasard, on les asperge du répulsif anti-moustique, et on les expose à des moustiques pendant 30 minutes. On note alors 58 individus qui ont été piqués.
+
+À l'aide d'un test statistique, dites si cette étude a mis en évidence l'efficacité du répulsif.
+Précisez le degré de signification si nécessaire. \\
+
+\bigskip 
+
+
+\subsection*{ Exercice 4 : Pour s'entraîner}
+Une étude a démontré que des composants de la réglisse stimulent la production de mucus par l’estomac et  renforcent ainsi, par exemple, sa protection naturelle contre les brûlures d'estomac. 
+
+Des herboristes ont mis au point une tisane à base de réglisse pour empêcher l'apparition de problèmes de brûlure d'estomac et souhaitent connaître son efficacité. 
+On note $\pi$ la proportion d'individus qui souffrent de brûlures d'estomac malgré la consommation
+quotidienne de cette tisane.
+Sur un échantillon de 85 individus qui ont consommé quotidiennement la tisane pendant six mois, on a comptabilisé 14 individus souffrant de brûlures d'estomac.
+
+Donner une estimation de $\pi$ ainsi qu'un intervalle de confiance à $95\,\%$.\\
+
+\bigskip 
+
+\subsection*{ Exercice 5 : Pour s'entraîner}
+Un laboratoire a trouvé une nouvelle molécules antipaludéenne pour empêcher les crises et souhaite en 
+comparer l'efficacité avec une ancienne molécule.
+
+On sait qu'avec l'ancienne molécule, $61\,\%$ des patients ne font plus de crise de paludisme. 
+
+On a traité un échantillon de 367 patients avec la nouvelle molécule et on a observé que 235 n’ont 
+plus fait de crise de paludisme par la suite.
+
+Cette étude met-elle en évidence une différence d'efficacité entre les deux molécules ? 
+On précisera le degré de signification si nécessaire. \\
+
+
+\bigskip 
+
+\subsection*{ Exercice 6 : Pour s'entraîner} 
+
+\noindent La caféine peut contracter les vaisseaux sanguins cérébraux  et pourrait donc posséder des propriétés 
+d'anti-migraineux. La question est de connaître la dose de caféine efficace. On note $\pi_1$ le taux
+de guérison d'une migraine lorsqu'on absorbe 1 tasse de café et $\pi_3$ le taux
+de guérison d'une migraine lorsqu'on absorbe 3 tasses de café. L'expérience suivante a été menée : 
+\begin{itemize}
+\item[-] un échantillon de 60 individus qui ont une migraine et on leur fait absorber une tasse de café ; on observe alors 21 cas de guérison dans l'heure qui suit.
+\item[-] et un échantillon de 50 individus qui ont une migraine et on leur fait absorber trois tasses de café ; on observe alors 28 cas de guérison dans l'heure qui suit. 
+\end{itemize} 
+En utilisant un test statistique, dites si cette expérience a mis en évidence une différence d'efficacité 
+entre les deux doses de caféines. \\
+Si oui, quelle dose est la plus efficace ? Donnez le degré de signification, si nécessaire. \\
+
+\bigskip 
+\bigskip 
+\bigskip 
+\noindent {\bf Réponses des trois derniers exercices}.\\
+
+\noindent Exercice 4 : 
+On estime $\pi$ par 0.165. L'intervalle de confiance est $[0.086 ; 0.244]$.\\
+
+\noindent Exercice 5 : On fait un test de conformité sur les proportions. 
+On trouve $t\approx 1.19$. Il n'y a donc pas de différence significative.\\
+
+
+\noindent Exercice 6 : On fait un test d'homogénéité sur les proportions.
+On trouve $|t|\approx 2.21$ donc il y a une différence significative entre les deux taux de guérison.
+La dose de trois cafés est plus efficace. Le degré de signification est environ 0.03.
+
+
+
+\end{document}

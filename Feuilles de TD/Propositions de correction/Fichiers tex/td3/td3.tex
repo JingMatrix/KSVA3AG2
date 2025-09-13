@@ -1,0 +1,511 @@
+\documentclass[a4paper,oneside,12pt]{article}
+
+%\usepackage{natbib}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+
+
+% Packages
+\usepackage{amsmath,amsfonts,amssymb,amsopn,amscd,amsthm}
+\usepackage{comment}
+\usepackage{dsfont}
+\usepackage{graphicx,float}
+\usepackage{color}
+\usepackage[colorlinks]{hyperref}
+\usepackage{epigraph}
+\usepackage{todonotes}
+\usepackage[left=2cm,top=2cm,bottom=2cm,right=2cm]{geometry}
+\usepackage{tikz-cd}
+\usepackage{caption}
+\usepackage{subcaption}
+
+\hypersetup{
+  colorlinks,
+  citecolor=blue,
+  linkcolor=red
+}
+
+
+
+\DeclareCaptionFormat{custom}
+{%
+    \textbf{#1#2}\textit{\small #3}
+}
+\captionsetup{format=custom}
+
+%\usepackage{geometry}
+%\usepackage{enumitem}
+%\usepackage[babel]{csquotes}
+%\usepackage{graphicx}
+\usepackage{bbm}
+%\usepackage{tikz}
+%\usepackage{pgfplots}
+%\usepackage{dsfont}
+\usepackage{faktor}
+%\usepackage{amsthm}
+\usepackage{cancel}
+\usepackage{indentfirst}
+%\usepackage{comment}
+\usepackage{stmaryrd}
+%\MakeAutoQuote{«}{»}
+%\geometry{dvips,a4paper,hmargin=2cm,vmargin=2.5cm}
+
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{assumption}[definition]{Assumption}
+\newtheorem*{remark}{Remarque}
+\newtheorem*{ex}{Example}
+
+%\numberwithin{algorithm}{section}
+% \numberwithin{equation}{section}
+% \numberwithin{figure}{section}
+% \numberwithin{table}{section}
+
+\usepackage{pstricks,pstricks-add,pst-node,pst-tree}
+%\pgfplotsset{compat=1.16}
+
+
+\title{TD3 - L2 BCP}
+\author{}
+\date{}
+
+%Ordinals
+\def\N{{\mathbb N}}
+\def\Z{{\mathbb Z}}
+\def\Q{{\mathbb Q}}
+\def\R{{\mathbb R}}
+\def\C{{\mathbb C}}
+\def\H{{\mathbb H}}
+\def\S{{\mathbb S}}
+\def\T{{\mathbb T}}
+\def\K{{\mathbb K}}
+\def\W{\mathbb{W}}
+\def\D{\mathbb{D}}
+\def\V{\mathbb{V}}
+
+%Probability
+\def\P{{\mathbb P}}
+\def\E{{\mathbb E}}
+\def\F{{\mathbb F}}
+\def\X{{\mathbb X}}
+\def\Y{{\mathbb Y}}
+\def\F{{\mathcal F}}
+\def\U{{\mathcal U}}
+\def\Cov{{\mbox Cov}}
+
+%Index
+\def\u{{\textbf{u}}}
+\def\v{{\textbf{v}}}
+
+
+
+
+\begin{document}
+
+
+
+\maketitle
+
+\section*{Exercice 1}
+
+\begin{enumerate}
+\item Soit $n = 120$. Alors, d'après la loi des grands nombres, la moyenne empirique est une bonne estimation de $\mu$ puisque $n>30$ est grand. D'après les échantillons à dispositions, la réalisation de la moyenne empirique est :
+    $$m_{120} =  \frac{1}{120}\sum_{i=1}^{120}x_i = \frac{36}{120} = 0,3$$
+    
+e    Toujours d'après la loi des grands nombres, la racine carré de l'estimateur de variance empirique (corrigé) est une bonne estimation de $\sigma$. Or la réalisation de cette dernière peut être calculé à partir des échantillons observés :
+    $$s_{120}^2 = \frac{1}{119}\sum_{i=1}^{120}x_i^2 - \frac{120}{119}m_{120}^2 = \frac{12}{119}-\frac{120}{119}0,3^2 \approx 0.01$$
+    d'où $s_{120} = \sqrt{0.01} = 0.1$.
+    
+    Ainsi, une bonne estimation pour $\mu$ est $m_{120}  = 0,3$ est une bonne estimation pour $\sigma$ est $s_{120} = 0.1$
+    
+    
+    \item Puisque $n> 30$ est considéré comme grand, on sait que $$T = \frac{M_n - \mu}{S_{n}/\sqrt{n}} \sim \mathcal{N}\left(1, 0\right)$$
+    (d'après le théorème central limite)
+    Donc d'après la table des valeurs extrêmes de la loi normale centrée réduite :
+    \begin{align*}
+        \P\left(\left|T\right|>1.96\right) = 0.05 \; &\Longleftrightarrow \; \P\left(\left|\frac{M_n - \mu}{S_n/\sqrt{n}}\right|>1.96\right) = 0.05 \\
+        &\Longleftrightarrow \; \P(\left|\frac{M_n - \mu}{S_n/\sqrt{n}}\right|<1.96) = 0.95\\
+        & \Longleftrightarrow \; \P\left(-1.96 <\frac{M_n - \mu}{S_n/\sqrt{n}}<1.96\right) = 0.95\\
+        & \Longleftrightarrow \; \P\left(-1.96\frac{S_n}{\sqrt{n}} <M_n - \mu<1.96\frac{S_n}{\sqrt{n}}\right) = 0.95\\
+        & \Longleftrightarrow \; \P\left(-M_n-1.96\frac{S_n}{\sqrt{n}} <- \mu<-M_n + 1.96\frac{S_n}{\sqrt{n}}\right) = 0.95\\
+        & \Longleftrightarrow \; \P\left(M_n-1.96\frac{S_n}{\sqrt{n}} <\mu<M_n + 1.96\frac{S_n}{\sqrt{n}}\right) = 0.95\\
+    \end{align*}
+    
+    \begin{remark}
+    C'est le même principe lorsque l'on construit un intervalle de confiance pour une variable aléatoire de loi normale, à la différence prés que l'on cherche à encadrer la moyenne et non la variable aléatoire.
+    \end{remark}
+    
+    Il y a donc 95\% de chances pour que :
+    $$\mu\mbox{ soit entre } M_n-1.96\frac{S_{n}}{\sqrt{n}}\mbox{ et } M_n+1.96\frac{S_{n}}{\sqrt{n}}$$
+    Si on regarde la réalisation de ces deux bornes, cela signifie que 
+    $$\mbox{IC}_{95\%}(\mu) = \left[m_{120}-1.96\frac{s_{120}}{\sqrt{120}} ; m_{120}+1.96\frac{s_{120}}{\sqrt{120}}\right]$$
+    et en terminant les calculs : 
+    $$\mbox{IC}_{95\%}(\mu) = \left[0.282 ; 0.318\right]$$
+    
+    En recommençant le même raisonnement, à partir du fait que $\P\left(\left|T\right|>2.326\right) = 0.02$ (toujours d'après la table des valeurs extrêmes de la loi normale centrale réduite), on montre que :
+    $$\P\left(M_n-2.326\frac{S_n}{\sqrt{n}} <\mu<M_n + 2.326\frac{S_n}{\sqrt{n}}\right) = 0.98$$
+    d'où :
+    \begin{align*}
+        \mbox{IC}_{98\%}(\mu) &= \left[m_{120}-2.326\frac{s_{120}}{\sqrt{120}} ; m_{120}+2.326\frac{s_{120}}{\sqrt{120}}\right]\\
+        &=\left[0.279 ; 0.321\right] 
+    \end{align*}
+    
+    \item Soit $n=17$. Ici on a cette fois :
+    $$m_{17}= \frac{1}{17}\sum_{i=1}^{17}x_i = \frac{5.4}{17} = 0,317$$
+    $$s_{17}^2 = \frac{1}{16}\sum_{i=1}^{17}x_i^2 - \frac{17}{16}m_{17}^2 = \frac{2.23}{119}-\frac{120}{119}0,317^2 \approx 0.033$$
+    $$\Rightarrow \; s_{17} = \sqrt{0.033} = 0.18$$
+    
+    Comme $n<30$, si on suppose que $X\sim \mathcal{N}(\mu,\sigma)$, alors on a:
+    $$T = \frac{M_n - \mu}{S_{n}/\sqrt{n}} \sim \mathcal{S}\left(n-1\right) = \mathcal{S}\left(16\right)$$
+    
+    En utilisant la table des valeurs extrêmes de la loi de Student de degré 16, alors, on a $\P\left(\left|T\right|>2.120\right) = 0.05$, d'où :
+    \begin{align*}
+        \mbox{IC}_{95\%}(\mu) &= \left[m_{17}-2.120\frac{s_{17}}{\sqrt{17}} ; m_{17}+2.120\frac{s_{17}}{\sqrt{17}}\right]\\
+        &=\left[0.228 ; 0.406\right] 
+    \end{align*}    
+    
+    De même dans ce cas : $\P\left(\left|T\right|>2.583\right) = 0.02$, d'où :
+    \begin{align*}
+        \mbox{IC}_{98\%}(\mu) &= \left[m_{17}-2.583\frac{s_{17}}{\sqrt{17}} ; m_{17}+2.583\frac{s_{17}}{\sqrt{17}}\right]\\
+        &=\left[0.208 ; 0.426\right] 
+    \end{align*}    
+    
+    \begin{remark}
+    On remarque ici que l'intervalle de confiance est plus grand (à erreur fixée). Cela fait sens, puisqu'un intervalle de confiance représente l'incertitude sur une valeur : il est logique que si on observe moins d'échantillon, on a moins d'informations, donc une incertitude plus grande.
+    \end{remark}
+\end{enumerate}
+
+
+\section*{Exercice 2}
+
+On note $\mu_0$ le taux d'hémoglobine moyen chez l'être humain. La question 2 a été traitée dans la partie de cours "Notions d'erreur".
+
+
+
+\subsection*{Test pour la question 1}
+
+\textit{\textbf{Étape 0 : Identifier les phénomènes et les outils en jeu}}\\
+On modélise ici le taux d'hémoglobine chez les coureurs cyclistes professionnels par une variable aléatoire $X$ de moyenne $\mu$ et d'écart-type $\sigma$.
+    
+Il y a $n = 50>30$ échantillons et on peut en déduire les réalisations de la moyenne empirique et de l'estimateur de l'écart-type:
+$$m_{50} (=\overline{x}) = 15.8$$
+$$s_{50} (=s_{x}) = 2.35$$
+    
+\textit{\textbf{Étape 1 : Identifier le problème}}\\\
+Nous sommes face à un problème de conformité de moyenne. Nous allons donc chercher à rejeter l'hypothèse nulle :
+$$H_0) \;\mu=\mu_0$$ 
+au travers d'un test statistique, ce qui signifiera que la différence entre le taux moyen global et celui des cyclistes professionnels est significative (et pas seulement due au hasard).\\
+    
+\textit{\textbf{Étape 2 : Identifier le cadre de travail (i.e. la taille de l'échantillon)}}\\
+Nous pouvons considérer que nous travaillons avec une grande taille d'échantillon, puisque $n>30$.\\
+    
+\textit{\textbf{Étape 3 : Identifier si la différence entre les valeurs en jeu est unilatérale}}\\
+On n'a aucune raison de penser qu'ou bien $\mu\le \mu_0$ ou bien $\mu\ge \mu_0$. C'est pourquoi on va rester dans un cadre bilatéral pour l'hypothèse alternative : $$H_1) \;\mu \neq \mu_0$$
+    
+\textit{\textbf{Étape 4 : Faire le test}}\\
+Supposons $H_0$. Alors sous cette hypothèse et étant en grande taille d'échantillon, on sait que :
+$$ T = \frac{M_n-\mu_0}{S_n/\sqrt{n}} \sim \mathcal{N}(0;1)$$
+En particulier, d'après les tables des valeurs extrêmes de la loi normale centrée réduite, 
+$$\P(-z_\alpha<T<z_\alpha) = \P(|T|<z_\alpha) = 1-\alpha$$
+ce qui donne pour une erreur $\alpha = 5\%$ que :
+$$\P(-1,96 < T < 1,96) = 0.95$$
+    
+En d'autres termes, les réalisations de $T$ doivent appartenir à $[-1.96;1.96]$ (avec un risque de se tromper de $\alpha = 5\%$). Calculons la réalisation de $T$ dans notre cas :
+$$ t = \frac{m_{50}-\mu_0}{s_{50}/\sqrt{50}} =  \frac{15.8-15}{2.35/\sqrt{50}} = 2.407$$
+    
+On observe que $t\notin [-1.96;1.96]$, ce qui (à $\alpha = 5\%$ d'erreur près) est censé être faux. On peut donc rejeter l'hypothèse $H_0$ et conclure que le taux d'hémoglobine des cyclistes est "anormal" (toujours avec une erreur de $\alpha = 5\%$).\\
+    
+    
+\textit{\textbf{Étape 5 : Identifier le degré de signification}}\\
+Pour trouver le degré de signification, on diminue l'erreur jusqu'à temps de ne plus pouvoir rejeter $H_0$. On peut remarquer que l'on continue de rejeter l'hypothèse avec $\alpha = 2\%$, puisque : 
+$$|t|> z_{2\%} = 2.326$$
+Mais on ne peut plus rien dire pour $\alpha = 1\%$, puisque $$|t|< z_{1\%} = 2.576$$
+Le degré de signification est donc compris entre 1\% et 2\%.
+    
+\begin{remark}
+Si on avait pu trouver $\epsilon$ tel que $|t|= z_{\epsilon}$, alors cet $\epsilon$ aurait été exactement notre degré de signification, puisqu'il représente le cas idéal de transition entre le rejet de l'hypothèse ($|t|> z_{\alpha}$) et le non-rejet de celle-ci ($|t|< z_{\alpha}$), et donc la plus petite erreur possible nous permettant de rejeter $H_0$. Regarder la question 3 pour plus de précision.\\
+\end{remark}
+    
+\subsection*{Test pour la question 3}
+
+\textit{\textbf{Étape 0 : Identifier les phénomènes et les outils en jeu}}\\
+On modélise ici le taux d'hémoglobine chez les consommateurs du produit par une variable aléatoire $Y$ de moyenne $\mu$ et d'écart-type $\sigma$.
+    
+Il y a $n = 40>30$ échantillons et on peut en déduire les réalisations de la moyenne empirique et de l'estimateur de l'écart-type:
+$$m_{40} (=\overline{y}) = 15.6$$
+$$s_{40} (=s_{y}) = 1.5$$
+    
+\textit{\textbf{Étape 1 : Identifier le problème}}\\
+Nous sommes face à un problème de conformité de moyenne. Nous allons donc chercher à rejeter l'hypothèse nulle :
+$$H_0) \;\mu=\mu_0$$ 
+au travers d'un test statistique, ce qui signifiera que la différence entre le taux moyen global et celui des consommateurs du produit est significative (et pas seulement due au hasard), et donc que le produit est réellement efficace.\\
+
+\textit{\textbf{Étape 2 : Identifier le cadre de travail (i.e. la taille de l'échantillon)}}\\
+Nous pouvons considérer que nous travaillons avec une grande taille d'échantillon, puisque $n>30$.\\
+    
+\textit{\textbf{Étape 3 : Identifier si la différence entre les valeurs en jeu est unilatérale}}\\
+Le produit devant normalement augmenté le taux d'hémoglobine, on devrait s'attendre à ce que $\mu \ge \mu_0$, i.e. au mieux le produit fonctionne et augmente significativement le taux d'hémoglobine, au pire il est inutile et n'agit pas sur le taux d'hémoglobine. C'est pourquoi on va s'orienter vers une hypothèse alternative unilatérale, de la forme : $$H_1) \;\mu > \mu_0$$
+    
+\textit{\textbf{Étape 4 : Faire le test}}\\
+Supposons $H_0$. Alors sous cette hypothèse et étant en grande taille d'échantillon, on sait que :
+$$ T = \frac{M_n-\mu_0}{S_n/\sqrt{n}} \sim \mathcal{N}(0;1)$$
+    
+D'après le cadre unilatéral que nous utilisons, $T$ ne devrait prendre que des valeurs positives, on va donc chercher un intervalle de confiance de la forme $]-\infty;z_\alpha]$. Or cette valeur est donnée par la table de la fonction de répartition de la loi normale centrée réduite, 
+$$\P(T<z_\alpha) = 1-\alpha$$
+ce qui donne pour une erreur $\alpha = 5\%$ que :
+$$\P(T < 1,645) = 0.95$$
+    
+En d'autres termes, les réalisations de $T$ doivent appartenir à $]-\infty;1.645]$ (avec un risque de se tromper de $\alpha = 5\%$). Calculons la réalisation de $T$ dans notre cas :
+$$ t = \frac{m_{40}-\mu_0}{s_{40}/\sqrt{40}} =  \frac{15.6-15}{1.5/\sqrt{40}} = 2.530$$
+    
+On observe que $t\notin ]-\infty;1.645]$, ce qui (à $\alpha = 5\%$ d'erreur près) est censé être faux. On peut donc rejeter l'hypothèse $H_0$ et conclure que le produit est réellement efficace (toujours avec une erreur de $\alpha = 5\%$).\\
+    
+    
+\textit{\textbf{Étape 5 : Identifier le degré de signification}}\\
+Pour trouver le degré de signification, on diminue l'erreur jusqu'à temps de ne plus pouvoir rejeter $H_0$. On peut remarquer que l'on continue de rejeter l'hypothèse avec $\alpha = 0.57\%$, puisque dans ce cas, $t$ est à la limite de l'intervalle de confiance:
+$$t = z_{0.57\%} = 2.530$$
+Mais on ne peut plus rien dire pour $\alpha < 0.57\%$, puisque nécessairement, pour de tels $\alpha$, on a : $$t = z_{0.57\%}< z_{\alpha}$$ 
+Le degré de signification est donc 0.57\% (on est dans le cas d'égalité, énoncé dans la précédente remarque de la question 1).\\
+    
+\subsection*{Test pour la question 4}
+
+\textit{\textbf{Étape 0 : Identifier les phénomènes et les outils en jeu}}\\
+On modélise ici le taux d'hémoglobine chez les coureurs cyclistes professionnels par une variable aléatoire $X$ de moyenne $\mu$ et d'écart-type $\sigma$.
+    
+Il y a $n = 20<30$ échantillons et on peut en déduire les réalisations de la moyenne empirique et de l'estimateur de l'écart-type:
+$$m_{20} = 15.8$$
+$$s_{20} = 2.35$$
+    
+\textit{\textbf{Étape 1 : Identifier le problème}}\\
+Nous sommes face à un problème de conformité de moyenne. Nous allons donc chercher à rejeter l'hypothèse nulle :
+$$H_0) \;\mu=\mu_0$$ 
+au travers d'un test statistique, ce qui signifiera que la différence entre le taux moyen global et celui des cyclistes professionnels est significative (et pas seulement due au hasard).\\
+    
+\textit{\textbf{Étape 2 : Identifier le cadre de travail (i.e. la taille de l'échantillon)}}\\
+Nous pouvons considérer que nous travaillons avec une trop petite taille d'échantillon, puisque $n<30$. On a donc besoin de faire une hypothèse supplémentaire sur la loi $X$, qui sera supposé gaussienne :
+$$X \sim \mathcal{N}(\mu, \sigma)$$
+    
+\textit{\textbf{Étape 3 : Identifier si la différence entre les valeurs en jeu est unilatérale}}\\
+On n'a aucune raison de penser que ou bien $\mu\le \mu_0$ ou bien $\mu\ge \mu_0$. C'est pourquoi on va rester dans un cadre bilatéral pour l'hypothèse alternative : $$H_1) \;\mu \neq \mu_0$$
+    
+\textit{\textbf{Étape 4 : Faire le test}}\\
+Supposons $H_0$. Alors sous cette hypothèse et étant en grande taille d'échantillon, on sait que :
+$$ T = \frac{M_n-\mu_0}{S_n/\sqrt{n}} \sim \mathcal{S}(n-1)=\mathcal{S}(19)$$
+En particulier, d'après les tables des valeurs extrêmes de la loi de Student, 
+$$\P(-t_{19,\alpha}<T<t_{19,\alpha}) = \P(|T|<t_{19,\alpha}) = 1-\alpha$$
+ce qui donne pour une erreur $\alpha = 5\%$ que :
+$$\P(-2.093< T < 2.093) = 0.95$$
+    
+En d'autres termes, les réalisations de $T$ doivent appartenir à $[-2.093;2.093]$ (avec un risque de se tromper de $\alpha = 5\%$). Calculons la réalisation de $T$ dans notre cas :
+$$ t = \frac{m_{20}-\mu_0}{s_{20}/\sqrt{20}} =  \frac{15.8-15}{2.35/\sqrt{20}} = 1.52$$
+    
+On observe que $t\in [-2.093;2.093]$, ce qui (à $\alpha = 5\%$ d'erreur près) est censé être cohérent... On ne peut donc pas rejeter l'hypothèse $H_0$ avec une erreur de $\alpha = 5\%$. Pour arriver à conclure le test, il fait particulièrement sens de s'intéresser au degré de signification.\\
+    
+\textit{\textbf{Étape 5 : Identifier le degré de signification}}\\
+Pour trouver le degré de signification, on augmente l'erreur jusqu'à temps de pouvoir enfin rejeter $H_0$. On peut remarquer que l'on continue de rien pouvoir dire pour $\alpha = 10\%$, puisque :
+$$|t|< t_{19,10\%} = 1.729$$
+En revanche, on peut enfin rejeter l'hypothèse $H_0$, avec une erreur $\alpha = 20\%$, puisque :
+$$|t|> t_{19,20\%} = 1.328$$
+Le degré de signification est donc compris entre 10\% et 20\%. En particulier, en prenant le risque de se tromper de 20\% (c'est à dire une chance sur cinq), on peut conclure que le taux d'hémoglobine des cyclistes est différent de la moyenne.\\
+
+
+\begin{remark}
+On peut remarquer ici qu'entre les test de la question 1 et 4, on a diminué notre capacité à conclure (logique, on a moins d'informations car moins d'échantillons), puisqu'à erreur $\alpha$ fixée, on rejettera plus facilement $H_0$ à la question 1 qu'à la question 4 (prendre par exemple $\alpha = 5\%$, on peut rejeter $H_0$ à la question 1, mais pas à la question 4). Cela signifie que l'on a diminué la puissance de notre test. (i.e. notre capacité à conclure, cf. définitions du cours), en revanche on a donc cependant augmenté l'erreur de seconde espèce...
+\end{remark}
+
+\section*{Exercice 3}
+
+
+\textit{\textbf{Étape 0 : Identifier les phénomènes et les outils en jeu}}\\
+On modélise ici :
+\begin{itemize}
+    \item le temps de réaction chez les personnes âgées de 30 ans par une variable aléatoire $X_1$ de moyenne $\mu_1$ et d'écart-type $\sigma_1$
+    \item le temps de réaction chez les personnes âgées de 55 ans par une variable aléatoire $X_2$ de moyenne $\mu_2$ et d'écart-type $\sigma_2$
+\end{itemize}
+    
+Pour les personnes de 30 ans, il y a $n_1 = 52$ individus (=échantillons) et on peut en déduire les réalisations de la moyenne empirique et de l'estimateur de l'écart-type:
+$$m_1 = 255$$
+$$s_1 = 32$$
+    
+Pour les personnes de 55 ans, il y a $n_2 = 35$ individus (=échantillons) et on peut en déduire les réalisations de la moyenne empirique et de l'estimateur de l'écart-type:
+$$m_2 = 264$$
+$$s_2 = 35.5$$
+    
+\textit{\textbf{Étape 1 : Identifier le problème}}\\
+Nous sommes face à un problème d'homogénéité des moyennes. Nous allons donc chercher à rejeter l'hypothèse nulle :
+$$H_0) \;\mu_1=\mu_2$$ 
+au travers d'un test statistique, ce qui signifiera que la différence moyenne de temps de réaction est significative et peut se généraliser au populations des deux tranches d'âge.\\
+    
+\textit{\textbf{Étape 2 : Identifier le cadre de travail (i.e. la taille de l'échantillon)}}\\
+Nous pouvons considérer que nous travaillons avec une grande taille d'échantillon, puisque $n_1>30$ et $n_2>30$.\\
+\vspace{1cm}
+
+
+\noindent En l'absence de claires indications de la consigne à ce niveau là, le choix d'un test unilatéral ou bilatéral importe peu, du moment qu'il est justifié et cohérent avec le contexte. 
+    
+\begin{remark}
+En cas de vrai doute, on pourra commencer par se ramener à un test bilatéral, plus général car on fait moins de supposition sur la différence potentielle entre les valeurs en jeu. On se ramènera alors  à un test unilatéral si le test bilatéral n'est pas concluant. En effet, à erreur fixée, on arrivera plus facilement à une conclusion (i.e. à rejeter $H_0$) avec un test unilatéral, puisqu'en rajoutant de l'information, on aura moins d'incertitude sur la valeur de la statistique $T$.
+\end{remark}
+
+
+\noindent Pour le reste de la procédure de test, on propose deux solutions, en fonction du point de vue bilatéral ou non.
+    
+\subsection*{a) Test bilatéral (point de vue naïf, le plus général)}
+    
+    
+\textit{\textbf{Étape 3 : Identifier si la différence entre les valeurs en jeu est unilatérale}}\\
+On reste donc le plus naïf possible, et on se disant qu'on n'a aucun a priori sur quelle population (i.e. quelle tranche d'âge) a le meilleur temps de réaction. Cela nous mène donc à poser une hypothèse alternative bilatérale de la forme :
+$$H_1) \;\mu_1\neq\mu_2$$ 
+    
+\textit{\textbf{Étape 4 : Faire le test}}\\
+Supposons $H_0$. Alors sous cette hypothèse et étant en grande taille d'échantillon, on sait que :
+$$ T = \frac{M_1 -M_2}{\sqrt{\frac{S_1^2}{n_1}+\frac{S_2^2}{n_2}}} \sim \mathcal{N}(0;1)$$
+    
+En particulier, d'après les tables des valeurs extrêmes de la loi normale centrée réduite, 
+$$\P(-z_\alpha<T<z_\alpha) = \P(|T|<z_\alpha) = 1-\alpha$$
+ce qui donne pour une erreur $\alpha = 5\%$ que :
+$$\P(-1,96 < T < 1,96) = 0.95$$
+    
+En d'autres termes, les réalisations de $T$ doivent appartenir à $[-1.96;1.96]$ (avec un risque de se tromper de $\alpha = 5\%$). Calculons la réalisation de $T$ dans notre cas :
+$$ t = \frac{m_1 -m_2}{\sqrt{\frac{s_1^2}{52}+\frac{s_2^2}{35}}} =  \frac{255 -264}{\sqrt{\frac{32^2}{52}+\frac{35.5^2}{35}}} = -1.206$$
+    
+On observe que $t\in [-1.96;1.96]$, ce qui (à $\alpha = 5\%$ d'erreur près) est censé être cohérent... On ne peut donc pas rejeter l'hypothèse $H_0$ avec une erreur de $\alpha = 5\%$. Pour arriver à conclure le test, il fait particulièrement sens de s'intéresser au degré de signification.\\
+    
+\textit{\textbf{Étape 5 : Identifier le degré de signification}}\\
+Pour trouver le degré de signification, on augmente l'erreur jusqu'à temps de pouvoir enfin rejeter $H_0$. On peut remarquer que l'on continue de rien pouvoir dire pour $\alpha = 20\%$, puisque :
+$$|t|< z_{20\%} = 1.282$$
+En revanche, on peut enfin rejeter l'hypothèse $H_0$, avec une erreur $\alpha = 25\%$, puisqu'alors :
+$$|t|> z_{25\%} = 1.150$$
+Le degré de signification est donc compris entre 20\% et 25\%. 
+    
+En particulier, en prenant le risque de se tromper de 25\% (c'est à dire une chance sur quatre), on peut conclure que le temps de réaction entre les personnes de 30 ans et celles de 55 ans est sensiblement différent (en particulier, il est meilleur pour les personnes de 30 ans).
+
+\begin{remark}
+On a pu voir en cours que, si on définit $z_\alpha$ par $ \P(|T|<z_\alpha) = 1-\alpha$, alors 
+$$ F(z_{\alpha}) =  1-\frac{\alpha}{2}\qquad \mbox{(faire un dessin)}$$
+où $F$ désigne ici la fonction de répartition de $T$
+En d'autre termes, on peut obtenir une expression de notre erreur sur un test bilatéral, en utilisant la fonction de répartition :
+$$\alpha = 2(1-F(z_{\alpha}))$$
+Cela signifie que l'on pourrait utiliser la table de la fonction de répartition plutôt que la table des valeurs extrêmes. Ceci est particulièrement intéressant puisque vous remarquerez que la table de la fonction de répartition est plus détaillée et précise que la table des valeurs extrêmes.
+\end{remark}
+
+\textit{\textbf{Étape 5bis : Identifier le degré de signification}}\\
+Recommençons cette étape, mais avec l'aide de la remarque. Remarquons que $$1.20<|t|<1.21$$
+En particulier:
+\begin{itemize}
+    \item si $z_\alpha = 1.21$, alors $|t|<z_\alpha$, et donc on ne pourrait toujours rien dire. Cela correspond à un $\alpha = 2(1-F(1.21)) = 22.32\%$.
+    \item si  $z_\alpha = 1.20$, alors $|t|>z_\alpha$, et on peut rejeter l'hypothèse $H_0$. Cela correspond à un $\alpha = 2(1-F(1.20)) = 23.02\%$
+\end{itemize}
+Le degré de signification est donc plus précisément compris entre 22.32\% et 23.02\%. En particulier, en prenant le risque de se tromper de 23.02\% on peut conclure que le temps de réaction entre les personnes de 30 ans et celles de 55
+ans est sensiblement différent (ce qui est plus précis qu'en ayant utilisé la table des valeurs extrêmes).
+
+\begin{remark}
+Cette astuce de passage d'une table à l'autre n'est pas nécessaire avec la loi normale, puisque l'on dispose des deux tables (à moins que vous ne recherchiez un résultat plus précis). Si vous n'êtes pas spécialement à l'aise, vous pouvez vous contenter d'estimer le degré de signification avec la table des valeurs extrêmes pour les test bilatéraux engageant des lois normales (cf. Étape 5 et non 5bis).
+
+En revanche, cette astuce étant aussi valable si $T$ suit une loi de Student, elle devra être maîtrisée afin d'obtenir les valeurs de sa fonction de répartition en fonction des valeurs de sa table des valeurs extrêmes, (puisqu'il n'y a pas de table pour la fonction de répartition de la loi de Student...). Ce cas se présentera par exemple sur des test unilatéraux engageant une loi de Student.
+\end{remark}
+
+\subsection*{b) Test unilatéral (point de vue enrichi par un positionnement sur le problème)}
+
+\textit{\textbf{Étape 3 : Identifier si la différence entre les valeurs en jeu est unilatérale}}\\
+On pourrait, à l'inverse, s'attendre à ce que le temps de réaction diminue avec l'âge. Avec cette supposition, on perd certes en généralité, mais on aiguille notre raisonnement vers un test unilatéral :
+$$H_1) \;\mu_1<\mu_2$$ 
+    
+\textit{\textbf{Étape 4 : Faire le test}}\\
+Supposons $H_0$. Alors sous cette hypothèse et étant en grande taille d'échantillon, on sait que :
+$$ T = \frac{M_1 -M_2}{\sqrt{\frac{S_1^2}{n_1}+\frac{S_2^2}{n_2}}} \sim \mathcal{N}(0;1)$$
+    
+D'après le cadre unilatéral que nous utilisons, $T$ ne devrait prendre que des valeurs négatives, on va donc chercher un intervalle de confiance de la forme $[-z_\alpha;+\infty[$. Or cette valeur est donnée par la tables de la fonction de répartition de la loi normale centrée réduite, 
+$$\P(-z_\alpha<T) = \P(T>-z_\alpha) = \P(T<z_\alpha) = 1-\alpha$$
+ce qui donne pour une erreur $\alpha = 5\%$ que :
+$$\P(T < 1,645) = 0.95$$
+    
+En d'autres termes, les réalisations de $T$ doivent appartenir à $[-1.645;+\infty[$ (avec un risque de se tromper de $\alpha = 5\%$). Calculons la réalisation de $T$ dans notre cas :
+$$ t = \frac{m_1 -m_2}{\sqrt{\frac{s_1^2}{52}+\frac{s_2^2}{35}}} =  \frac{255 -264}{\sqrt{\frac{32^2}{52}+\frac{35.5^2}{35}}} = -1.206$$
+    
+On observe que $t\in [-1.645;+\infty[$, ce qui (à $\alpha = 5\%$ d'erreur près) est censé être cohérent... On ne peut donc pas rejeter l'hypothèse $H_0$ avec une erreur de $\alpha = 5\%$. Pour arriver à conclure le test, il fait particulièrement sens de s'intéresser au degré de signification.\\
+    
+\textit{\textbf{Étape 5 : Identifier le degré de signification}}\\
+Pour trouver le degré de signification, on augmente l'erreur jusqu'à temps de pouvoir enfin rejeter $H_0$. On peut remarquer que l'on continue de rien pouvoir dire pour $\alpha = 11.31\%$ (i.e. $1-\alpha = 88.69\%$), puisque 
+$$t> - z_{11.31\%} = -1.21$$
+
+En revanche on peut enfin rejeter l'hypothèse $H_0$, avec une erreur $\alpha = 11.51\%$ (i.e. $1-\alpha = 88.49\%$), puisque cette fois: 
+$$t< z_{11.51\%} = -1.20$$
+Le degré de signification est donc compris entre 11.31\% et 11.51\%. 
+    
+En particulier, en prenant le risque de se tromper de 11.51\%, on peut conclure que le temps de réaction des personnes de 30 ans est plus élevé que celui des personnes de 55 ans.
+
+
+\begin{remark}
+Cela permet de bien mettre en évidence qu'avoir ajouté de l'information en amont du test nous permet d'arriver plus facilement à une conclusion : il nous faut une erreur plus petite pour pouvoir rejeter l'hypothèse nulle dans le cas unilatéral (ce qui se traduit par un degré de signification plus petit). Cela caractérise aussi le phénomène qu'un ajout d'information réduit aussi l'incertitude sur les résultats.
+\end{remark}
+
+\begin{remark}
+On peut faire aussi le lien avec les notions de puissance et d'erreur de seconde espèce vues en cours. A erreur fixée, on a plus de chance de conclure dans le cas unilatéral que bilatéral (prendre $\alpha = 15\%$ par exemple, dans le cas unilatéral on peut rejeter $H_0$ mais pas dans le cas bilatéral). Notre capacité à conclure est donc plus importante pour un test unilatéral que pour un test bilatéral : cela signifie que le test unilatéral est plus puissant que le test bilatéral (cela fait sens à la lumière de la précédente remarque, puisque nous avons en fait ajouté des informations en plus). On en déduit que l'erreur de seconde espèce est plus petite dans le cas unilatéral.
+\end{remark}
+
+
+\section*{Exercice 4}
+
+
+\textit{\textbf{Étape 0 : Identifier les phénomènes et les outils en jeu}}\\
+On modélise ici :
+\begin{itemize}
+    \item la durée de sommeil chez les chats de campagne par une variable aléatoire $X_1$ de moyenne $\mu_1$ et d'écart-type $\sigma_1$
+    \item la durée de sommeil chez les chats de ville par une variable aléatoire $X_2$ de moyenne $\mu_2$ et d'écart-type $\sigma_2$
+\end{itemize}
+    
+Pour les chats de campagne, il y a $n_1 = 15$ individus (=échantillons) et on peut en déduire les réalisations de la moyenne empirique et de l'estimateur de l'écart-type:
+$$m_1 (=\overline{x}) = 16.44$$
+$$s_1 (=s_x) = 2.9$$
+    
+Pour les chats de ville, il y a $n_2 = 16$ individus (=échantillons) et on peut en déduire les réalisations de la moyenne empirique et de l'estimateur de l'écart-type:
+$$m_2  = \frac{1}{16}\sum_{i=1}^{16}y_i = \frac{310}{16} = 19.38$$
+$$s_2 =\sqrt{\frac{1}{15}\sum_{i=1}^{16}y_i^2 - \frac{16}{15}(m_2)^2} = \sqrt{\frac{6128}{15} - \frac{16}{15}(m_2)^2} = 2.81$$
+    
+\textit{\textbf{Étape 1 : Identifier le problème}}\\
+Nous sommes face à un problème d'homogénéité des moyennes. Nous allons donc chercher à rejeter l'hypothèse nulle :
+$$H_0) \;\mu_1=\mu_2$$ 
+au travers d'un test statistique, ce qui signifiera que la différence de la durée moyenne de sommeil entre nos deux échantillons de chats se généralise à leurs populations respectives, en particulier, cela signifiera que les chats ne dorment pas la même quantité d'heure d'un environnement à l'autre.\\
+    
+\textit{\textbf{Étape 2 : Identifier le cadre de travail (i.e. la taille de l'échantillon)}}\\
+Nous pouvons considérer que nous travaillons avec une trop petite taille d'échantillon, puisque $n_1<30$ (et $n_2<30$). On a donc besoin de faire des hypothèses supplémentaires sur les lois de $X_1$ et $X_{2}$ :
+$$X_1 \sim \mathcal{N}(\mu_1, \sigma_1)$$
+$$X_2 \sim \mathcal{N}(\mu_2, \sigma_2)$$
+$$\sigma_1 = \sigma_2$$
+
+\textit{\textbf{Étape 3 : Identifier si la différence entre les valeurs en jeu est unilatérale}}\\
+On n'a aucune raison de penser a priori qu'un des deux environnements favorise ou non le sommeil des chats. Cela nous mène donc à poser une hypothèse alternative bilatérale de la forme :
+$$H_1) \;\mu_1\neq\mu_2$$ 
+
+\textit{\textbf{Étape 4 : Faire le test}}\\
+Supposons $H_0$. Alors sous cette hypothèse et étant en grande taille d'échantillon, on sait que :
+$$ T = \frac{M_1 -M_2}{\sqrt{\frac{S^2}{n_1}+\frac{S^2}{n_2}}} \sim \mathcal{S}(15+16-2)=\mathcal{S}(29)$$
+$$\mbox{où}\qquad S^2 = \frac{(n_1-1)(S_1)^2+(n_2-1)(S_2)^2}{n_1+n_2-2}$$
+    
+En particulier, d'après les tables des valeurs extrêmes de la loi de Student, 
+$$\P(-t_{29,\alpha}<T<t_{29,\alpha}) = \P(|T|<t_{29,\alpha}) = 1-\alpha$$
+ce qui donne pour une erreur $\alpha = 5\%$ que :
+$$\P(-2.045< T < 2.045) = 0.95$$
+    
+En d'autres termes, les réalisations de $T$ doivent appartenir à $[-2.045;2.045]$ (avec un risque de se tromper de $\alpha = 5\%$). Calculons la réalisation de $T$ dans notre cas :
+$$ s^2 = \frac{(n_1-1)(s_1)^2+(n_2-1)(s_2)^2}{n_1+n_2-2} = \frac{14\times 2.9^2+15\times2.81^2}{29} = 8.14$$
+$$ t = \frac{m_1 -m_2}{\sqrt{\frac{s^2}{n_1}+\frac{s^2}{n_2}}} =  \frac{16.44-19.38}{\sqrt{\frac{8.14}{15}+\frac{8.14}{16}}}= -2.86$$
+    
+On observe que $t\notin [-2.045;2.045]$, ce qui (à $\alpha = 5\%$ d'erreur près) est censé être faux. On peut donc rejeter l'hypothèse $H_0$ et conclure qu'il y a bien une réelle différence de temps de sommeil entre les chats de ville et les chats de campagne (toujours avec une erreur de $\alpha = 5\%$).\\
+    
+    
+\textit{\textbf{Étape 5 : Identifier le degré de signification}}\\
+Pour trouver le degré de signification, on diminue l'erreur jusqu'à temps de ne plus pouvoir rejeter $H_0$. On peut remarquer que l'on continue de rejeter l'hypothèse avec $\alpha = 1\%$, puisque : 
+$$|t|> t_{29, 1\%} = 2.756$$
+Mais on ne peut plus rien dire pour $\alpha = 0.1\%$, puisque $$|t|< t_{29, 0.1\%} = 3.659$$
+Le degré de signification est donc compris entre 0.1\% et 1\%.
+
+\end{document}

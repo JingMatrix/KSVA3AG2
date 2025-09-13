@@ -1,0 +1,478 @@
+\documentclass[a4paper,oneside,12pt]{article}
+
+%\usepackage{natbib}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+
+
+% Packages
+\usepackage{amsmath,amsfonts,amssymb,amsopn,amscd,amsthm}
+\usepackage{comment}
+\usepackage{dsfont}
+\usepackage{graphicx,float}
+\usepackage{color}
+\usepackage[colorlinks]{hyperref}
+\usepackage{epigraph}
+\usepackage{todonotes}
+\usepackage[left=2cm,top=2cm,bottom=2cm,right=2cm]{geometry}
+\usepackage{tikz-cd}
+\usepackage{caption}
+\usepackage{subcaption}
+
+\hypersetup{
+  colorlinks,
+  citecolor=blue,
+  linkcolor=red
+}
+
+
+
+\DeclareCaptionFormat{custom}
+{%
+    \textbf{#1#2}\textit{\small #3}
+}
+\captionsetup{format=custom}
+
+%\usepackage{geometry}
+%\usepackage{enumitem}
+%\usepackage[babel]{csquotes}
+%\usepackage{graphicx}
+\usepackage{bbm}
+%\usepackage{tikz}
+%\usepackage{pgfplots}
+%\usepackage{dsfont}
+\usepackage{faktor}
+%\usepackage{amsthm}
+\usepackage{cancel}
+\usepackage{indentfirst}
+%\usepackage{comment}
+\usepackage{stmaryrd}
+%\MakeAutoQuote{«}{»}
+%\geometry{dvips,a4paper,hmargin=2cm,vmargin=2.5cm}
+
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{assumption}[definition]{Assumption}
+\newtheorem*{remark}{Remarque}
+\newtheorem*{ex}{Example}
+
+%\numberwithin{algorithm}{section}
+% \numberwithin{equation}{section}
+% \numberwithin{figure}{section}
+% \numberwithin{table}{section}
+
+\usepackage{pstricks,pstricks-add,pst-node,pst-tree}
+%\pgfplotsset{compat=1.16}
+
+
+\title{TD4 - L2 BCP}
+\author{}
+\date{}
+
+%Ordinals
+\def\N{{\mathbb N}}
+\def\Z{{\mathbb Z}}
+\def\Q{{\mathbb Q}}
+\def\R{{\mathbb R}}
+\def\C{{\mathbb C}}
+\def\H{{\mathbb H}}
+\def\S{{\mathbb S}}
+\def\T{{\mathbb T}}
+\def\K{{\mathbb K}}
+\def\W{\mathbb{W}}
+\def\D{\mathbb{D}}
+\def\V{\mathbb{V}}
+
+%Probability
+\def\P{{\mathbb P}}
+\def\E{{\mathbb E}}
+\def\F{{\mathbb F}}
+\def\X{{\mathbb X}}
+\def\Y{{\mathbb Y}}
+\def\F{{\mathcal F}}
+\def\U{{\mathcal U}}
+\def\Cov{{\mbox Cov}}
+
+%Index
+\def\u{{\textbf{u}}}
+\def\v{{\textbf{v}}}
+
+
+
+
+\begin{document}
+
+
+
+\maketitle
+
+Pour l'entièreté du document, on note:
+$$Q = \sum \frac{(\mbox{effectif observé}-\mbox{effectif théorique})^2}{\mbox{effectif théorique}}$$
+
+Pour chacun des tests suivants, $Q$ suivra une loi du $\chi^2$ (avec un degré de liberté dépendant du type de test), sous l'hypothèse nulle et à condition que tous les effectifs théoriques soient plus grands que 5. Cela  nous permettra donc de définir les zones de rejet et de non rejet de l'hypothèse nulle.
+
+Une fois le type de test identifié, le but sera donc ici de calculer la réalisation de $Q$. Les effectifs observés étant donnés par les informations d'échantillonnage, le réel enjeu sera de calculer/estimer les effectifs théoriques.
+
+\section*{Exercice 1}
+\begin{enumerate}
+    \item En l'absence d'indication supplémentaire, l'hypothèse alternative $(H_1)$ n'est que la négation de l'hypothèse nulle $(H_0)$, d'où :
+    $$(H_1)\quad \pi_{CR} \neq 9/16 \;\mbox{ OU }\; \pi_{Cr} \neq 3/16 \;\mbox{ OU }\;\pi_{cR} \neq 3/16 \;\mbox{ OU } \; \pi_{cr} \neq 1/16$$
+
+    \item Cherchant à comparer une partition des proportions d'une population testée avec la proportion de référence, on reconnaît ici un \textbf{problème de conformité}.
+    Ce que l'on va appeler ici "effectifs théoriques" seront les effectifs correspondant aux proportions de référence dans un échantillon de taille identique à celui observé en pratique. 
+    
+    D'où, en notant $n =556$ la taille totale de la l'échantillon : 
+
+    \begin{table}[h]
+        \centering
+        \begin{tabular}{|c|c|c|c|c|c|}
+             \hline
+             Phénotypes & CR & Cr & cR & cr & Total \\
+             \hline
+             Effectifs observés & 315 & 101 & 108 & 32 & 556\\
+             \hline
+             Effectifs théoriques & $n\pi_{CR} \approx 313$ & $n\pi_{Cr} \approx 104$ & $n\pi_{cR} \approx 104$ & $n\pi_{cr} \approx 35$ & $n=556$ \\
+             \hline
+        \end{tabular}
+    \end{table}
+
+    \begin{remark}
+        Comme expliqué en en-tête du document, sous l'hypothèse nulle $(H_0)$ et si les effectifs théoriques sont plus grands que 5 (ce qui est le cas d'après le précédent tableau), $Q$ suit une loi du $\chi^2$ à $d$ degrés de liberté. \textbf{Dans le cas de tels tests de conformité, }$\textbf{d =C-1}$ où $C$ est le nombre de catégories considérées dans la partition des proportions. Ici, $d =4-1 =3$.
+    \end{remark}    
+
+
+
+
+    
+    \item Testons donc $(H_0)$ contre $(H_1)$.
+
+    Sous $(H_0)$, les effectifs théoriques étant suffisamment grands, $Q \sim \chi^2(3)$. D'après la table des valeurs extrêmes du $\chi^2$, le seuil $K_{5\%}$ tel que $$P(Q>K_{5\%}) = 0.05$$ vaut $K_{5\%}=K_{3;5\%} =7.815$. En d'autres termes, la probabilité pour que $Q$ soit plus grand que 7.815 est de $5\%$ : ce sera notre zone de rejet.
+
+    Or 
+    \begin{align*}
+        q &= \frac{(315-313)^2}{313}+\frac{(101-104)^2}{104}+\frac{(108-104)^2}{104}+\frac{(32-35)^2}{35} = 0.510
+    \end{align*}
+    
+
+    Comme ici $q<7.815$, nous sommes dans la zone de non-rejet de $(H_0)$, on ne peut donc pas conclure, avec une précision $\alpha = 5\%$ ...
+
+    En cherchant le degré de signification, on remarque que l'on ne peut toujours rien conclure avec une erreur $\alpha = 90\%$ ($q<K_{90\%} = 0.584$), mais que l'on peut enfin rejeter $(H_{0})$ avec une erreur de $\alpha = 97.5\%$ ($q>K_{97.5\%} = 0.216$) : à défaut on donc évalue notre degré de signification à $\epsilon = 97.5\%$.
+
+    En particulier, on peut affirmer que les lois de Mendel ne s'appliquent pas à notre échantillon (i.e. l'hypothèse nulle est fausse) en prenant le risque de se tromper de 97.5\%... Cela nous incite à croire qu'en fait les lois de Mendel s'appliquent bien à notre échantillon (encore heureux!).
+
+\end{enumerate}
+
+\section*{Exercice 2}
+
+\begin{enumerate}
+    \item Ici, on cherche à vérifier si la variable aléatoire $X$ suit une certaine loi de probabilité : c'est ce que l'on va appeler un \textbf{problème d'ajustement}. Pour voir la proximité entre ce problème et un problème de conformité, notons
+    \begin{itemize}
+        \item pour $ 0\le i \le 2$, $\pi_i^{(\lambda)}$ la probabilité pour qu'une variable aléatoire suivant une $\mathcal{P}(\lambda)$ soit égale à $i$
+        \item $\pi_3^{(\lambda)}$ la probabilité pour qu'une variable aléatoire suivant une $\mathcal{P}(\lambda)$ soit supérieure ou égale à 3
+        \item pour $ 0\le i \le 2$,
+        $\pi_i$ la proportion théorique de boite de Pétri possédant $i$ colonies ($\pi_i = \P(X=i)$)
+        \item $\pi_3$ la proportion théorique de boite de Pétri possédant au moins 3 colonies ($\pi_3 = \P(X\ge3)$)
+    \end{itemize}
+
+    Le parallèle entre les deux types de test vient donc du fait que si on parvient à rejeter l'hypothèse :
+    $$(H_0') \quad \pi_{0} = \pi_0^{(2)} \;;\;\pi_{1} = \pi_1^{(2)} \;;\;\pi_{2} = \pi_2^{(2)} \;; \; \pi_{3} = \pi_3^{(2)}$$
+    alors en particulier, l'hypothèse 
+    $$(H_0) \quad \mbox{X suit une loi de Poisson }\mathcal{P}(2)$$
+    sera aussi fausse.\\
+
+    L'idée est donc de venir plutôt tester l'hypothèse $(H_0')$, qui se teste de la même manière qu'un test de conformité usuel. Les effectifs théoriques se construisent donc de la même façon que dans un problème de conformité, il nous faut donc la valeur des proportions de référence, que l'on calcule en utilisant la loi de Poisson $\mathcal{P}(2)$ :
+    \begin{itemize}
+        \item $\pi_0^{(2)} = e^{-2} \approx 0.315$
+        \item $\pi_1^{(2)} = 2e^{-2} \approx 0.271$
+        \item $\pi_2^{(2)} = 2^2e^{-2}/2 = 2e^{-2}  \approx 0.271$
+        \item $\pi_3^{(2)} = 1 -\pi_0^{(2)} -\pi_1^{(2)} -\pi_2^{(2)} = 1- 5e^{-2} \approx 0.323$
+    \end{itemize}
+     d'où, en notant $n = 100$ la taille de l'échantillon total :
+    \begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|}
+        \hline
+        Nombre de colonies & 0 & 1 & 2 & au moins 3 & Total \\
+        \hline
+        Effectifs observés & 25 & 35 & 20 & 20 & 100\\
+        \hline
+        Effectifs théoriques & $n\pi_0^{(2)} \approx 14$ & $n\pi_1^{(2)} \approx 27$ & $n\pi_2^{(2)} \approx 27$ & $n\pi_3^{(2)} \approx 32$ & $n=100$ \\
+        \hline
+    \end{tabular}
+    \end{table}
+
+
+    \begin{remark}
+        Sous l'hypothèse nulle $(H_0')$ et si les effectifs théoriques sont plus grands que 5 (ce qui est le cas d'après le précédent tableau), $Q$ suit une loi du $\chi^2$ à $d$ degrés de liberté.\textbf{ Dans le cas de tels tests d'ajustement,} $\textbf{d =C-1-p}$ où $C$ est le nombre de catégories considérés dans la partition des proportions et $p$ le nombre de paramètre à estimer. Dans notre cas, $p=0$ (voir la seconde question pour une illustration de $p\neq 0$). Ici, $d =4-1-0 =3$.
+    \end{remark}
+
+
+    Testons donc $(H_0')$ : sous $(H_0')$, les effectifs théoriques étant suffisamment grands, $Q \sim \chi^2(3)$. D'après la table des valeurs extrêmes du $\chi^2$, le seuil $K_{5\%}$ tel que $$P(Q>K_{5\%}) = 0.05$$ vaut $K_{5\%}=K_{3;5\%} =7.815$. En d'autres termes, la probabilité pour que $Q$ soit plus grand que 7.815 est de $5\%$ : ce sera notre zone de rejet.
+
+    Or 
+    \begin{align*}
+        q &= \frac{(25-14)^2}{14}+\frac{(35-27)^2}{27}+\frac{(20-27)^2}{27}+\frac{(20-32)^2}{32} = 20.028
+    \end{align*}
+
+
+    Comme ici $q>7.815$, nous sommes dans la zone de rejet de $(H_0')$, on peut donc rejeter $(H_0')$, et donc $(H_0)$ avec une précision de $\alpha = 5\%$
+
+    En cherchant le degré de signification, on remarque que l'on continue de rejeter $(H_0)$ avec une erreur $\alpha = 0.1\%$ ($q>K_{0.1\%} = 16.266$), mais que l'on ne peut plus conclure au rejet de $(H_0')$ (et donc de $(H_0)$) lorsque l'erreur est $\alpha = 0.01\%$ ($q<K_{0.01\%} = 21.108$) : à défaut on évalue donc notre degré de signification à $\epsilon = 0.1\%$.
+
+    En particulier, on peut affirmer que $X$ ne suit pas une loi de Poisson $\mathcal{P}(2)$ avec une faible erreur de 0.1\%, ce qui semble nous faire croire que ce c'est en effet le cas.
+
+    \begin{remark}
+        Doit-on conclure pour autant que les manipulations ont été mal faites, puisque normalement $X$ doit suivre une loi de Poisson ? Pour cela, une idée serait de recommencer ce test avec tous les paramétrages possibles d'une loi de Poisson (et pas uniquement pour $\lambda = 2$), et si pour tous ces tests, on parvient à rejeter l'hypothèse nulle avec des erreurs suffisamment petites, alors on pourrait, en effet, conclure à de mauvaises manipulations lors de l'expérience. Une méthode plus simple est de laisser $\lambda$ inconnu dans l'hypothèse à tester et de l'estimer, en amont du test.
+    \end{remark}
+    
+    \item De la même manière, on va se ramener à tester 
+    $$(H_0') \quad \pi_{0} = \pi_0^{(\lambda)} \;;\;\pi_{1} = \pi_1^{(\lambda)} \;;\;\pi_{2} = \pi_2^{(\lambda)} \;; \; \pi_{3} = \pi_3^{(\lambda)}\mbox{, où }\lambda\mbox{ est à estimer}$$
+    afin de pouvoir tester :
+    $$(H_0) \quad \mbox{X suit une loi de Poisson }\mathcal{P}(\lambda)\mbox{, où }\lambda\mbox{ est à estimer}$$
+
+    Commençons par estimer $\lambda$, i.e. trouver une valeur de $\lambda$ qui colle au mieux aux données observées, en utilisant par exemple une estimation de $\pi_0^{\lambda}$ sur les données échantillonnées à disposition. En particulier :
+    $$\pi_0^{\lambda} \approx p_0 = \frac{25}{100} \Longleftrightarrow e^{-\lambda} = \frac{1}{4}\Longleftrightarrow \lambda = \mbox{ln}(4) \approx 1.386$$
+
+    Dans ce cas on a :
+    \begin{itemize}
+        \item $\pi_0^{\left(\mbox{ln}(4)\right)} = e^{-\mbox{ln}(4)} = 0.25$
+        \item $\pi_1^{\left(\mbox{ln}(4)\right)} = \mbox{ln}(4)e^{-\mbox{ln}(4)} \approx 0.347$
+        \item $\pi_2^{\left(\mbox{ln}(4)\right)} = \mbox{ln}(4)^2e^{-2}/2  \approx 0.240$
+        \item $\pi_3^{\left(\mbox{ln}(4)\right)} = 1 -\pi_0^{\left(\mbox{ln}(4)\right)} -\pi_1^{\left(\mbox{ln}(4)\right)} -\pi_2^{\left(\mbox{ln}(4)\right)} \approx 0.163$
+    \end{itemize}
+
+    et on obtient le tableau suivant :
+
+    \begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|}
+        \hline
+        Nombre de colonies & 0 & 1 & 2 & au moins 3 & Total \\
+        \hline
+        Effectifs observés & 25 & 35 & 20 & 20 & 100\\
+        \hline
+        Effectifs théoriques & 25 & 35 & 24 & 16 & 100 \\
+        \hline
+    \end{tabular}
+    \end{table}
+
+    Testons donc $(H_0')$ : sous $(H_0')$, les effectifs théoriques étant suffisamment grands, $Q \sim \chi^2(d)$. Comme le nombre de catégorie est $C=4$ et qu'il y a ici $p=1$ paramètre à estimer (le paramètre $\lambda$), alors $d = 4- 1- 1 = 2$ D'après la table des valeurs extrêmes du $\chi^2$, le seuil $K_{5\%}$ tel que $$P(Q>K_{5\%}) = 0.05$$ vaut $K_{5\%}=K_{\textbf{2};5\%} =5.991$. En d'autres termes, la probabilité pour que $Q$ soit plus grand que 5.991 est de $5\%$ : ce sera notre zone de rejet.
+
+    Or 
+    \begin{align*}
+        q &= \frac{(25-25)^2}{25}+\frac{(35-35)^2}{35}+\frac{(20-24)^2}{24}+\frac{(20-16)^2}{16} = 1.667
+    \end{align*}
+
+
+    Comme ici $q<5.991$, nous sommes dans la zone de non-rejet de $(H_0')$, on ne peut donc pas conclure avec une précision de $\alpha = 5\%$...
+
+    En cherchant le degré de signification, on remarque que l'on peut enfin rejeter $(H_{0}')$ et donc $(H_0')$ avec une erreur de $\alpha = 50\%$ ($q>K_{50\%} = 1.386$) : à défaut on évalue donc notre degré de signification à $\epsilon = 50\%$.
+
+    En particulier on peut conclure que $X$ ne suit pas une loi de Poisson, en prenant le risque de se tromper de 50\%.
+\end{enumerate}
+
+\section*{Exercice 3}
+
+\begin{enumerate}
+    \item[] On cherche ici à tester l'hypothèse (nulle) :
+    $$(H_0) \quad \pi_A = \pi_A'\; ; \;\pi_B = \pi_B'\; ; \;\pi_O = \pi_O'\; ; \;\pi_{AB} = \pi_{AB}'$$
+
+    Nous souhaitons donc étudier la répartition de proportions entre deux populations testées, sans connaître a priori de valeurs théoriques. Il s'agit donc d'un \textbf{problème d'homogénéité}. N'ayant aucune valeur de référence connue dans ce genre de problème, la détermination des "effectifs théoriques" n'est pas aussi triviale que dans les problèmes de conformité. A l'instar des précédentes démarches de tests d'homogénéité, on va se ramener à une estimation de ces effectifs théoriques.
+
+    Par exemple, pour estimer la proportions théoriques de personne du groupe A en général, on va regarder la proportions de personnes du groupe A sur l'ensemble des populations que l'on compare :
+    $$p_A = \frac{\mbox{Effectif des personnes du groupe A}}{\mbox{Effectif total}} =  \frac{42+60}{n_1 +n_2} = \frac{102}{257}\approx 0.397$$
+    où $n_1 = 111$ et $n_2 = 146$ sont les tailles respectives des deux échantillons considérés.
+
+    De même on estime $p_B \approx 0.109$, $p_O \approx 0.397$, $p_{AB} \approx 0.097$. On remarque que ce sont simplement les formules des estimateurs de proportions vues au chapitre 4. On peut ainsi accéder à une estimation des effectifs théoriques :
+
+    \begin{table}[h]
+        \centering
+        \begin{tabular}{|c|c|c|c|c|c|}
+            \hline
+            Groupes sanguins & A & O & B & AB & Total \\
+            \hline
+            Effectifs observés 1 & 42 & 45 & 10 & 14 & 111\\
+            \hline
+            Effectifs théoriques 1 & $n_1p_A \approx 44$ & $n_1p_O \approx 44$ & $n_1p_B \approx 12$ & $n_1p_{AB} \approx 11$ & $n_1 = 111$\\
+            \hline
+            Effectifs observés 2 & 60 & 57 & 18 & 11 & 146\\
+            \hline
+            Effectifs théoriques 2 & $n_2p_A \approx 58$ & $n_2p_O \approx 58$ & $n_2p_B \approx 16$ & $n_2p_{AB} \approx 14$ & $n_2 = 146$\\
+            \hline
+\end{tabular}
+    \end{table}
+\begin{remark}
+        Sous l'hypothèse nulle $(H_0)$ et si les effectifs théoriques sont plus grands que 5 (ce qui est le cas d'après le précédent tableau), $Q$ suit une loi du $\chi^2$ à $d$ degrés de liberté. \textbf{Dans le cas de tels tests d'homogénéité, $\textbf{d =(C-1)(P-1)}$} où $C$ est le nombre de catégories considérés dans la partition des proportions et $P$ le nombre de populations que l'on compare entre elles. Dans notre cas présent, $P=2$ et $C=4$, donc $d =(4-1)\times(2-1) =3$. On aura l'occasion de voir que l'on peut en effet imaginer des tests d'homogénéité plus élaborés, où on viendrait comparer plus de 2 populations, à condition que, comme d'habitude, \textbf{les échantillonnages d'une population à l'autre soient indépendants}.
+    \end{remark}
+
+    Testons $(H_0)$ : sous $(H_0)$, les effectifs théoriques étant (estimés comme) suffisamment grands, $Q \sim \chi^2(3)$. D'après la table des valeurs extrêmes du $\chi^2$, le seuil $K_{5\%}$ tel que $$P(Q>K_{5\%}) = 0.05$$ vaut $K_{5\%}=K_{3;5\%} =7.815$. En d'autres termes, la probabilité pour que $Q$ soit plus grand que 7.815 est de $5\%$ : ce sera notre zone de rejet.
+
+    Or 
+    \begin{align*}
+        q = \left ( \frac{(42-44)^2}{44} \right. & +\left. \frac{(45-44)^2}{44}+\frac{(10-12)^2}{12}+\frac{(14-11)^2}{11} \right ) \\
+        & + \left(\frac{(60-58)^2}{58}+\frac{(57-58)^2}{58}+\frac{(18-16)^2}{16}+\frac{(11-14)^2}{14}\right) = 2.244\\
+    \end{align*}
+
+    Comme ici $q<7.815$, nous sommes dans la zone de non-rejet de $(H_0)$, on ne peut donc pas conclure, avec une précision $\alpha = 5\%$ ...
+
+    En cherchant le degré de signification, on remarque que l'on ne peut toujours rien conclure avec une erreur $\alpha = 50\%$ ($q<K_{90\%} = 2.366$), mais que l'on peut enfin rejeter $(H_{0})$ avec une erreur de $\alpha = 90\%$ ($q>K_{90\%} = 0.584$) : à défaut on donc évalue notre degré de signification à $\epsilon = 90\%$.
+
+    En particulier, on pourrait donc conclure à une différence significative entre la répartition sanguine des deux populations, en prenant le risque de se tromper de 90\%... Il semble donc légitime de se dire qu'il ne doit, en fait, pas exister une grande différence entre la répartition des groupes sanguins de ces deux populations.
+    
+\end{enumerate}
+
+
+\section*{Exercice 4}
+
+\begin{enumerate}
+    \item Lors des \textbf{problèmes d'indépendance}, on cherche à vérifier si deux variables aléatoires (discrètes) sont indépendantes. En notant ici $X$ la variable aléatoire décrivant l'intensité de l'asthme ($X \in \{f, m, l\}$) et $Y$ la variable aléatoire décrivant la présence d'eczéma ($Y \in \{E, e, \emptyset\}$), alors l'hypothèse nulle que l'on nous demande de tester se résume par :
+    $$(H_0) \quad X \mbox{ est indépendante de } Y$$
+
+    Une telle hypothèse revient aussi à se dire que si je fixe une valeur/catégorie pour $X$, alors les proportions théoriques de chaque valeur de $Y$ devraient rester inchangé (puisque $X$ n'influe pas sur $Y$). En d'autres termes, sous $(H_O)$, on a nécessairement  :
+    $$(H_0') \quad \pi_{f,E} = \pi_{f,e}= \pi_{f,\emptyset}\; ; \;\pi_{m,E} = \pi_{m,e}= \pi_{m,\emptyset}\; ; \;\pi_{l,E} = \pi_{l,e}= \pi_{l,\emptyset}$$
+    où $\pi_{i,j}$ désigne la proportions théoriques de personnes dont l'intensité de l'asthme est donné par $i \in \{f, m, l\}$ et la présence d'eczéma par $j \in \{E, e, \emptyset\} $ (avec les mêmes notations qu'en cours)
+
+    Cela nous amène donc à vérifier une hypothèse nulle semblable à celles que l'on teste lors des problèmes d'homogénéité. Si on poussait le parallèle, ici, les valeurs de $X$ seraient nos catégories et les valeurs de $Y$ nos populations. 
+    
+    \item Nous allons donc évaluer les proportions théoriques pour chaque valeur de $X$ (i.e. les proportions relatives à chaque intensité d'asthme) de la même façon que lors d'un test d'homogénéité, c'est à dire en les estimant (vu que nous ne les connaissons pas) :
+
+    $$p_{f} = \frac{\mbox{Effectif ayant un asthme fort}}{\mbox{Effectif total}} = \frac{n_f}{n} = \frac{72}{200} = 0.360$$
+
+    $$p_{m} = \frac{\mbox{Effectif ayant un asthme moyen}}{\mbox{Effectif total}} = \frac{n_m}{n} = \frac{90}{200} = 0.450$$
+
+    $$p_{l} = \frac{\mbox{Effectif ayant un asthme léger}}{\mbox{Effectif total}} = \frac{n_l}{n} = \frac{38}{200} = 0.190$$
+
+    où $n_i$ désigne les effectifs totaux de la population concernée par $i \in \{f, m, l\}$ et $n$ l'effectif total de la population échantillonnée.
+    \newpage
+    Ce qui nous permet de compléter le tableau : 
+    \begin{table}[h]
+        \centering
+        \begin{tabular}{|c|c|c|c|c|}
+            \hline
+             & Asthme fort ($f$) & Asthme moyen ($m$) & Asthme léger ($l$) & Total \\
+            \hline
+            Effectif $E$ observé & 24 & 6 & 5 & 35\\
+            \hline
+            Effectif $E$ théorique & $n_Ep_f \approx 12.6$ & $n_Ep_m \approx 15.75$ &  $n_Ep_{l} \approx 6.65$ & $n_E = 35$\\
+            \hline
+            Effectif $e$ observé) & 30 & 30 & 10  & 70\\
+            \hline
+            Effectif $e$ théorique & $n_ep_f \approx 25.2$ & $n_ep_m \approx 31.5$ &  $n_ep_{l} \approx 13.3$ & $n_e = 70$\\
+            \hline
+            Effectif $\emptyset$ observé & 18 & 54 & 23 & 95\\
+            \hline
+            Effectif $\emptyset$ théorique & $n_\emptyset p_f \approx 34.20$ & $n_\emptyset p_m \approx 42.75$ &  $n_\emptyset p_{l} \approx 18.05$ & $n_\emptyset = 95$\\
+            \hline
+    \end{tabular}
+    \end{table}
+    
+    où $n_j$ désigne les effectifs totaux de la population concernée par $j \in \{E, e, \emptyset\}$
+
+   \item Sous l'hypothèse nulle $(H_0')$ et si les effectifs théoriques sont plus grands que 5 (ce qui est le cas d'après le précédent tableau), $Q$ suit une loi du $\chi^2$ à $d$ degrés de liberté. \textbf{Dans le cas de tels tests d'indépendance, $\textbf{d =(V(X)-1)(V(Y)-1)}$} où $V(X)$ est le nombre de valeurs prises par $X$ et $V(Y)$ est le nombre de valeurs prises par $Y$. Dans notre cas présent, $V(X)=V(Y)=3$, donc $d =(3-1)\times(3-1) =4$. Le parallèle avec les tests d'homogénéité reste valable : on serait dans le cas où $C = V(X)$ et $P = V(Y)$, ce qui correspondrait à un test d'homogénéité sur trois populations (P>2), que l'on avait évoqué dans une remarque de l'exercice 3.
+
+   Testons $(H_0')$ : sous $(H_0')$, les effectifs théoriques étant (estimés comme) suffisamment grands, $Q \sim \chi^2(4)$. D'après la table des valeurs extrêmes du $\chi^2$, le seuil $K_{5\%}$ tel que $$P(Q>K_{5\%}) = 0.05$$ vaut $K_{5\%}=K_{4;5\%} =9.488$. En d'autres termes, la probabilité pour que $Q$ soit plus grand que 9.488 est de $5\%$ : ce sera notre zone de rejet.
+
+    Or 
+    \begin{align*}
+        q = \left ( \frac{(24-12.6)^2}{12.6} \right. & +\left. \frac{(6-15.75)^2}{15.75}+\frac{(5-6.65)^2}{6.65} \right ) \\
+        & + \left(\frac{(30-25.2)^2}{25.2}+\frac{(30-31.5)^2}{31.5}+\frac{(10-13.3)^2}{13.3}\right) \\
+        & + \left(\frac{(18-34.2)^2}{34.2}+\frac{(54-42.75)^2}{42.75}+\frac{(23-18.05)^2}{18.05}\right)= 30.556\\
+    \end{align*}
+
+
+    Comme ici $q>9.488$, nous sommes dans la zone de rejet de $(H_0')$, on peut donc rejeter $(H_0')$, et donc $(H_0)$ avec une précision de $\alpha = 5\%$
+
+    En cherchant le degré de signification, on remarque que l'on continue de rejeter $(H_0)$ avec une erreur $\alpha = 0.01\%$ ($q>K_{0.01\%} = 23.513$), et la table n'est pas assez précise pour nous donner une valeur de $\alpha$ nous empêchant de conclure, à défaut on évalue donc notre degré de signification à $\epsilon = 0.01\%$.
+
+    En particulier, on peut affirmer avec une probabilité de se tromper de 0.01\% que les deux phénomènes ne sont pas indépendants : il existe une forme de corrélation entre les deux.
+
+    \begin{remark}
+        On a adopté le point de vue où les valeurs de $X$ représentaient les catégories de notre test d'homogénéité et les valeurs de $Y$ représentaient ses populations. Mais on aurait pu adopter le point de vue inverse : les valeurs de $Y$ auraient pu être nos catégories et les valeurs de $X$ nos populations, ce qui serait revenu à tester plutôt :
+        $$(H_0'') \quad \pi_{f,E} = \pi_{m,E}= \pi_{l,Et}\; ; \;\pi_{f,e} = \pi_{m,e}= \pi_{l,e}\; ; \;\pi_{f,\emptyset} = \pi_{m,\emptyset}= \pi_{l,\emptyset}$$
+
+        Cela aurait-il changé quelque chose? Non, puisque du côté de la loi de notre variable $Q$, le degré de liberté n'aurait pas changé à cause de la symétrie de celui-ci (i.e. inter-changer $V(X)$ et $V(Y)$ dans la formule de $d$ ne change rien). Et pour la valeur de la réalisations de $Q$, il faut regarder du côté des effectifs théoriques. Mais d'un point de vue à l'autre, l'expression de ceux-ci est, en fait, identique. Dans le premier point de vue, leurs expressions sont $n_j p_i$. Or : 
+        $$ n_j p_i = n_j \frac{n_i}{n} = \frac{n_j \times n_i}{n} = n_i \frac{n_j}{n} = n_i p_j$$
+        ce qui correspond aux effectifs théoriques adoptés lors du second point de vue (le point de vue inversé).
+
+        Ainsi les effectifs théoriques étant identiques d'un point de vue à l'autre, la réalisation de $Q$ sera identique aussi, amenant aux mêmes conclusions. \textbf{Choisir un des deux points de vue est donc totalement arbitraire}, et on pourrait même dépasser ces parallèles avec le test d'homogénéité en calculant directement les effectifs théoriques :
+        $$e_{i,j} = \frac{n_i\times n_j}{n}$$
+    \end{remark}
+
+
+    
+\end{enumerate}
+
+
+\section*{Exercice 5}
+
+\begin{enumerate}
+    \item Nous allons comme d'habitude prendre le contraire de l'hypothèse nulle à tester $(H_0)$ comme hypothèse alternative, d'où :
+    $$(H_1)\quad \exists 1\le i < j \le 4\; |\; \pi_i \neq \pi_j$$
+
+    \item Nous pouvons ramener ce problème à un problème d'homogénéité de proportions à $P = 4$ populations (sur chacun des 4 hôpitaux) et à $C = 2$ catégories (individus guéris et individus non-guéris).
+
+    Testons donc $(H_0)$ (contre $(H_1)$) par un test d'homogénéité : supposons $(H_0)$ et estimons les effectifs théoriques :
+    \begin{table}[h]
+        \centering
+        \begin{tabular}{|c|c|c|c|}
+            \hline
+             & Guérison & Non guérison & Total \\
+            \hline
+            Hôpital 1 (observé) & 123 & 28 & 151\\
+            \hline
+            Hôpital 1 (théorique) & $n_1p_G \approx 113.99$ & $n_1p_{NG} \approx 37.01$ & 151\\
+            \hline
+            Hôpital 2 (observé) & 95 & 19 & 114\\
+            \hline
+            Hôpital 2 (théorique) & $n_2p_G \approx 86.06$ & $n_2p_{NG} \approx 27.94$ & 114\\
+            \hline
+            Hôpital 3 (observé) & 152 & 63 & 215\\
+            \hline
+            Hôpital 3 (théorique) & $n_3p_G \approx 162.30$ & $n_3p_{NG} \approx 52.70$ & 215\\
+            \hline
+            Hôpital 4 (observé) & 132 & 53 & 185\\
+            \hline
+            Hôpital 4 (théorique) & $n_4p_G \approx 139.66$ & $n_4p_{NG} \approx 45.34$ & 185\\
+            \hline
+        \end{tabular}
+    \end{table}
+    
+    où $n_i$ désigne la taille de l'échantillon de patients dans l'hôpital $1\le i \le 4$, et où on estime les proportions théoriques $p_G$ et $p_{NG}$ par :
+    $$p_G = \frac{\mbox{Effectif des individus guéri}}{\mbox{Effectif total}} = \frac{502}{665} \approx 75.49\%$$
+    $$p_{NG} = \frac{\mbox{Effectif des individus non-guéri}}{\mbox{Effectif total}} = \frac{163}{665} \approx 24.51\%$$
+
+    \begin{remark}
+        On notera que l'on peut aussi naturellement calculer $p_G$ en passant par la probabilité de l'événement contraire, d'où $p_{NG} = 1 - p_G$. C'est d'ailleurs pour cette raison que l'égalité sur les proportions de la catégorie des "non-guéris" n'apparaît pas dans l'hypothèse nulle : c'est une sorte d'abus de notation, mais que l'on a fait constamment lors des tests sur les proportions du chapitre 4...
+    \end{remark}
+
+    \begin{remark}
+        On peut de nouveau remarquer (comme dans l'exercice 4) que les effectifs théoriques s'obtiennent par la formule :
+        $$\frac{\mbox{Effectif de la population} \times \mbox{Effectif de la catégorie}}{\mbox{Effectif total}}$$
+    \end{remark}
+
+    Continuons la procédure de test. Sous $(H_0)$, comme les effectifs théoriques sont (estimés comme) suffisamment grands, on sait que pour des problèmes d'homogénéité $Q\sim \chi^2(d)$ où $d=(C-1)(P-1)=3$.
+
+    D'après la table des valeurs extrêmes du $\chi^2$, le seuil $K_{5\%}$ tel que $$P(Q>K_{5\%}) = 0.05$$ vaut $K_{5\%}=K_{3;5\%} =7.815$. En d'autres termes, la probabilité pour que $Q$ soit plus grand que 7.815 est de $5\%$ : ce sera notre zone de rejet.
+
+    Or 
+    \begin{align*}
+        q &= \left ( \frac{(123-113.99)^2}{113.99} \frac{(28-37.01)^2}{37.01}\right ) + \left ( \frac{(95-86.06)^2}{86.06} + \frac{(19-27.94)^2}{27.94}\right )\\
+        & \qquad + \left ( \frac{(152-162.30)^2}{162.30} \frac{(63-52.70)^2}{52.70}\right ) + \left ( \frac{(132-139.66)^2}{139.66} + \frac{(53-45.34)^2}{45.34}\right )\\ 
+        & = 2.906 + 3.789 + 2.667 + 2.384 = 11.746
+    \end{align*}
+
+
+    Comme ici $q>7.815$, nous sommes dans la zone de rejet de $(H_0')$, on peut donc rejeter $(H_0')$, et donc $(H_0)$ avec une précision de $\alpha = 5\%$
+
+    En cherchant le degré de signification, on remarque que l'on continue de rejeter $(H_0)$ avec une erreur $\alpha = 1\%$ ($q>K_{0.1\%} = 11.345$), mais que l'on ne peut plus conclure au rejet de $(H_0)$ lorsque l'erreur est $\alpha = 0.1\%$ ($q<K_{0.01\%} = 16.266$) : à défaut on évalue donc notre degré de signification à $\epsilon = 1\%$.
+
+    En particulier, on peut affirmer avec une probabilité de se tromper de 1\% que les traitements n'ont pas tous la même efficacité, i.e. il y en a au moins deux qui ont des efficacités différentes (cf. hypothèse alternative)
+\end{enumerate}
+\end{document}

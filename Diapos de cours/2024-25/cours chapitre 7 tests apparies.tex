@@ -1,0 +1,256 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}   % pour pouvoir taper les accents directement     
+\usepackage{amsfonts,amssymb,amsmath}
+\usepackage{tikz}
+\usepackage{array}
+\usepackage{calc}
+\usetikzlibrary{patterns}
+\usepackage[absolute,showboxes,overlay]{textpos}     
+\textblockorigin{0pt}{0pt}                          
+\TPshowboxesfalse  
+ \usepackage{lmodern,multido}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+
+\begin{document}
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ % Afficher le numéro de diapos 
+  \addtobeamertemplate{navigation symbols}{}{ \hspace{1em}    \usebeamerfont{footline}%
+    \insertframenumber/\inserttotalframenumber }
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Introduction aux statistiques}{Données appariées}
+\begin{textblock*}{\textwidth}(1cm,2cm)
+
+\begin{center}{\bf \Large Généralités } \end{center}
+
+
+\
+
+Appariement  = une des deux situations suivantes :
+\begin{itemize}
+\item  deux expériences sur le même échantillon et comparaison des résultats obtenus
+\item expérience sur deux échantillons  non indépendants : les individus  ont des caractéristiques communes.
+\end{itemize}
+
+
+
+\end{textblock*}
+
+\end{frame}
+
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Introduction aux statistiques}{Données appariées}
+\begin{textblock*}{\textwidth}(1cm,2cm)
+
+\begin{center}{\bf \Large Comparaison de moyennes } \end{center}
+
+
+ Exemple :
+ 
+ \begin{itemize}
+ \item deux traitements A et B pour diminuer les  infections
+opportunes  si infection au VIH
+\item durées sans infection opportune  très corrélées
+au nombre de lymphocytes CD4
+\item couples de patients ayant le même nombre de CD4 
+\item attribution aléatoire des traitements A et B dans chaque paire
+ \end{itemize}
+
+
+
+
+\end{textblock*}
+
+\end{frame}
+
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Introduction aux statistiques}{Données appariées}
+\begin{textblock*}{\textwidth}(1cm,2cm)
+
+\begin{center}{\bf \Large Comparaison de moyennes } \end{center}
+
+
+
+ 
+ \begin{itemize}
+ \item $X$ (resp. $Y$) durée de vie (en mois) sans infection  des patients traités avec A (resp. B)
+\item durées  des couples  notées $(x_1,y_1),\hdots,(x_{100},y_{100})$ 
+\item $z_i=x_i-y_i$ :  série statistique $z_1,\hdots,z_{100}$
+ \end{itemize}
+
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+valeur de $z$ & -4 & -3 & -2 & -1 & 0 & 1 & 2 & 3 & 4 & 6 \\
+\hline
+nombre de couples & 2 & 4 & 8 & 15 & 22 & 23 & 14 & 8 & 3 & 1 \\
+\hline
+\end{tabular}
+\end{center}
+
+\end{textblock*}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Introduction aux statistiques}{Données appariées}
+\begin{textblock*}{\textwidth}(1cm,2cm)
+
+\begin{center}{\bf \Large Comparaison de moyennes } \end{center}
+
+
+
+ 
+ \begin{itemize}
+ \item une seule population (donc un seul échantillon) 
+ \item variable  $Z=X-Y$
+ \item $E(Z) = \mu_A - \mu_B$ mais  $Var(Z) \not= Var(X) + Var(Y)$ (variables $X$ et $Y$  pas indépendantes)
+ \item $\mu=E(Z)$ et $\sigma^2=Var(Z)$
+ \item $M$ estimateur de $\mu$ sur des échantillons de taille $n=100$ 
+ \item $S^2$ estimateur de  $\sigma^2$ 
+ \end{itemize}
+
+
+
+\end{textblock*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Introduction aux statistiques}{Données appariées}
+\begin{textblock*}{\textwidth}(1cm,2cm)
+
+\begin{center}{\bf \Large Comparaison de moyennes } \end{center}
+
+
+
+
+ \begin{itemize}
+ \item variable de test  $T=\frac{M-\mu}{S/\sqrt{n}}$
+ \item si $n$ est grand ($n\geq 30$), $T\sim \mathcal{N}(0\,;\,1)$
+ \item si $X$ et $Y$  distribuées normalement alors $T$ suit une loi de Student à $n-1$ degrés de liberté
+ \end{itemize}
+
+Méthode classique :
+
+\begin{itemize}
+\item si $(H_0)$ vraie, $T(echantillon) = \frac{\overline{x}-\overline{y}}{\frac{s_{xy}}{\sqrt{n}}}=t\approx 2.29>1.96$ 
+\item on  rejette $(H_0)$ :différence significative
+\item conclusion $\mu_A > \mu_B$,
+\item  degré de signification  0.03.
+\end{itemize}
+
+\end{textblock*}
+
+\end{frame}
+
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Introduction aux statistiques}{Données appariées}
+\begin{textblock*}{\textwidth}(1cm,2cm)
+
+\begin{center}{\bf \Large Comparaison de proportions } \end{center}
+
+
+ Exemple :
+ 
+ \begin{itemize}
+\item deux méthodes pour tenter de dessouler
+\item 45 journalistes  même quantité d'alcool 
+\item  première soirée, bol de café
+\item deuxième soirée,  bol de vinaigre de cidre
+\item  nombre de succès.
+\item  C+ (resp. C-)  "la technique du café a marché" (resp. "n'a pas marché") 
+\item  V+ (resp. V-)  "la technique du vinaigre a marché" (resp. "n'a pas marché")
+ \end{itemize}
+
+
+
+
+\end{textblock*}
+
+\end{frame}
+
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Introduction aux statistiques}{Données appariées}
+\begin{textblock*}{\textwidth}(1cm,2cm)
+
+\begin{center}{\bf \Large Comparaison de proportions } \end{center}
+
+
+
+ 
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Résultat Café & Résultat Vinaigre & nombre d'individus \\
+\hline
+C- & V- & 5 \\
+\hline
+C- & V+ &  13\\
+\hline
+C+ & V- &   19\\
+\hline 
+C+ & V+ &   11 \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{itemize}
+\item population abstraite $\mathcal{P}$ : individus de type 
+$(C+,V-)$ ou  $(C-,V+)$ (différence entre les deux traitements)
+\item  $\pi$ la proportion (théorique...) d'individus  du type $(C+,V-)$ dans cette population.
+\item  $(H_0)\,: \, \pi=0.5$ contre $(H_1)\,: \, \pi\neq 0.5$ 
+\end{itemize}
+\end{textblock*}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Introduction aux statistiques}{Données appariées}
+\begin{textblock*}{\textwidth}(1cm,2cm)
+
+\begin{center}{\bf \Large Comparaison de proportions } \end{center}
+
+
+
+ 
+ \begin{itemize}
+ \item $\mathcal{E}_n$ l'ensemble des échantillons de taille $n$ dans la population $\mathcal{P}$
+ \item $ T(echantillon) = \frac{x-y}{\sqrt{n}}$
+où $x$ = nombre d'individus  de type $(C+,V-)$ et $y$  nombre d'individus  de type $(C-,V+)$ (rmq : $n=x+y$).
+ \item si $n$  grand ($n\geq 30$) alors  $T\sim\mathcal{N}(0\,;\,1)$
+ \item $|t|=\left|\frac{13-19}{\sqrt{32}}\right| \approx 1.06<1.96$
+ \item Conclusion : pas de différence significative entre les deux méthodes
+ \end{itemize}
+
+
+\end{textblock*}
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+

@@ -1,0 +1,144 @@
+\documentclass[11pt]{article}
+\usepackage{amsfonts,amssymb,epsfig}
+%\usepackage[latin1]{inputenc}
+\usepackage[all]{xy}
+\usepackage{amsmath}
+\usepackage{delarray}
+\usepackage{pdfpages}
+\usepackage[french]{babel}
+\usepackage[T1]{fontenc}
+
+\usepackage[utf8]{inputenc} 
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+%\theoremstyle{definition}
+\newtheorem{defn}[thm]{Definition}
+%\theoremstyle{remark}
+\newtheorem{rem}[thm]{Remark}
+\numberwithin{equation}{section}
+\newtheorem{example}[thm]{Example}
+
+\newcommand{\D}{\displaystyle}
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\K}{{\mathbb K}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+
+\setlength{\textwidth}{17.2cm}
+\setlength{\textheight}{24cm}
+\hoffset=-2.2cm
+\voffset=-2.5cm
+
+%-----------------------------------------------------------------------------
+\begin{document}
+\noindent Université Paul Sabatier -- Toulouse III
+\hfill L2 BCP\\
+\noindent Introduction aux Statistiques
+%\hfill Année 2023-2024
+
+\bigskip
+\bigskip
+
+
+\begin{center}
+{\bf \large TD 0: Révisions sur les variables aléatoires discrètes}\\
+{\bf \large }
+\end{center}
+
+\bigskip
+%\bigskip
+
+\subsection*{Exercice 1 :}
+
+\noindent
+Sur une île des Palaos, deux plages existent : l'une au nord et l'autre au sud. 
+$1000$ touristes se trouvent sur cette île. Chaque jour, chaque touriste choisit d'aller sur l'une ou l'autre de ces deux plages, chacune  avec probabilité $1/2$, et ceci, indépendamment les uns des autres. On note $S$ la variable aléatoire égale au nombre de touristes choisissant la plage nord.
+\begin{enumerate}
+\item Quelle est la loi de $S$ ? Justifier votre réponse.
+\item Donner l'espérance et la variance de $S$.
+\item Calculer la probabilité qu'aucun touriste ne choisisse la plage nord.
+\item Calculer la probabilité qu'au moins deux touristes choisissent la plage nord.
+\item Les deux plages étant désertes au début de la journée, on dit qu'un touriste est \emph{heureux} si il se retrouve seul sur une plage toute  la journée. 
+\begin{enumerate}
+\item Peut-on avoir deux touristes heureux ?
+\item
+Montrer que la probabilité qu'il y ait un touriste heureux parmi les $1000$ touristes est
+$ \displaystyle
+\frac{1000}{2^{999}}.
+$
+\end{enumerate}
+\end{enumerate}
+
+\bigskip
+\thispagestyle{empty}
+
+
+\subsection*{Exercice 2 : }
+
+\noindent
+Certaines mutations sont à l'origine de plantes à feuille panachée. Si cela est souvent sélectionné 
+chez les plantes d'ornement pour des raisons esthétiques, c'est peu souhaité pour les plantes 
+agricoles, car les plantes sont plus fragiles et avec un rendement plus faible. 
+
+On note $X$ la variable aléatoire représentant le nombre de plants panachés dans une parcelle d'un 
+hectare de tournesol. Les mutations étant des phénomènes rares et plutôt spontanés, 
+on suppose que $X$ suit une loi de Poisson.
+
+\begin{enumerate}
+\item Sur un échantillon de 300 parcelles de tournesol prises au hasard, on a remarqué qu'il y en 
+avait 74 qui n'avaient aucun plant panaché. Donner une estimation du paramètre $\lambda$ de la loi
+de Poisson que suit $X$.
+\item Quel est le nombre moyen de plants panaché sur une parcelle de tournesol prise au hasard ?
+\item Calculer la probabilité qu'une parcelle de tournesol possède au moins 3 plants panachés.
+\end{enumerate}
+
+\bigskip
+
+\subsection*{Exercice 3 : }
+
+Certaines graines ont besoin d'une période de froid pour pouvoir germer; c'est en particulier le cas 
+pour certaines variétés de blé. On sait que, cultivées dans des conditions adaptées, avec une période de froid, $92\,\%$  
+des graines d'une certaine variété de blé germent. 
+
+On note $X$ la variable aléatoire représentant le nombre de graines qui ne germent pas parmi $50$ 
+graines de cette variété semées dans de bonnes conditions de culture, avec une période de froid. 
+\begin{enumerate}
+\item Expliquer pourquoi $X$ suit une loi binomiale dont on précisera les paramètres. \\
+Est-il possible d'approcher cette loi binomiale par une autre loi ? si oui laquelle ?
+\item Quel est le nombre moyen de graines non germées ? et son écart-type ? 
+\item Calculer les probabilités que : 
+\begin{enumerate}
+\item aucune graine n'ait germé, 
+\item toutes les graines aient germé,
+\item au moins une graine n'ait pas germé.  
+\end{enumerate}
+\end{enumerate}
+\thispagestyle{empty}
+
+\bigskip
+
+
+\subsection*{Exercice 4 : }
+En Europe, les moustiques vecteurs du paludisme sont rares et la transmission du 
+parasite n’est pas systématique à chaque piqure. 
+On désigne par Y la variable aléatoire qui
+représente le nombre annuel de cas de paludisme en Europe. On supposera que le
+nombre de cas observé dans une année est indépendant de ce qui a été observé les autres
+années. On suppose que Y suit une loi de Poisson $\mathcal{P}(\lambda)$.
+
+On sait que le nombre moyen annuel de cas de paludisme
+en Europe depuis le milieu du XXième siècle est de 6 par an. 
+%{\bf 1.} Rappeler la valeur de la moyenne $E(Y)$.
+\begin{enumerate}
+\item Déterminer une estimation de la valeur du paramètre $\lambda$.
+\item Quelle est la probabilité que l’année prochaine, il y ait au moins 2 cas de paludisme en
+Europe ?
+\end{enumerate}
+
+
+
+\end{document}

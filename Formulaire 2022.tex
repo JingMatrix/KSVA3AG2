@@ -1,0 +1,418 @@
+%\documentclass[12pt]{amsart}
+%\usepackage{amsfonts,amssymb,epsfig}
+\documentclass[12pt, a4paper]{article}
+
+%%%%%%%%%% Packages %%%%%%%%%%
+
+\usepackage{amsfonts,amssymb,amsmath}
+
+\usepackage[utf8]{inputenc}
+
+\usepackage[all]{xy}
+\usepackage{delarray}
+
+\usepackage[french]{babel}
+\usepackage[T1]{fontenc}
+
+\usepackage[colorlinks=true,allcolors=black]{hyperref}
+
+%\pagestyle{empty}
+
+%\marginparsep = -2cm
+%\addtolength{\evensidemargin}{-2.2cm}
+%\addtolength{\oddsidemargin}{-0.7cm}
+%\setlength {\topmargin}{-1cm}
+%\setlength {\textwidth}{16cm}
+%\textheight 22cm
+
+\textwidth=170mm
+\textheight=254mm
+
+\voffset=-18 mm
+\hoffset=-15 mm     
+
+\newcommand{\D}{\displaystyle}
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\K}{{\mathbb K}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+%\pagenumbering{arabic}{-1}
+
+
+%-----------------------------------------------------------------------------
+\begin{document}
+
+
+\noindent Université Paul Sabatier -- Toulouse III \hfill  Introduction aux Statistiques
+
+\noindent Licence SdV - Parcours BCP
+
+%noindent Introduction aux Statistiques
+
+%\noindent Année 2005-2006
+\bigskip
+\bigskip
+
+\begin{center}
+{\huge {\bf Formulaire de cours}}
+\end{center}
+
+\bigskip
+\noindent {\it Ce formulaire sera le seul document autorisé pour les évaluations de l'UE Introduction aux Statistiques. Il est permis de souligner ou de colorier mais pas de rajouter des commentaires.
+Attention, ce document n'est pas un polycopié de cours mais un formulaire qui résume les notions vues en cours pour vous éviter d'apprendre des formules par coeur. }
+%\thispagestyle{empty}
+%\vspace{1cm}
+
+\section{Variables aléatoires discrètes}
+
+\subsection[Loi binomiale]{Loi binomiale $\mathcal{B}(n\,;\,p)$ avec $n\in\mathbb{N}$ et $p\in[0;1]$}
+
+Une variable aléatoire discrète $X$ suit une loi binomiale de paramètres $n$ et $p$ si elle prend les 
+valeurs  $\{0, 1, 2\hdots, n\}$ avec les probabilités 
+$$
+\Pr(X=k)=C^k_n p^k (1-p)^{n-k}\,, \quad \forall k\in\{0,1,\hdots , n\}\,.
+$$
+On rappelle que $C^k_n=\frac{n !}{k! (n-k)!}$ avec $k!=1\times 2\times 3\times\hdots\times k$ et $0!=1$. \\
+Un calcul donne $E(X)=np$ et $Var(X)=np(1-p)$.
+
+
+\subsection[Loi de Poisson]{Loi de Poisson $\mathcal{P}(\lambda)$ avec $\lambda>0$}
+
+Une variable aléatoire discrète $X$ suit une loi de Poisson de paramètre $\lambda>0$ si l'ensemble de ses valeurs est
+$\mathbb{N}$ avec les probabilités 
+$$
+\Pr(X=k)=\frac{\lambda^k}{k !} e^{-\lambda} \,, \quad \forall k\in\mathbb{N}.
+$$
+On a alors $E(X)=Var(X)=\lambda$.\\
+
+\noindent {\bf Propriété :} Si $X$ suit une loi binomiale $\mathcal{B}(n,p)$ avec $n\geq 30$ ($n$ grand), 
+$p\leq 0,1$ ($p$ petit) et $np\leq 10$ alors on peut supposer que $X$ suit approximativement une loi de Poisson $\mathcal{P}(\lambda)$ avec $\lambda=np$.
+
+\section{Variables aléatoires continues}
+
+\subsection[Loi uniforme sur un intervalle]{Loi Uniforme $U[a,b]$}
+Une variable aléatoire continue $X$ suit une loi si sa densité de probabilité est la fonction
+$f:\mathbb{R}\longrightarrow \mathbb{R}$ définie par 
+$f(t)=\frac{1}{b-a}$ si $t \in [a,b]$ et $f(t)=0$ sinon. 
+La fonction de répartition sera alors la fonction $F$ définie par $F(t)=0$ si $t<a$, $F(t)=\frac{t-a}{b-a}$
+si $t\in [a,b]$ et $F(t)=1$ si $t>b$.
+On a $E(X)=\frac{a+b}{2}$ et $Var(X)=\frac{(a-b)^2}{12}$.
+
+\subsection[Loi exponentielle]{La loi exponentielle $\mathcal{E}(\lambda)$, avec $\lambda>0$}
+
+Une variable aléatoire continue $X$ suit une loi exponentielle de paramètre $\lambda>0$ si sa densité de 
+probabilité est la fonction $f:\mathbb{R}\longrightarrow \mathbb{R}$ donnée par  $f(t)=0$ si $t<0$ et
+$f(t)=\lambda e^{-\lambda t}$  si $t\geq 0$.
+
+La fonction de répartition sera alors la fonction $F$ définie par $F(t)=0$ si $t<0$ et 
+$F(t)=1-e^{-\lambda t}$ si $t\geq 0$. Un petit calcul montre que $E(X)=\frac{1}{\lambda}$ et $Var(X)=\frac{1}{\lambda^2}$.\\
+Les lois exponentielles vérifient la propriété $ \Pr(X>s+t|X>t) = \Pr(X>s)$ pour tout $s,t>0$. On dit qu'elles sont ``sans mémoire".
+
+
+\subsection[Loi de Weibull]{La loi de Weibull $W(a,b)$ avec $a>0$ et $b>0$}
+
+Une variable aléatoire continue $X$ suit une loi de Weibull de paramètres $a>0$ et $b>0$ si sa densité de probabilité est la 
+fonction $f:\mathbb{R}\longrightarrow \mathbb{R}$ définie par  $f(t)=0$ si $t<0$ et
+$f(t)=\frac{a}{b} \big( \frac{t}{b} \big)^{a-1} \mathrm{exp}\big( - \big( \frac{t}{b} \big)^{a} \big)$ si  $t\geq 0$.
+
+La fonction de répartition sera alors la fonction $F$ définie par $F(t)=0$ si $t<0$ et 
+$F(x)=1- \mathrm{exp}\big( - \big( \frac{t}{b} \big)^{a} \big)$ si $t\geq 0$. 
+L'expression de la moyenne et de l'écart-type est un peu compliquée dans ce cas.
+Notons que lorsque $a=1$, on retrouve la loi exponentielle.
+
+\subsection[Loi normale]{La loi normale $\mathcal{N}(\mu,\sigma)$ avec $\mu\in \mathbb{R}$ et $\sigma>0$}
+
+Une variable aléatoire continue $X$ suit une loi normale (ou loi de Gauss) $\mathcal{N}(\mu,\sigma)$ avec
+$\mu\in \mathbb{R}$ et $\sigma>0$ si sa densité de probabilité est la 
+fonction $f:\mathbb{R}\longrightarrow \mathbb{R}$ définie par  
+$$
+f(x)=\frac{1}{\sigma\sqrt{2\pi}} e^{-\frac{(x-\mu)^2}{2\sigma^2}}\,.
+$$
+On a alors  $E(X)=\mu$ et $Var(X)=\sigma^2$.
+
+\noindent {\bf Propriété :} Si $X$ suit une loi $\mathcal{N}(\mu,\sigma)$ alors $Y=\frac{X-\mu}{\sigma}$ suit
+une loi $\mathcal{N}(0,1)$.
+
+\noindent {\bf Propriété :} Si $X_1$ suit une loi normale $\mathcal{N}(\mu_1,\sigma_1)$ et 
+$X_2$ une loi normale $\mathcal{N}(\mu_2,\sigma_2)$ et si $X_1$ et $X_2$ sont indépendantes, alors
+la variable $\alpha X_1 + \beta X_2$ (où $\alpha$ et $\beta$ sont deux réels quelconques) suit une loi
+normale $\mathcal{N}(\alpha\mu_1+\beta\mu_2,\sqrt{\alpha^2\sigma_1^2+\beta^2\sigma_2^2})$.
+
+
+\section{Estimation et tests statistiques sur moyennes }
+On considère une population $\Omega$ et on note $\mathcal{E}_n$ l'ensemble de tous les échantillons de $n$
+individus pris dans $\Omega$.
+
+\subsection{Estimation de la moyenne et de l'écart-type} \label{EstimationMoyenne}
+On prend une variable aléatoire $X : \Omega \longrightarrow \mathbb{R}$ et on note $\mu$ sa moyenne et
+$\sigma$ son écart-type. 
+Si on considère un échantillon de $n$ individus, on note $x=(x_1,\hdots,x_n)$ les valeurs de $X$ prises sur chaque individu de l'échantillon.
+On définit alors $M_n : \mathcal{E}_n \longrightarrow \mathbb{R}$ 
+et $S_n^2 : \mathcal{E}_n \longrightarrow \mathbb{R}$
+par 
+\begin{eqnarray*}
+M_n(echantillon) & = & \bar{x}=\frac{x_1+\hdots x_n}{n} = \frac{\sum_{i=1}^n x_i}{n}\\
+S_n^2(echantillon) & = & s_x^2=\frac{1}{n-1}\sum_{i=1}^n (x_i-\bar{x})^2 = \frac{n}{n-1}\big( \frac{\sum_{i=1}^n x_i^2}{n} - \bar{x}^2 \big)
+=\frac{\sum_{i=1}^n x_i^2}{n-1} -  \frac{n}{n-1}\bar{x}^2
+\end{eqnarray*}
+
+Les variables aléatoires $M_n$ et $S_n^2$ sont les estimateurs respectivement de $\mu$ et $\sigma^2$. 
+
+Les valeurs $\bar{x}$ et $s_x^2$ sont les estimations de $\mu$ et $\sigma^2$ à partir de l'échantillon choisi.\\
+
+%On peut montrer que 
+%$\displaystyle s_x^2=\frac{n}{n-1}\big( \frac{\sum_{i=1}^n x_i^2}{n} - \bar{x}^2 \big)=\frac{\sum_{i=1}^n x_i^2}{n-1} -  \frac{n}{n-1}\bar{x}^2$.\\
+
+\noindent {\bf Propriété :} On a $E(M_n)=\mu$ et $Var(M_n)=\sigma^2/n$.
+Si $n$ est grand, $M_n$ suit approximativement une loi normale $\mathcal{N}(\mu;\sigma/\sqrt{n})$. \\
+
+\noindent {\bf Propriété :} On a $E(S_n^2)=\sigma^2$ et %$Var(S_n^2)=\frac{2\sigma^4}{n-1}$.
+la variable $\frac{(n-1)S_n^2}{\sigma^2}$ suit une loi du $\chi^2$ à $n-1$ degrés de liberté.\\
+
+%\subsection{Statistique de test}
+
+On considère maintenant la variable aléatoire $\displaystyle T=\frac{M_n-\mu}{S_n/\sqrt{n}}$ 
+
+\noindent {\bf Propriété :} Si $n$ est grand ($n\geq 30$ en général) alors $T$ suit approximativement une
+loi normale centrée réduite $\mathcal{N}(0;1)$.\\
+
+\noindent {\bf Propriété :} Si $n$ est petit ($n < 30$), mais si $X$ est distribuée selon une loi normale alors $T$ suit une loi de Student
+de degré de liberté égal à $n-1$.
+
+\subsection{Test de conformité sur les moyennes}
+On prend une variable aléatoire $X : \Omega \longrightarrow \mathbb{R}$ et on note $\mu$ sa moyenne et
+$\sigma$ son écart-type ; ces deux paramètres étant inconnus, à estimer sur l'échantillon. %On utilise les notations et propriétés du paragraphe \ref{EstimationMoyenne}.\\
+ 
+\subsubsection*{\it Hypothèses}
+\begin{center}
+$
+\begin{array}{ll}
+& H_0: \mu = \mu_0 \mbox{ (où } \mu_0 \mbox{ est la valeur de référence donnée)} \\
+\mbox{vs } & H_1: \mu \neq \mu_0  \mbox{ (ou } H_1: \mu > \mu_0 \mbox{ ou } H_1: \mu < \mu_0)
+\end{array}
+$
+\end{center}
+
+\noindent {\it Statistique de test } \hspace{3cm} $\displaystyle T=\frac{M_n-\mu_0}{S_n/\sqrt{n}}$.
+
+\subsection{Test d'homogénéité sur les moyennes}
+On prend deux variables aléatoires $X_1$ et $X_2$, on note $\mu_1$ et $\mu_2$ les moyennes, $\sigma_1$ et
+$\sigma_2$ les écart-types.
+On note $M_1$ et $S_1$ les estimateurs de $\mu_1$ et $\sigma_1$ sur des échantillons de taille $n_1$.
+De même, on note $M_2$ et $S_2$ les estimateurs de $\mu_2$ et $\sigma_2$ sur des échantillons de taille $n_2$.
+
+\subsubsection*{\it Hypothèses}
+\begin{center}
+$\begin{array}{ll}
+ & H_0: \mu_1 = \mu_2 \\
+\mbox{vs }& H_1: \mu_1 \neq \mu_2  \mbox{ (ou } H_1 : \mu_1 > \mu_2 \mbox{ ou } H_1 : \mu_1 < \mu_2 \mbox{)} 
+\end{array}$
+\end{center}
+
+%\noindent {\it Statistique de test :} grands ou petits échantillons ?
+
+\subsubsection*{\it Statistique de test sur grands échantillons}
+Si $n_1$ et $n_2$ sont grands (supérieurs à 30),
+$\displaystyle T=\frac{M_1-M_2}{\sqrt{\frac{S_1^2}{n_1}+\frac{S_2^2}{n_2}} }$ suit une loi normale $\mathcal{N}(0;1)$.
+
+\subsubsection*{\it Statistique de test sur petits échantillons} 
+Si $n_1$ et/ou $n_2$ sont petits (inférieurs à 30),
+on note alors $\displaystyle S^2=\frac{(n_1-1)S_1^2+(n_2-1)S_2^2}{n_1 + n_2-2}$ et 
+$\displaystyle T=\frac{M_1-M_2}{\sqrt{\frac{S^2}{n_1}+\frac{S^2}{n_2}} }$.
+Si $X_1$ et $X_2$ sont distribuées selon une loi normale et si $\sigma_1=\sigma_2$ alors $T$ suit
+une loi de Student à $n_1+n_2-2$ degrés de liberté.
+
+\section{Estimation et tests statistiques sur proportions}
+
+\subsection{Estimation de proportions}\label{EstimationProportion}
+
+On note $\pi$ la proportion d'individus de $\Omega$ qui ont une certaine caractéristique $\mathcal{C}$.
+
+On construit alors l'estimateur de la proportion $\pi$, $\mathrm{P}_n : \mathcal{E}_n \longrightarrow \mathbb{R}$ par
+
+$\mathrm{P}_n$ (échantillon) $=p = card(\mathcal{C}) / card(\Omega)$ : proportion d'individus de l'échantillon qui présentent la 
+caractéristique $\mathcal{C} $.\\
+
+\noindent {\bf Propriété :} On a  $E(\mathrm{P}_n)=\pi$ et 
+$Var(\mathrm{P}_n)=\frac{\pi(1-\pi)}{n}$.\\
+
+\noindent {\bf Propriété  : } Si $n$ est grand ($n\geq 30$) et si $n\pi\geq 5$ et $n(1-\pi)\geq 5$ alors on peut 
+supposer
+que $\mathrm{P}_n$ suit approximativement une loi normale $\mathcal{N}(\pi;\sqrt{\pi(1-\pi)/n})$.\\
+
+\noindent {\bf Propriété  : } Si $n$ est grand ($n\geq 30$) et si $n\pi\geq 5$ et $n(1-\pi)\geq 5$ alors la variable aléatoire
+$$
+T=\frac{\mathrm{P}_n - \pi}{\sqrt{\frac{\mathrm{P}_n (1-\mathrm{P}_n)}{n}}}
+$$ 
+suit approximativement une loi normale centrée réduite $\mathcal{N}(0;1)$.
+
+\subsection{Test de conformité sur les proportions}
+
+%On utilise les mêmes notations et définitions qu'au paragraphe \ref{EstimationProportion}.\\
+
+%\noindent {\it Hypothèse :} $\pi = \pi_0$ où $\pi_0$ est donnée. \\
+
+\subsubsection*{\it Hypothèses}
+\begin{center}
+$
+\begin{array}{ll}
+& H_0: \pi = \pi_0 \mbox{ (où } \pi_0 \mbox{ est la valeur de référence donnée)} \\
+\mbox{vs } & H_1: \pi \neq \pi_0  \mbox{ (ou } H_1: \pi > \pi_0 \mbox{ ou } H_1: \pi < \pi_0)
+\end{array}
+$
+\end{center}
+
+\noindent {\it Statistique de test } \hspace{3cm} $\displaystyle T=\frac{ P_n-\pi_0}{\sqrt{\frac{\pi_0(1-\pi_0)}{n}}}$. \\
+Si $n\geq 30$, $n\pi_0>5$
+et  $n(1-\pi_0)>5$ alors $T$ suit approximativement une loi normale $\mathcal{N}(0;1)$.
+
+\subsection{Test d'homogénéité sur les proportions}
+
+On note $\pi_1$ la proportion d'individus d'une population $\mathcal{P}_1$ qui présentent une certaine 
+caractéristique et $\mathrm{P}_1$ son estimateur sur des échantillons de taille $n_1$.
+De même on note $\pi_2$ la proportion d'individus d'une population $\mathcal{P}_2$ qui présentent une certaine caractéristique et $\mathrm{P}_2$ son estimateur sur des échantillons de taille $n_2$.
+
+%\noindent {\it Hypothèse :} $\pi_1 = \pi_2$.\\
+
+\subsubsection*{\it Hypothèses}
+\begin{center}
+$\begin{array}{ll}
+ & H_0: \pi_1 = \pi_2 \\
+\mbox{vs }& H_1: \pi_1 \neq \pi_2  \mbox{ (ou } H_1 : \pi_1 > \pi_2 \mbox{ ou } H_1 : \pi_1 < \pi_2 \mbox{)} 
+\end{array}$
+\end{center}
+
+\noindent {\it Statistique  de test :} 
+On note $\displaystyle \mathrm{P}=\frac{n_1 \mathrm{P}_1 + n_2 \mathrm{P}_2}{n_1+n_2}$
+et $\displaystyle T=\frac{\mathrm{P}_1-\mathrm{P}_2}{\sqrt{\mathrm{P}(1-\mathrm{P})} \sqrt{\frac{1}{n_1} + \frac{1}{n_2}} }$. \\
+Si $n_1\geq 30$, $n_2\geq 30$, $n_1 \pi_1>5$,  $n_1(1-\pi_1)>5$, $n_2 \pi_2>5$ et  $n_2(1-\pi_2)>5$
+alors la variable $T$ suit approximativement une loi normale $\mathcal{N}(0;1)$.
+
+\section{Tests stastistiques sur répartitions}
+
+\noindent {\it Statistique de test du $\chi^2$ :} 
+$$
+Q=\sum\frac{ ({\mbox { effectif observé }} -  {\mbox { effectif théorique }})^2}
+ { {\mbox { effectif théorique }}} \,
+$$
+Les effectifs théoriques sont calculés selon la problématique. 
+
+\subsection[Test du chi-2 de conformité]{Test du $\chi^2$ de conformité}
+On considère une population dans laquelle chaque individu peut être classé dans une catégorie parmi $k$. 
+On note $C_1$,....., $C_k$ ces catégories supposées disjointes et $\pi_1$, $\pi_2$, ....,$\pi_k$ les proportions des $k$ catégories dans la population (ces proportions sont inconnues). \\
+
+\noindent {\it Hypothèses :} 
+\begin{itemize}
+\item[] $H_0 : \pi_1=p_1, \;\hdots,\; \pi_k=p_k$ où $p_1, \hdots, p_k$ sont
+des valeurs de référence données,
+\item[] vs $H_1 : \pi_1\neq p_1 \mbox{ ou } \;\hdots,\;  \mbox{ ou } \pi_k \neq p_k$. \\
+\end{itemize}
+
+%\noindent {\it Statistique  de test :} 
+%
+%Q=\sum\frac{ ({\mbox { effectif observé }} -  {\mbox { effectif théorique }})^2}
+% { {\mbox { effectif théorique }}} \,.
+%$$
+
+Sur un échantillon de taille $n$, on comptabilise $n_1$ individus de la $1^{\text{ère}}$ catégorie, 
+$n_2$ de la $2^e$ catégorie, .... , $n_k$ de la $k^{\text{ème}}$ catégorie ; ce sont les effectifs observés. On calcule les effectifs théoriques : $np_1$, ....., $np_k$.
+
+La valeur de $Q$ sur cet échantillon est alors 
+$$
+q=\sum_{i=1}^k \frac{(n_i- p_i n)^2}{p_i n}
+$$
+
+Si $n\geq 30$ et $np_i > 5$ pour tout $i$ alors la variable $Q$ suit une loi du $\chi^2$ à $(k-1)$ d.d.l.
+
+\subsection[Test du chi-2 d'homogénéité]{Test du $\chi^2$ d'homogénéité}
+
+On considère deux populations $\mathcal{P}$ et $\mathcal{P}'$ dans lesquelles chaque individu peut être classé dans une catégorie parmi $k$. 
+On note $C_1$,....., $C_k$ et $\pi_1$, $\pi_2$, ....,$\pi_k$ les catégories et les proportions de $\mathcal{P}$. De même pour  $C_1'$,....., $C_k'$ et $\pi_1'$, $\pi_2'$, ....,$\pi_k'$.\\
+
+\noindent {\it Hypothèses :}  
+\begin{itemize}
+\item[] $H_0 : \pi_1=\pi'_1, \;\hdots,\; \pi_k=\pi'_k$
+\item[] vs  $H_1 : \pi_1 \neq \pi'_1  \mbox{ ou } \;\hdots,\; \mbox{ ou } \pi_k \neq \pi'_k$. \\
+\end{itemize}
+%\noindent {\it Statistique de test :} 
+%$$
+%Q=\sum\frac{ ({\mbox { effectif observé }} -  {\mbox { effectif théorique }})^2}
+% { {\mbox { effectif théorique }}} \,.
+%$$
+
+On dispose de deux échantillons indépendants, de tailles $n$ et $n'$, et
+on observe la répartition des effectifs suivant les $k$ catégories : $n_1$, $n_2$, .... , $n_k$ et  $n'_1$, $n'_2$, .... , $n'_k$.
+
+Les proportions théoriques $p_1, \hdots, p_k$ sont calculées par 
+$\displaystyle p_i = \frac{n_i+n'_i}{n+n'}$.
+Les effectifs théoriques sont alors $np_1$, $np_2$, ... , $np_k$ pour le premier échantillon et $n'p_1$, $n'p_2$, ... , $n'p_k$ pour le second échantillon.
+
+La valeur de $Q$ sur ces deux échantillons est alors
+$$
+q=\sum_{i=1}^k \frac{(n_i- p_i n)^2}{p_i n}  + \sum_{i=1}^k \frac{(n'_i- p_i n')^2}{p_i n'}\,.
+$$
+
+Si $n\geq 30$, $n' \geq 30$, $np_i > 5$ et $n'p_i > 5$ pour tout $i$ 	alors la variable $Q$ suit une 
+loi du $\chi^2$ à $k-1$ degrés de liberté.
+
+\subsection[Test du chi-2 d'indépendance]{Test du $\chi^2$ d'indépendance}
+
+On considère une population $\mathcal{P}$ dans laquelle chaque individu est étudié selon 2 caractéristiques : il est classé dans une première catégorie parmi $L$ (pour la première caractéristique) et une deuxième catégorie parmi $C$ (pour la deuxième caractéristique). \\
+  
+\noindent {\it Hypothèses :} 
+\begin{itemize} 
+\item[] $H_0$ : les deux caractéristiques sont indépendantes 
+\item[] vs $H_1$ : les deux caractéristiques ne sont pas indépendantes. \\
+\end{itemize}
+
+\noindent On note : 
+\begin{itemize}
+\item[] $n_{ij}$ le nombre d'individus dans les catégories $i$ et $j$ ($i=1,..., L$ ; $j=1,..., C$), 
+\item[] $n_{i.}$ le nombre d'individus dans la catégorie $i$ : $n_{i.} = \sum_{j=1}^C n_{ij}$,
+\item[] $n_{.j}$ le nombre d'individus dans la catégorie $j$ : $n_{.j} = \sum_{i=1}^L n_{ij}$,
+\item[] $n$ le nombre total d'individus dans l'échantillon : $n = \sum_{i=1}^L \sum_{j=1}^C n_{ij}$.
+\end{itemize}
+Les effectifs théoriques sous l'hypothèse d'indépendance sont calculés par 
+$\displaystyle e_{ij} = \frac{n_{i.} \times n_{.j}}{n}$ \\
+
+La valeur de $Q$ sur l'échantillon est alors : \;\;
+$
+\displaystyle q=\sum_{i=1}^L \sum_{j=1}^C \frac{(n_{ij}- e_{ij})^2}{e_{ij}}
+$ \\
+
+Si $n\geq 30$ et $e_{ij} > 5$ pour tout $(i,j)$ alors $Q$ suit une 
+loi du $\chi^2$ à $(L-1)(C-1)$ d.d.l.
+
+\section{Annexes : autres variables aléatoires continues}
+
+\subsection[Loi log-normale]{La loi log-normale $Log-\mathcal{N}(\mu,\sigma)$ avec $\mu\in \mathbb{R}$ et $\sigma>0$}
+
+Une variable aléatoire continue $X$ suit une loi Log-Normale (ou loi de Galton) 
+$Log-\mathcal{N}(\mu,\sigma)$ avec $\mu\in \mathbb{R}$ et $\sigma>0$ si $\ln(X)$ suit une loi normale $\mathcal{N}(\mu,\sigma)$.
+La densité de probabilité de $X$ est donc la fonction 
+$f : ]0\,;\,+\infty[ \longrightarrow \mathbb{R}$ définie par  
+$f(x)=\frac{1}{\sigma x\sqrt{2\pi}} e^{-\frac{(\ln (x) -\mu)^2}{2\sigma^2}}$.
+
+Un calcul donne $E(X)=e^{(\mu+\sigma^2/2)}$,  $Var(X)=(e^{\sigma^2}-1) e^{2\mu+\sigma^2}$, et le mode vaut $e^{(\mu-\sigma^2)}$.
+
+\subsection[Loi du chi-2]{La loi du $\chi^2$}
+
+On dit qu'une v.a. continue $Y$ suit une loi du $\chi^2$ à $d$ degrés de liberté si on peut écrire
+$$
+Y=X_1^2 + X_2^2 + \hdots + X_d^2
+$$
+où les $X_i$ sont des variables aléatoires indépendantes qui suivent une loi normale centrée réduite $\mathcal{N}(0;1)$. On peut démontrer facilement que $E(Y)=d$ et $Var(Y)=2d$.
+
+\subsection{La loi de Student}
+On dit que la variable aléatoire continue $T$ suit une loi de Student à $d$ degrés de liberté si on peut écrire $ T=\frac{X}{\sqrt{Y/d}}$ 
+où la variable aléatoire $X$ suit une loi normale $\mathcal{N}(0;1)$, 
+la variable aléatoire $Y$ suit une loi du $\chi^2$ à $d$ degrés de liberté, 
+$X$ et $Y$ sont indépendantes.
+
+On a alors $E(T)=0$ si $d>1$ et $Var(T)=\frac{d}{d-2}$ si $d>2$.
+
+On peut démontrer que si $T$ suit une loi de Student à degré de liberté $d$ grand ($d>30$ par exemple) 
+alors $T$ suit approximativement une loi normale centrée réduite $\mathcal{N}(0;1)$.
+
+\end{document}

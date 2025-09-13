@@ -1,0 +1,348 @@
+\documentclass[a4paper,oneside,12pt]{article}
+
+%\usepackage{natbib}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+
+
+% Packages
+\usepackage{amsmath,amsfonts,amssymb,amsopn,amscd,amsthm}
+\usepackage{comment}
+\usepackage{dsfont}
+\usepackage{graphicx,float}
+\usepackage{color}
+\usepackage[colorlinks]{hyperref}
+\usepackage{epigraph}
+\usepackage{todonotes}
+\usepackage[left=2cm,top=2cm,bottom=2cm,right=2cm]{geometry}
+\usepackage{tikz-cd}
+\usepackage{caption}
+\usepackage{subcaption}
+
+\hypersetup{
+  colorlinks,
+  citecolor=blue,
+  linkcolor=red
+}
+
+
+
+\DeclareCaptionFormat{custom}
+{%
+    \textbf{#1#2}\textit{\small #3}
+}
+\captionsetup{format=custom}
+
+%\usepackage{geometry}
+%\usepackage{enumitem}
+%\usepackage[babel]{csquotes}
+%\usepackage{graphicx}
+\usepackage{bbm}
+%\usepackage{tikz}
+%\usepackage{pgfplots}
+%\usepackage{dsfont}
+\usepackage{faktor}
+%\usepackage{amsthm}
+\usepackage{cancel}
+\usepackage{indentfirst}
+%\usepackage{comment}
+\usepackage{stmaryrd}
+%\MakeAutoQuote{«}{»}
+%\geometry{dvips,a4paper,hmargin=2cm,vmargin=2.5cm}
+
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{assumption}[definition]{Assumption}
+\newtheorem*{remark}{Remarque}
+\newtheorem*{ex}{Example}
+
+%\numberwithin{algorithm}{section}
+% \numberwithin{equation}{section}
+% \numberwithin{figure}{section}
+% \numberwithin{table}{section}
+
+\usepackage{pstricks,pstricks-add,pst-node,pst-tree}
+%\pgfplotsset{compat=1.16}
+
+
+\title{TD1 - L2 BCP}
+\author{}
+\date{}
+
+%Ordinals
+\def\N{{\mathbb N}}
+\def\Z{{\mathbb Z}}
+\def\Q{{\mathbb Q}}
+\def\R{{\mathbb R}}
+\def\C{{\mathbb C}}
+\def\H{{\mathbb H}}
+\def\S{{\mathbb S}}
+\def\T{{\mathbb T}}
+\def\K{{\mathbb K}}
+\def\W{\mathbb{W}}
+\def\D{\mathbb{D}}
+\def\V{\mathbb{V}}
+
+%Probability
+\def\P{{\mathbb P}}
+\def\E{{\mathbb E}}
+\def\F{{\mathbb F}}
+\def\X{{\mathbb X}}
+\def\Y{{\mathbb Y}}
+\def\F{{\mathcal F}}
+\def\U{{\mathcal U}}
+\def\Cov{{\mbox Cov}}
+
+%Index
+\def\u{{\textbf{u}}}
+\def\v{{\textbf{v}}}
+
+
+
+
+\begin{document}
+
+
+
+\maketitle
+
+\section*{Exercice 1}
+
+
+
+\begin{enumerate}
+    \item Le fait qu'un touriste choisisse la plage nord peut se modéliser par le succès d'une expérience de Bernoulli : le "succès" correspond à son choix pour la plage nord, et "l'échec" correspond à son choix pour la plage sud.
+    
+    Si c'est plus parlant, on pourrait associer le choix de chaque touriste à un tirage d'une pièce: avec pile, il va au nord (et le nombre de touristes à la plage nord prend 1 au compteur); avec face, il va au sud (et le nombre de touristes à la plage nord prend 0 au compteur). 
+    
+    De plus, cette pièce serait équilibrée (i.e. pas truquée), puisque la probabilité de "succès" (dans notre cas, il s'agit donc de la probabilité d'aller à la plage nord) est de $1/2$. Enfin, on peut voir que $S$ s'exprime comme la somme des succès de 1000 de ces expériences, réalisées de façon indépendantes. C'est pourquoi, $S$ suit une loi binomiale de paramètre $p=1/2$ et $n=1000$.
+    
+    \item Connaissant la loi de $S$, on peut alors calculer simplement son espérance et sa variance :
+    \begin{align*}
+        \E(S) = np = 1000\times 0,5 = 500 \mbox{ touristes.}
+    \end{align*}
+    \begin{align*}
+        \V(S) = np(1-p) = 1000\times 0,5\times (1-0,5) = 1000 \times 0,5 \times 0,5 = 250
+    \end{align*}
+    
+     \item Calculer la probabilité qu'aucun touriste ne choisisse la plage nord,  revient à calculer la probabilité de l'événement $\{S = 0\}$. 
+     
+     Puisque $S \sim \mathcal{B}(n; p)$, alors :
+     $$\forall 0\le k\le n,\; \P(S=k) = \binom{n}{k} \times p^k \times (1-p)^{n-k} $$
+     ce qui nous permet de calculer :
+     \begin{align*}
+         \P(S = 0) &= \binom{n}{0}\times p^0\times (1-p)^{n-0} \\
+         &= 1 \times 1 \times (1-0,5)^{1000}\\
+         &=0,5^{1000}\\
+         &(\approx \mbox{quelque chose de beaucoup trop petit})
+     \end{align*}
+    
+    \item Cette fois-ci on va regarder :
+    \begin{align*}
+        \P(S\ge 2) &= 1 - \P(S<2)\\
+    \end{align*}
+    \begin{remark}
+    On aurait pu aussi décomposer de cette façon :
+    $$\P(S\ge 2) = \sum_{k=2}^{1000} \P(S=k)$$
+    mais le calcul aurait été bien plus complexe.
+    \end{remark}
+    Or $ \P(S<2) = \color{blue}\P(S=0)\color{black} + \color{red}\P(S=1)\color{black}$. A la question 3, on a déjà calculé $\P(S=0) = 0,5^{1000}$. Calculons $\P(S=1)$ :
+    \begin{align*}
+        \P(S=1)&= \binom{n}{1} \times p^1 \times (1-p)^{n-1} \\
+        &= \binom{1000}{1} \times 0,5^1 \times (1-0,5)^{1000-1}\\
+        &= 1000 \times 0,5^1 \times 0,5^{999}\\
+        &= 1000\times 0,5^{1 + 999}\\
+        &= 1000 \times 0,5^{1000} .
+    \end{align*}
+    
+    Ainsi :
+    $$\P(S<2) = \color{blue}0,5^{1000}\color{black}+\color{red}1000 \times 0,5^{1000} \color{black}= 1001 \times 0,5^{1000}$$
+    Enfin, en réinjectant dans l'expression plus haut : :
+    \begin{align*}
+        \P(S\ge 2) &= 1 - 1001 \times 0,5^{1000} \\
+        &(\approx \mbox{quelque chose de très proche de 1})
+    \end{align*}
+    
+    \item (a) S'il y avait deux touristes heureux, le premier serait sur la plage nord, et le second serait nécessairement sur la plage sud ... on aurait alors 998 touristes absents, ce qui est absurde, puisqu'ils devraient être sur l'une des deux plages. Donc, il ne peut pas y avoir deux touristes heureux.
+    
+    (b) Pour qu'un touriste soit heureux, soit il est seul sur la plage nord (ce qui correspond à l'événement $\{S=1\}$), soit il est seul sur la plage sud (ce qui correspond à l'événement $\{S=999\}$).
+    Ainsi, on se ramène à calculer la probabilité de l'union de ces deux événements. On a déjà calculé $\P(S=1)$, à la question précédente. Regardons $\P(S=999)$: 
+    \begin{align*}
+        \P(S=999)&= \binom{n}{999} \times p^{999} \times (1-p)^{n-999} \\
+        &= \binom{1000}{999} \times 0,5^{999} \times (1-0,5)^{1000-999} \\
+        &=1000 \times 0,5^{999}\times 0,5^{1}\\
+        &= \P(S=1)
+    \end{align*}
+    
+    \begin{remark}
+    La symétrie est due au fait que la probabilité de succès est identique à la probabilité d'échec (=1/2). En effet, on peut, par exemple, retenir que pour tout $n\in \N$, si $X\sim \mathcal{B}(n, 1/2)$, alors :
+    $$\forall 0 \le k \le n,\; \P(X=k) = \P(X = n-k)$$
+    On a juste à prendre $k=1$ pour retrouver les résultats du précédent calcul.
+    \end{remark}
+    
+    Ainsi :
+    \begin{align*}
+        \P(\mbox{1 touriste heureux}) &= \P(S=1) + \P(S=999) \\
+        &= 2 \times  \P(S=1) \\
+        &= 2\times 1000 \times 0,5^{1000} \\
+        &= 2 \times 1000 \times \frac{1}{2^{1000}} \\
+        &= \cancel{2} \times 1000 \times \frac{1}{2^{999}} \times \cancel{\frac{1}{2}}\\
+        &=1000 \times \frac{1}{2^{999}}
+    \end{align*}
+\end{enumerate}
+
+\section*{Exercice 2}
+
+On décide de modéliser le nombre de plants panachés, $X$, par une variable aléatoire suivant une loi de Poisson, $\mathcal{P}(\lambda)$, où $\lambda$ est pour le moment inconnu.
+
+\begin{enumerate}
+    \item A partir des observations, on peut déduire une estimation de la probabilité pour qu'il n'y ait aucun plant panaché dans une parcelle : 
+    \begin{align}
+        \P(X = 0) = \frac{74}{300}
+    \end{align}
+    Or $X\sim \mathcal{P}(\lambda)$, donc :
+    $$\forall k\in \N,\; \P(X=k) = \frac{\lambda^k}{k!}e^{-\lambda}$$
+    En particulier :
+    \begin{align}
+        \P(X=0) = \frac{\lambda^0}{0!}e^{-\lambda}= e^{-\lambda}
+    \end{align}
+    Pour avoir une bonne estimation de $\lambda$, il s'agit donc de rassembler les deux égalités (1) et (2) ci-dessus et de résoudre l'équation :
+    $$e^{-\lambda} = \frac{74}{300}$$
+    $$\Rightarrow -\lambda = \ln\left(\frac{74}{300}\right)$$
+    $$\Rightarrow \lambda = -\ln\left(\frac{74}{300}\right) \approx 1,4$$
+    
+    \item Pour avoir le nombre moyen de plants panachés sur une parcelle, il suffit de regarder l'espérance/la moyenne de $X$, valeur que l'on connait puisque $X$ suit une loi de Poisson :
+    $$\E(X) = \lambda \approx 1,4$$
+    Cela signifie qu'il y a en moyenne entre 1 et 2 plants panachés par parcelle.
+    
+    \item Cela revient au calcul de $\P(X\ge 3)$ :
+    \begin{align*}
+        \P(X\ge 3) &= 1 - \P(X< 3) \\
+        &= 1 - (\color{blue}\P(X= 0) \color{black}+ \color{red}\P(X= 1)\color{black} + \color{orange}\P(X= 2)\color{black}) \\
+        &=1 - \color{blue}\P(X= 0) \color{black}- \color{red}\P(X= 1)\color{black} - \color{orange}\P(X= 2)\color{black}
+    \end{align*}
+    
+    Or 
+    \begin{align*}
+        \color{blue}\P(X= 0) = \frac{74}{300}\approx 0,247\color{black} \qquad \mbox{(d'après les observations)} 
+    \end{align*} \color{red}
+    \begin{align*}
+        \P(X= 1) &= \frac{\lambda^1}{1!}e^{-\lambda} \\
+        &=1,4 e^{-1,4} \\
+        &\approx 0,345 
+    \end{align*} \color{orange}
+    \begin{align*}
+        \P(X= 2) &= \frac{\lambda^2}{2!}e^{-\lambda} \\
+        &=\frac{1,4^2}{2} e^{-1,4} \\
+        &\approx 0,242
+    \end{align*}\color{black}
+
+    On en déduit ainsi la valeur de $\P(X\ge 3)$:
+    $$\P(X\ge 3) = 1 - \color{blue}0,247\color{black} -\color{red} 0,345 \color{black}- \color{orange}0,242\color{black} = 0,166$$
+\end{enumerate}
+
+
+\section*{Exercice 3}
+
+\begin{enumerate}
+    \item Ici, $X$ modélise bien une somme de succès d'une expérience de Bernoulli. Le "succès" qui nous intéresse ici est "une graine ne germe pas". L'événement contraire (i.e. "l'échec") est donc "une graine germe". La probabilité de d'échec est, ici, donnée par $1-p = 92\%$, donc $p = 0,08$. Si la germination d'une graine est indépendante des germinations des autres, alors $X$ modélise bien la somme des succès de $n=50$ de ces expériences, d'où $$X \sim \mathcal{B}(n; p) = \mathcal{B}(50\;;\; 0,08)$$
+    
+    Par ailleurs, on vérifie que :
+    \begin{itemize}
+        \item $n$ est grand : $n=50 \ge 30$
+        \item $p$ est petit : $p = 0,08\le0,1 $
+        \item $np$ est "raisonnable" : $np = 50 \times 0,08 = 4 \le 10$
+    \end{itemize}
+    On peut en déduire que $X$ suit approximativement une loi de Poisson de paramètre $\lambda = np = 4$.
+    
+    \item Une nouvelle fois, pour connaître le nombre moyen de graines non germées, on se ramène au calcul de l'espérance de $X \sim \mathcal{B}(n; p)$:
+    $$\E(X) = np = 50 \times 0,08 = 4 \mbox{ graines non germées.}$$
+    Pour calculer l'écart-type de $X$, on va calculer la racine carrée de sa variance :
+   \begin{align*}
+       \sigma(X) &= \sqrt(\V(X)) \\
+       &= \sqrt(np(1-p))\\
+       &= \sqrt(50 \times 0,08 \times 0,92)\\
+       &= \sqrt{3.68} \\
+       &\approx 1,92 \mbox{ graines non germées.}
+   \end{align*}
+   
+   \item Calculons les probabilités demandées pour $X \sim \mathcal{B}(n; p)$. 
+   
+    D'abord, l'événement "aucune graine n'a germé", correspond à l'événement $\{X = n\}$. Alors :
+   \begin{align*}
+       \P(X = n) &= \binom{n}{n}\times p^n\times (1-p)^{n-n}\\
+       &= 1\times 0,08^{50}\times 1\\
+       &= 0,08^{50} \\
+       &\approx 0
+   \end{align*}
+
+   
+   Ensuite, l'événement "toutes les graines ont germé", correspond à l'événement $\{X = 0\}$. Alors :
+   \begin{align*}
+       \P(X = 0) &= \binom{n}{0}\times p^0\times (1-p)^{n-0}\\
+       &= 1\times 1 \times (1-0,08)^{50}\\
+       &= 0,92^{50} \\
+       &\approx 0,015
+   \end{align*}
+   
+   Enfin, l'événement "au moins une graine n'a pas germé", correspond à l'événement $\{X \ge 1\}$. Alors :
+   \begin{align*}
+       \P(X \ge 1) &= 1 - \P(X =0) \\
+       &\approx 1- 0,015 = 0,985
+   \end{align*}
+   
+   \begin{remark}
+   Ne pas hésiter à se ramener au contexte de l'exercice pour vérifier la cohérence de vos résultats. Par exemple, avec un taux de germination à 92\%, il est logique que sur 50 graines, la probabilité qu'aucune n'ait germé soit dérisoire, ce qui nous conforte dans le résultat $\P(X=n) = \P(\mbox{"Aucune graine n'a germé"}) \approx0$.
+   \end{remark}
+\end{enumerate}
+\newpage
+
+\section*{\textit{Alternative pour les calculs de l'exercice 3}}
+\begin{remark}
+On remarquera que les deux dernières questions de l'exercice 3 ont été faites sous la condition que $X \sim \mathcal{B}(n; p)$. Mais d'après la question 1, on pourrait estimer que $X \sim \mathcal{P}(\lambda)$, où $\lambda = np = 4$. 
+
+Ci-dessous, on reprend donc les questions 2 et 3 sous cette hypothèse (ce raisonnement est totalement admissible en examen, si vous le préférez). Heureusement, on remarquera que les résultats sont relativement proches, d'un raisonnement à l'autre.
+\end{remark}
+
+\begin{enumerate}
+    \item[2.] Comme d'habitude, on se ramène au calcul de l'espérance de $X \sim \mathcal{P}(\lambda)$:
+    $$\E(X) = \lambda = 4 \mbox{ graines non germées.}$$
+    Pour calculer l'écart-type de $X$, on va calculer une nouvelle fois la racine carrée de sa variance :
+   \begin{align*}
+       \sigma(X) &= \sqrt(\V(X)) \\
+       &= \sqrt(\lambda)\\
+       &= \sqrt(4)\\
+       &= 2 \mbox{ graines non germées.}
+   \end{align*}
+   
+   \item[3.] Calculons les probabilités demandées avec $X \sim \mathcal{P}(\lambda)$. 
+   
+
+    D'abord, l'événement "aucune graine n'a germé", correspond à l'événement $\{X = n\}$. Alors :
+   \begin{align*}
+       \P(X = n) &= \frac{\lambda^n}{n!}e^{-\lambda}\\
+       &= \frac{4^{50}}{50!}e^{-4}\\
+       &\approx 0\\
+       \mbox{(en même temps}&\mbox{, on divise par } 50! \mbox{ ...)}
+   \end{align*}
+   Ensuite, l'événement "toutes les graines ont germé", correspond à l'événement $\{X = 0\}$. Alors :
+   \begin{align*}
+       \P(X = 0) &= \frac{\lambda^0}{0!}e^{-\lambda}\\
+       &= e^{-\lambda}\\
+       &\approx 0,018
+   \end{align*}
+   
+   Enfin, l'événement "au moins une graine n'a pas germé", correspond à l'événement $\{X \ge 1\}$. Alors :
+   \begin{align*}
+       \P(X \ge 1) &= 1 - \P(X =0) \\
+       &\approx 1- 0,018 = 0,988
+   \end{align*}
+\end{enumerate}
+\end{document}

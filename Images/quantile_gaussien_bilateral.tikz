@@ -1,0 +1,38 @@
+\usetikzlibrary{patterns}
+\ifdefined\theint
+\else
+  \newcounter{int}
+\fi
+\begin{tikzpicture}[scale=2]
+  %axes
+  \draw[->] (-3.2,0) -- (3.2,0);
+  \draw (3.2,0) node[right] {$x$};
+  \draw [->] (0,-.05) -- (0,2.2);
+  \draw (0,2.2) node[above] {$y$};
+  %graduations
+  \draw (-.05,2) -- (.05,2); \draw (-.05,2) node[left] {0.5};
+  \makeatletter
+    \setcounter{int}{-3}
+    \@whilenum\value{int}<4\do{
+      \draw (\theint,-.05) -- (\theint,.05); \draw (\theint,-.05) node[below] {\theint};
+      \stepcounter{int}
+    }
+  \makeatother
+  %densité gaussienne
+  \draw [domain=-3.2:3.2, thick] plot (\x, {4*exp(-(\x*\x)/2)/sqrt(2*pi)});
+  \draw[->, thick] (1.2,1.8) -- (.9,1.3); \draw (.5,1.8) node[above right] {$y=F'_X(x)$ pour $X\sim\mathcal{N}(0,\, 1)$};
+  % quantiles
+  \draw (1.96,-.05) -- (1.96, {4*exp(-(1.96*1.96)/2)/sqrt(2*pi)});
+  \draw (1.96,0) node[below left] {$z_{\alpha}$};
+  \draw (-1.96,-.05) -- (-1.96, {4*exp(-(1.96*1.96)/2)/sqrt(2*pi)});
+  \draw (-1.96,0) node[below right] {$-z_{\alpha}$};
+  % poids à droite
+  \fill[pattern=north west lines, pattern color=blue] (1.96,0)  -- plot [domain=1.96:3.2] (\x, {4*exp(-(\x*\x)/2)/sqrt(2*pi)}) -- (3.2,0) -- cycle;
+  \draw[->,thick, color=blue] (2.5,.8) -- (2.2,.3); \draw[color=blue] (2.4,.8) node[above] {$\Pr(X>z_\alpha)=\alpha/2$};
+  % poids à gauche
+  \fill[pattern=north west lines, pattern color=blue] (-3.2,0) -- plot [domain=-3.2:-1.96] (\x, {4*exp(-(\x*\x)/2)/sqrt(2*pi)}) -- (-1.96,0)  -- cycle;
+  \draw[->,thick, color=blue] (-2.5,.8) -- (-2.2,.3); \draw[color=blue] (-2.3,.8) node[above] {$\Pr(X<-z_\alpha)=\alpha/2$};
+  %poids au centre
+  \fill[pattern=north east lines, pattern color=red] (-1.96,0) -- plot [domain=-1.96:1.96] (\x, {4*exp(-(\x*\x)/2)/sqrt(2*pi)}) -- (1.96,0)  -- cycle;
+  \draw[->,thick, color=red] (-1.5,1.45) -- (-1.2,.95); \draw[color=red] (-1.6,1.45) node[above] {$\Pr(-z_\alpha\leq X\leq z_\alpha)=1-\alpha$};
+\end{tikzpicture}

@@ -1,0 +1,143 @@
+\documentclass[11pt]{article}
+\usepackage{amsfonts,amssymb,epsfig}
+%\usepackage[latin1]{inputenc}
+\usepackage[all]{xy}
+\usepackage{amsmath}
+\usepackage{delarray}
+\usepackage{pdfpages}
+\usepackage[frenchb]{babel}
+
+\usepackage[utf8]{inputenc} 
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+%\theoremstyle{definition}
+\newtheorem{defn}[thm]{Definition}
+%\theoremstyle{remark}
+\newtheorem{rem}[thm]{Remark}
+\numberwithin{equation}{section}
+\newtheorem{example}[thm]{Example}
+
+\newcommand{\D}{\displaystyle}
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\K}{{\mathbb K}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+
+\setlength{\textwidth}{17.2cm}
+\setlength{\textheight}{24cm}
+\hoffset=-2.2cm
+\voffset=-2.5cm
+
+%-----------------------------------------------------------------------------
+\begin{document}
+\noindent Université Paul Sabatier -- Toulouse III
+\hfill L2 BCP\\
+\noindent Introduction aux Statistiques
+%\hfill Année 2022-2023
+
+\bigskip
+\bigskip
+
+
+\begin{center}
+{\bf \large TD 1 : Variables aléatoires continues}\\
+{\bf \large }
+\end{center}
+
+\bigskip
+%\bigskip
+
+\subsection*{Exercice 1 :}
+Dans le cadre d'une expérience, des scientifiques ont besoin de disposer de nombreuses larves de 
+diptères. Le poids de ces larves suit approximativement une loi normale de moyenne 3.4g d'écart type 
+de 0.42. On note $X$ la variable aléatoire représentant le poids en grammes d'une larve prise au hasard.
+
+\begin{enumerate}
+\item Quelle est la probabilité qu'une larve prise au hasard pèse 3 grammes ?
+\item Seules les larves d'un poids supérieur à la moyenne sont éventuellement conservées pour l'élevage de la génération suivante. Quelle est la probabilité qu'une larve prise au hasard puisse être utilisée pour la reproduction ?
+\item Calculer la probabilité qu'une larve pèse moins de 3.75 grammes.
+\item Pour l'expérience considérée, les scientifiques ont besoin de larves de plus de 3g. Quelle proportion de larves pourront-ils utiliser ?
+\item On note $Z$ la variable aléatoire représentant le poids total de 50 larves prises au hasard de 
+façon indépendante. Quelle est la loi de probabilité de $Z$ ?
+\end{enumerate}
+
+\bigskip
+\subsection*{Exercice 2 :} 
+Les moustiques sont attirés par le dioxyde de carbone que nous dégageons lorsque nous respirons.
+On note $Y$ la variable aléatoire qui représente la quantité (en grammes) de CO2 dégagée par un être 
+humain dans des conditions normales, en une heure. 
+On sait que $Y$ suit une loi normale $\mathcal{N}(22;5)$ de moyenne $\mu=22 \,g$ et d'écart-type 
+$\sigma=5 \,g$. 
+\begin{enumerate}
+\item Donnerr la quantité médiane de CO2 dégagée par un être humain en une heure.
+\item Expliquer pourquoi $Pr(Y\leq 17) = Pr(Y\geq 27)$. 
+\item Calculer la probabilité qu'un individu dégage une quantité de CO2 comprise entre
+$20\,g$ et  $26\,g$.
+\item Certaines personnes dégagent naturellement beaucoup de CO2 et attirent donc plus les moustiques. Déterminer le seuil $M$ tel que seulement $5\%$ des êtres humains dégagent une quantité de CO2 par 
+heure supérieure à $M$.
+\item Déterminer un intervalle de type $[\mu - a ; \mu + a]$ tel que $95\,\%$ des individus 
+dégagent une quantité de CO2 comprise entre $\mu - a$ et $\mu + a$.  \\
+\end{enumerate}
+
+
+
+\bigskip
+\subsection*{Exercice 3 :} 
+
+L'{\it analyse de donn\'ees de survie} est l'\'etude du temps \'ecoul\'e avant l'apparition d'un 
+ph\'enom\`ene en g\'en\'eral important (mort, accident, mutation, gu\'erison, panne d'un appareil \'electronique, etc.).
+
+La plupart des tumeurs canc\'ereuses sont la cons\'equence d'une mutation du g\'enome cellulaire. 
+Dans cet exercice, on s'int\'eresse au temps pass\'e avant l'apparition de la mutation des cellules ; 
+c'est un ph\'enom\`ene al\'eatoire. 
+
+On note $T$ la variable al\'eatoire repr\'esentant le {\it temps de vie} d'une cellule jusqu'\`a 
+l'apparition d'une mutation canc\'ereuse. 
+La fonction $S : \mathbb{R}\longrightarrow \mathbb{R}$ d\'efinie par $S(t)=Pr(T>t)$ s'appelle la 
+{\it fonction de survie}.
+
+On suppose que la variable $T$ suit une loi exponentielle $\mathcal{E}(\lambda)$ de param\`etre 
+$\lambda=10^{-2}$. 
+\begin{enumerate}
+\item Donner l'expression de la fonction $S(t)$. Donner le valeurs des param\`etres 
+$E(T)$ et $\sigma(T)$.
+\item Calculez $Pr(T<40)$. 
+\item D\'eterminez la m\'ediane de $T$.
+\item On consid\`ere un r\'eel $\varepsilon>0$. 
+Calculer la probabilit\'e conditionnelle $Pr(T\geq t + \varepsilon\, | \, T>t)$.
+Comparer cette probabilité avec $Pr(T>\varepsilon)$. 
+Est-ce que modéliser la loi de probabilité de $T$ par une loi exponentielle paraît pertinent ? 
+\item Il faut modéliser la loi de probabilité de $T$ par une loi plus générale que la loi 
+exponentielle. On tente une loi de Weibull $W(a,b)$ de paramètres $a>0$ et $b>0$. Pensez-vous que
+$a>1$ ou $a<1$ ? 
+\end{enumerate}
+
+\iffalse %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+{\bf 2)} On suppose maintenant que $T$ suit une loi de Weibull $W(a,b)$. Donnez $S(t)$.
+
+On fixe un r\'eel $\varepsilon>0$. Donnez l'expression de la probabilit\'e $Pr(T\geq t + \varepsilon\, | \, T>t)$.
+En supposant que $\frac{\varepsilon}{t}\approx 0$, on pourrait alors d\'emontrer (mais on ne le fera pas),
+que  
+$Pr(T\geq t + \varepsilon\, | \, T>t)\approx exp(-\frac{a\varepsilon}{b^a} t^{a-1})$. Etudiez l'effet du 
+vieillissement \`a partir de cette probabilit\'e.
+
+{\bf 3)} Un organe est compos\'e de $N$ cellules. On note $T_1,\hdots, T_N$ les variables al\'eatoires repr\'esentant les
+temps de vie des cellules jusqu'\`a l'apparition d'une mutation. 
+On suppose que ces $N$ variables sont ind\'ependantes et sont toutes distribu\'ees selon la loi exponentielle de la question 1).
+On suppose que la premi\`ere mutation d'une des cellules suffit pour d\'eclencher une tumeur. On note $X$ la dur\'ee de vie de l'organe. 
+On a alors $X=\min \{T_1,\hdots, T_N\}$.
+D\'eterminez la fonction de survie $S_X(t)$ de l'organe. Calculez $S_X(40)$ pour $N=100$.\\
+
+\fi %%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+
+\end{document}

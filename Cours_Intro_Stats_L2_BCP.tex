@@ -1,0 +1,2242 @@
+% Version fork de "polycopié revu 2021" de L3 BCP initialement
+
+\documentclass[12pt, a4paper]{book}
+
+\usepackage{amsfonts,amssymb,amsmath}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage[all]{xy}
+\usepackage{delarray}
+\usepackage[french]{babel}
+
+\usepackage{enumitem}
+\setlist[itemize,1]{label=$\bullet$}
+
+\usepackage{graphicx}
+\graphicspath{{Images/}}
+\usepackage{tikz}
+\usetikzlibrary{patterns, arrows}
+%\usetikzlibrary{babel}
+\setlength{\unitlength}{1cm}
+
+\usepackage[colorlinks=true,allcolors=black]{hyperref}
+
+%\pagestyle{empty}
+
+\marginparsep = -2cm
+\addtolength{\evensidemargin}{-2.2cm}
+\addtolength{\oddsidemargin}{-0.7cm}
+\setlength {\topmargin}{-1cm}
+\setlength {\textwidth}{16cm}
+\textheight 250mm
+
+%\textwidth=165mm
+%\textwidth=160mm
+%\textheight=254 mm
+
+%\voffset=-18 mm
+%\hoffset=-15 mm     
+%\hoffset=-5 mm     
+
+\newtheorem{thm}{Théorème}[section]
+\newtheorem{cor}[thm]{Corollaire}
+\newtheorem{lem}[thm]{Lemme}
+\newtheorem{prop}[thm]{Propriété}
+%\theoremstyle{definition}
+\newtheorem{defn}[thm]{Définition}
+%\theoremstyle{remark}
+\newtheorem{rem}[thm]{Remarque}
+\numberwithin{equation}{section}
+\newtheorem{example}[thm]{Example}
+
+\newcommand{\D}{\displaystyle}
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\K}{{\mathbb K}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+%\pagenumbering{arabic}{-1}
+
+\def\moodlepage{course/view.php?id=8951}
+\NewDocumentCommand{\moodle}{o}{%
+  \IfNoValueTF{#1}{%
+    \href{https://moodle.univ-tlse3.fr/\moodlepage}{moodle}%
+  }{%
+    \href{https://moodle.univ-tlse3.fr/\moodlepage}{#1}%
+  }%
+}
+
+%%%%%%%%%% Page de titre %%%%%%%%%%
+
+\makeatletter
+\def\@UE{}
+\newcommand{\UE}[1]{
+  \renewcommand{\@UE}{#1}
+}
+\def\@address{}
+\newcommand{\address}[1]{
+  \renewcommand{\@address}{#1}
+}
+\def\@logo{}
+\newcommand*{\logo}[1]{
+  \renewcommand{\@logo}{#1}
+}
+\renewcommand\maketitle{\begin{titlepage}%
+  \let\footnotesize\small%
+  \let\footnoterule\relax%
+  \let \footnote \thanks%
+  \ifx\@logo\empty\else%
+    \begin{center}%
+      \includegraphics[width=\textwidth]{\@logo}%
+    \end{center}%
+    \vskip -1.5cm%
+    \vfil%
+  \fi%
+  \begin{center}%
+    {\Huge \@title \par}%
+    \vfil%
+    {\large%
+      \begin{tabular}[t]{c}%
+        \@author%
+      \end{tabular}\par}%
+      \ifx\@address\empty\else%
+        \vskip .25cm%
+        {\normalsize \@address}\par%
+      \fi%
+      \ifx\@date\empty\else%
+        \vskip .25cm%
+        {\large \@date \par}%
+      \fi%
+  \end{center}%
+  \vfil%
+  \ifx\@UE\empty\else%
+    \begin{center}%
+      {\large \@UE}%
+      \vspace{-3cm}%
+    \end{center}%
+  \fi%
+  \ifx\@thanks\empty\else%
+    \@thanks%
+  \fi%
+  \end{titlepage}%
+  \setcounter{footnote}{0}%
+  \global\let\thanks\relax%
+  \global\let\maketitle\relax%
+  \global\let\@thanks\@empty%
+  \global\let\@author\@empty%
+  \global\let\@date\@empty%
+  \global\let\@title\@empty%
+  \global\let\@address\@empty%
+  \global\let\@logo\@empty%
+  \global\let\logo\relax%
+  \global\let\address\relax%
+  \global\let\title\relax%
+  \global\let\author\relax%
+  \global\let\date\relax%
+  \global\let\and\relax%
+}
+\makeatother
+
+\logo{FSI.jpg}
+
+\UE{
+  Licence de Biologie (BCP) 2ème année --- KSVA3AG2 \\ \vskip .5em Introduction aux Statistiques
+}
+
+\author{
+  %Dominique Bontemps \and Philippe Monnier
+}
+
+\address{Université Paul Sabatier -- Toulouse 3 --- FSI}
+
+\title{Introduction aux Statistiques}
+%\date{version finale automne 2022}
+
+%%%%%%%%%% Corps du document %%%%%%%%%%
+
+\begin{document}
+
+\frontmatter
+\maketitle
+
+Ce document est un petit résumé des Mathématiques enseignées en L2 Biologie (BCP) dans l'UE 
+{\it Introduction aux Statistiques}. 
+
+L'objectif de ce cours est de donner une introduction à la théorie de l'estimation et des tests 
+statistiques, très utiles en biologie.
+
+La présentation de ces notes de cours est plutôt brève car ce n'est qu'un support pour suivre correctement les séances de cours-TD faites en classe. Ces notes de cours seront illustrées par les exercices traités pendant les séances de TD.
+Nous conseillons fortement les étudiants de jeter un coup d'oeil 
+sur des livres de biostatistiques qui seront un peu plus détaillés sur les notions abordées ici. 
+
+Par ailleurs, le point de vue adopté dans ces notes de cours n'est pas forcément très rigoureux, nous avons
+parfois simplifié les choses pour les rendre facilement utilisables. Les 
+étudiants intéressés par l'aspect Mathématiques sont invités à consulter les livres plus sérieux.
+
+Le volume horaire de cet enseignement étant assez restreint, nous ne donnons pas trop de détails et nous n'irons pas très loin. Ceci dit, les notions de base sont introduites et peuvent suffire pour démarrer l'apprentissage de l'utilisation des tests statistiques en biologie. Les grands absents de ce cours sont par exemple le test ANOVA et les tests non paramétriques. Peut-être que ces tests viendront s'ajouter à ce 
+document dans une prochaine version. Pour le moment, on pourra là encore consulter les livres pour
+compléter.
+
+Si vous constatez dans ces notes de cours des coquilles, erreurs ou imprécisions, merci de les 
+signaler en déposant un message sur \moodle.
+%en envoyant un message à l'adresse : philippe.monnier@math.univ-toulouse.fr
+
+
+\vfill
+\begin{center}
+  \includegraphics[
+  %\includesvg[
+    height=1cm
+  ]{
+    CC-BY-NC-SA.png
+  }  
+  \begin{minipage}[b]{9.5cm}
+    \begin{center}
+      \textcopyright{} FSI 2022 \\ 
+      \href{https://creativecommons.org/licenses/by-nc-sa/3.0/fr/}{Licence Creative Commons (CC BY-NC-SA 3.0 FR)}
+    \end{center}
+  \end{minipage}
+\end{center}
+
+\tableofcontents
+
+\mainmatter
+
+
+%\iffalse %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\chapter{Probabilités}
+
+On ne rappelle pas ici toutes les notions de base de probabilités. Il est donc conseillé de revoir les cours de lycée.
+
+\section{Quelques rappels :} On note $\Omega$ l'ensemble des résultats possibles d'une expérience
+aléatoire (c'est l'événement  certain) et $\emptyset$ l'événement impossible. L'ensemble $\Omega$
+peut être fini ou infini. Un événement élémentaire est un élément $\omega$ de $\Omega$. Un
+événement est une partie de $\Omega$.
+
+ Si $A\subset\Omega$ et $B\subset\Omega$ sont des événements, on note
+\begin{itemize}
+\item[] $A\cup B$ : l'événement $A$ {\bf ou} $B$ est réalisé
+\item[] $A\cap B$ : les événements $A$ {\bf et} $B$ sont réalisés
+\item[] $\overline{A}$ : l'événement $A$ {\bf n'est pas} réalisé
+\end{itemize}
+On a les propriétés
+\begin{center}
+\begin{tabular}{|ll|}
+\hline
+$\Pr(\emptyset) = 0 \;;\;  \Pr(\Omega) = 1 $ & \\
+$A \subset B \Longrightarrow \Pr(A) \leq \Pr(B)$ & \\
+$\Pr(\overline{A}) = 1-\Pr(A)$ & \\
+$\Pr(A) = \Pr(A \cap B) + \Pr(A \cap \overline{B})$ & \\
+$\Pr(A\cup B) = \Pr(A) + \Pr(B) - \Pr(A \cap B)$ & \\
+$A \cap B = \emptyset$ ($A$ et $B$ incompatibles) $\Longrightarrow$  $\Pr(A \cup B) = \Pr(A)+\Pr(B)$ & \\
+\hline
+\end{tabular}
+\end{center}
+\noindent Les événements $A$ et $B$ sont {\bf indépendants} si $\Pr(A\cap B)=\Pr(A)\times \Pr(B)$.\\
+
+\noindent {\bf Si $\Omega$ est un ensemble fini :} Si tous les événements élémentaires ont la même
+probabilité ($1/card(\Omega)$) on a alors, pour tout événement $A$ :
+$$
+\Pr(A)=\frac{card(A)}{card(\Omega)}=\frac{cas\, favorables}{cas\, possibles}\,.
+$$
+
+\noindent {\bf Probabilités conditionnelles :}  La probabilité conditionnelle de $A$ {\bf sachant} $B$ est
+définie par:
+$$
+\Pr(A|B)=\frac{\Pr(A\cap B)}{\Pr(B)}
+$$
+On a les propriétés
+\begin{center}
+\begin{tabular}{|ll|}
+\hline
+$\Pr(B|B)=1$ & \\
+$\Pr(A|B)+\Pr(\overline{A}|B)=1$ & \\
+${\displaystyle \Pr(B|A)= \frac{\Pr(B)}{\Pr(A)}.\Pr(A|B)}$ & \\
+Si $A$ et $B$ sont indépendants, $\Pr(A|B)=P(A)$ & \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\noindent  {\bf La formule des probabilités totales} :
+
+Si $(B_1, B_2, \hdots, B_k)$ forme une partition de $\Omega$ (on dira que c'est un {\it système de 
+probabilité totale}) alors on a
+$$
+\Pr(A)=\Pr(A|B_1).\Pr(B_1)+ \Pr(A|B_2).\Pr(B_2) + \hdots + \Pr(A|B_k).\Pr(B_k)\,.
+$$
+
+\noindent Cas particulier :
+${\displaystyle \Pr(A)=  \Pr(A|B).\Pr(B)+\Pr(A| \overline{B}). \Pr(\overline{B})}$.\\
+
+
+\section{Variables aléatoires} 
+
+En gros, une {\bf variable aléatoire} réelle est une fonction $X:\Omega \longrightarrow \mathbb{R}$ où $\Omega $
+est l'ensemble fondamental (ensemble des résultats possibles) associé à une expérience aléatoire. Mathématiquement, 
+$\Omega $ et $X$ doivent avoir de bonnes propriétés qu'on ne donnera pas ici.
+
+%Dans ce cours, les deux exemples pour $\Omega $ que nous rencontrerons sont : une population (population humaine, animale, végétale, etc.) ou l'ensemble de tous les échantillons de taille $n$ pris au hasard dans une population donnée.
+
+%Un exemple : $\Omega $ est la population formée par les adultes en Europe et $X$ est le poids ou la taille ou le taux de glycémie, etc.
+Un exemple : $X$ est le poids ou la taille ou le taux de glycémie, etc., d'un individu choisi au hasard dans la population $\mathcal{U}$ des adultes en Europe. Si $X$ est la seule variable aléatoire que l'on considère, et si on ne tient pas compte du moment auquel on effectue la mesure, alors $X$ dépendra uniquement de l'individu dont on mesure le poids ou la taille ou le taux de glycémie: on pourra dans ce cas choisir \emph{dans un premier temps} $\Omega=\mathcal{U}$.
+
+\subsection{Loi d'une variable aléatoire}
+
+Une variable aléatoire réelle $X$ permet de définir une probabilité $P_X$ sur $\R$ à partir de la probabilité initiale sur $\Omega$. $P_X$ est appelée loi ou distribution de probabilité de la variable $X$, et est définie pour $A\subset \R$ par
+\[ P_X(A) := \Pr(X\in A) = \Pr\left(\left\{\omega\in\Omega: X(\omega)\in A\right\}\right). \]
+
+Quelques remarques:
+\begin{itemize}
+  \item La loi de $X$ rassemble les informations pertinentes au sujet de $X$ d'un point de vue statistique.
+	\item Il existe toujours plusieurs choix possibles pour fabriquer un ensemble $\Omega$ muni d'une probabilité $\Pr$ initiale, et une fonction $X: \Omega \rightarrow \R$, tels que $X$ ait une loi de probabilité donnée $P_X$.
+	\item L'ensemble $\Omega$ sur lequel sont définis $X$ et la probabilité initiale n'a dès lors que peu d'intérêt mathématique.
+	\item Chercher à décrire $\Omega$ est en outre souvent périlleux. En particulier \emph{lorsque l'on considère plusieurs variables aléatoires, elles doivent toutes être définies sur le même ensemble $\Omega$,} tout en respectant leur structure de dépendance. Par exemple si les variables sont indépendantes (voir plus loin pour la définition), $\Omega$ s'écrira le plus couramment comme un ensemble produit muni d'une probabilité adaptée à ce produit.
+	\item De même, lorsqu'on modélise un sondage, c'est-à-dire lorsqu'on mesure différentes quantités ou caractéristiques sur une population d'individus $\mathcal{U}$, $\Omega$ devra contenir tous les échantillons possibles de taille fixe dans la population, voire tous les échantillons finis\dots Et malgré cela on se heurte encore à d'autres limitations problématiques, parmi lesquelles :
+  \begin{itemize}
+    \item la population $\mathcal{U}$ peut elle-même être aléatoire, et elle peut dépendre du temps ;
+    \item les quantités ou caractéristiques que vous mesurez (poids, taux de glycémie, en rémission d'un cancer ou non, etc.) peuvent elles-mêmes varier au cours du temps pour un individu fixé dans la population.
+  \end{itemize}
+\end{itemize}
+
+En conséquence les mathématiciens préfèrent garder $\Omega$ comme un espace abstrait que l'on n'explicite jamais totalement. \emph{Vous pouvez penser $\Omega$ comme l'ensemble de tous les états possibles de l'univers.} Un élément $\omega\in\Omega$ modélise alors l'état concret de l'univers lors de la réalisation de l'expérience aléatoire, et inclut l'état de la population, les choix arbitraires que vous avez fait lorsque vous avez mené votre expérience aléatoire, tels que l'échantillon que vous avez sélectionné en pratique, et de nombreuses autres informations dont on peut imaginer qu'elles participent à la détermination du résultat observé de l'expérience aléatoire.
+
+\subsection{Fonction de répartition}
+
+La loi d'une variable aléatoire peut être entièrement déterminée à l'aide de sa {\bf fonction de répartition}. C'est la fonction 
+$F:\mathbb{R}\longrightarrow [0\,;\,1]$ définie par
+$$
+F(x)=\Pr(X\leq x)\,.
+$$
+
+\begin{prop}
+Quelques propriétés de la fonction de répartition :
+\begin{itemize}
+\item $\Pr(a<X\leq b)=F(b)-F(a)$
+\item $F$ est croissante et continue à droite
+\item $\displaystyle lim_{-\infty} F(x)=0$ et $\displaystyle lim_{+\infty} F(x)=1$
+\item $\Pr(X>a)=1-\Pr(X\leq a)$\\
+\end{itemize}
+\end{prop}
+
+\subsection{Lois discrètes et lois continues}
+
+On peut distinguer deux types principaux de variables aléatoires. Une variable aléatoire $X$ est dite {\bf discrète} si l'ensemble des 
+valeurs qu'elle peut prendre est un ensemble fini ou infini dénombrable (comme $\mathbb{\N}$). Par contre, on dira qu'elle est {\bf continue} si sa fonction de répartition est continue, et dans ce cas l'ensemble de ses valeurs est un intervalle de $\mathbb{R}$ ou une réunion d'intervalles de $\R$.
+
+Notons que la fonction de répartition d'une variable aléatoire discrète est une fonction en escalier.
+à l'opposé, la fonction de répartition d'une variable aléatoire continue est dérivable.
+
+\begin{itemize}
+  \item Si $X(\Omega)=\{x_1,\hdots, x_n \}$ alors la loi de $X$ est entièrement déterminée par la donnée de $\Pr(X=x_1), \hdots, \Pr(X=x_n)$. à noter que: $\sum_{k=1}^n \Pr(X=x_k) =1$. La moyenne (ou espérance) de $X$ est alors 
+\[ E(X)=\sum_{k=1}^n x_k \Pr(X=x_k). \]
+	\item Si $X(\Omega)=\mathbb{\N}$ alors la loi de $X$ est entièrement déterminée
+par la donnée de $\Pr(X=k)$ exprimée en fonction de $k$ (où $k \in \mathbb{\N}$);
+voir par exemple la loi de Poisson. à noter que: $\sum_{k=0}^\infty \Pr(X=k) =1$.
+La moyenne (ou espérance) de $X$ est alors
+\[ E(X)=\sum_{k=1}^\infty k \Pr(X=k). \]
+\end{itemize}
+Dans les deux cas, la variance est $Var(X):= E\left([X-E(X)]^2\right) =E(X^2)-[E(X)]^2$ (l'écart-type est alors $\sigma(X)=\sqrt{Var(X)}$ ).
+
+La loi d'une variable aléatoire continue est entièrement déterminée par sa {\bf densité de probabilité}.
+C'est une fonction positive $f : \mathbb{R}\longrightarrow \mathbb{R}$ telle que
+$$
+\Pr(X\leq x)=\int_{-\infty}^x f(t) dt\,.
+$$
+Notons au passage que $f$ est la dérivée de la fonction de répartition.
+On a bien entendu ${\displaystyle \Pr(X\in [a\,;\,b])=\int_a^b f(t)dt}$
+et ${\displaystyle \int_{-\infty}^{+\infty} f(t)dt =1}$.
+
+
+Dans le cas continu, la moyenne est donnée par
+\[ E(X)=\int_{-\infty}^{+\infty} tf(t) dt\,. \]
+La variance reste $Var(X):= E\left([X-E(X)]^2\right) =E(X^2)-[E(X)]^2$ et l'écart-type $\sigma(X)=\sqrt{Var(X)}$.
+
+\noindent {\bf Important :} Notons qu'avec une variable continue $X$ on a $\Pr(X=a)=0$ pour n'importe
+quel réel $a$, ce qui  n'est pas le cas pour les variables discrètes.
+Dans le cas d'une variable continue, on s'intéresse alors  plutôt aux probabilités $\Pr(X\leq b)$, $\Pr(X\geq a)$ ou $\Pr(a\leq X\leq b)$. Noter qu'on a aussi, par exemple, $P(X\leq b) =\Pr(X<b)$.\\
+
+\subsection{Variables aléatoires indépendantes}
+
+\begin{itemize}
+  \item On dit que deux variables aléatoires $X$ et $Y$ continues sont indépendantes si pour tous intervalles $I$ et $J$ de $\R$, on a
+\[ \Pr(X\in I\;{\mbox { et }}\; Y\in J)=\Pr(X\in I)\times \Pr(Y\in J)\,.\]
+	\item Soient $X$ et $Y$ aléatoires discrètes à valeurs respectivement dans $\{1,\ldots,I\}$
+et dans  $\{1,\ldots,J\}$. On dit que $X$ et $Y$ sont indépendantes si
+$$\Pr(X=i\;{\mbox { et }}\; Y=j)=\Pr(X=i)\times \Pr(Y=j)\,$$
+pour tout $i \in \{1,\ldots,I\} $ et pour tout $j \in \{1,\ldots,J\}$.
+\end{itemize}
+
+\subsection{Combinaison linéaire de variables aléatoires}
+
+\begin{prop}
+On considère deux variables aléatoires $X$ et $Y$ et deux réels $\alpha$ et $\beta$. On a alors
+\begin{itemize}
+\item[] $E(\alpha X+\beta Y) =  \alpha E(X) + \beta E(Y)$.
+\item[] $Var(\alpha X+\beta Y) = \alpha^2 Var(X) + \beta^2 Var(Y)$ si $X$ et $Y$ sont indépendantes.
+\end{itemize}
+\end{prop}
+
+\section{Lois usuelles discrètes}
+On se contente de donner ici les lois les plus usuelles avec leurs paramètres.\\
+
+\subsection[Loi de Bernoulli]{Loi de Bernoulli $B(p)$ avec $p\in[0;1]$} 
+C'est la plus simple des lois de probabilité. Elle modélise une expérience dont l'issue est le succès ou l'échec aussi appelée schéma de Bernoulli. La variable aléatoire $X$ ne prend que deux valeurs possibles : 1 (succès) et 0 (échec). Le paramètre $p$ est alors la probabilité de succès et la loi de $X$ est
+$$
+\Pr(X=1)=p\quad {\mbox { et }} \quad \Pr(X=0)=1-p\,.
+$$
+On a $E(X)=p$ et $Var(X)=p(1-p)$.\\
+
+\subsection[Loi binomiale]{Loi binomiale $\mathcal{B}(n\,;\,p)$ avec $n\in\mathbb{N}$ et $p\in[0;1]$}
+Elle modélise le nombre de succès  dans $n$  répétitions  indépendantes d'un même
+schéma de Bernoulli $B(p)$. Les valeurs de $X$ sont donc $\{0,1,2,\hdots,n\}$ et sa loi est
+$$
+\Pr(X=k)=C_n^k p^k (1-p)^{n-k}\quad {\mbox { où }}\quad C_n^k=\frac{n!}{k!(n-k)!}\,.
+$$
+\noindent Rappel : $n\,!=n(n-1)(n-2)\hdots 1$ avec $0\, !=1$.
+
+\noindent On a $E(X)=np$ et $Var(X)=np(1-p)$.\\
+
+On a représenté ici le graphe, c'est-à-dire les points $(k,PrX=k)$, de la loi binomiale $\mathcal{B}(15\,;\,0.3)$ :
+
+\begin{center}
+% \psset{xunit=0.5714285714285714cm,yunit=12.499999999999968cm,algebraic=true,dotstyle=o,dotsize=3pt 0,linewidth=0.8pt,arrowsize=3pt 2,arrowinset=0.25}
+% \begin{pspicture*}(-1.3,-0.05)(17,0.35)
+% \psaxes[labelFontSize=\scriptstyle,xAxis=true,yAxis=true,Dx=1,Dy=0.1,ticksize=-2pt 0,subticks=2]{->}(0,0)(-0.5,-0.05)(17,0.35)
+% \begin{scriptsize}
+% \psdots[dotstyle=*](0,0)
+% \psdots[dotstyle=*,linecolor=darkgray](1,0.03)
+% \psdots[dotstyle=*,linecolor=darkgray](2,0.09)
+% \psdots[dotstyle=*,linecolor=darkgray](3,0.17)
+% \psdots[dotstyle=*,linecolor=darkgray](4,0.22)
+% \psdots[dotstyle=*,linecolor=darkgray](5,0.21)
+% \psdots[dotstyle=*,linecolor=darkgray](6,0.15)
+% \psdots[dotstyle=*,linecolor=darkgray](7,0.08)
+% \psdots[dotstyle=*,linecolor=darkgray](8,0.03)
+% \psdots[dotstyle=*,linecolor=darkgray](9,0.01)
+% \psdots[dotstyle=*,linecolor=darkgray](10,0)
+% \psdots[dotstyle=*,linecolor=darkgray](11,0)
+% \psdots[dotstyle=*,linecolor=darkgray](12,0)
+% \psdots[dotstyle=*,linecolor=darkgray](13,0)
+% \psdots[dotstyle=*,linecolor=darkgray](14,0)
+% \psdots[dotstyle=*,linecolor=darkgray](15,0)
+% \end{scriptsize}
+% \end{pspicture*}
+\end{center}
+
+
+
+Cette loi est souvent utilisée pour représenter le nombre d'individus possédant une certaine propriété  
+(comme une maladie) dans un échantillon de taille $n$. Le paramètre $p$ représente alors la probabilité qu'un individu
+possède cette propriété.
+
+
+\subsection[Loi de Poisson]{Loi de Poisson $\mathcal{P}(\lambda)$ avec $\lambda>0$}
+
+Une variable aléatoire discrète $X$ suit une loi de Poisson de paramètres $\lambda>0$ si l'ensemble de ses valeurs est
+$\mathbb{N}$ avec les probabilités 
+$$
+\Pr(X=k)=\frac{\lambda^k}{k !} e^{-\lambda} \,, \quad \forall k\in\mathbb{N}.
+$$
+Un calcul donne $E(X)=Var(X)=\lambda$.\\
+
+On dit souvent que la loi de Poisson est la loi des "événements rares".
+
+On a représenté ci-dessous une partie du graphe de la loi de Poisson d'abord pour $\lambda=0.3$ puis pour $\lambda=2.4$ :
+
+\begin{center}
+% \psset{xunit=0.7142857142857143cm,yunit=4.54545454545455cm,algebraic=true,dotstyle=o,dotsize=3pt 0,linewidth=0.8pt,arrowsize=3pt 2,arrowinset=0.25}
+% \begin{pspicture*}(-1,-0.1)(6,1)
+% \psaxes[labelFontSize=\scriptstyle,xAxis=true,yAxis=true,Dx=1,Dy=0.2,ticksize=-2pt 0,subticks=2]{->}(0,0)(-1,-0.1)(6,1)
+% \rput[tl](1.43,0.54){$\mathcal{P}(0.3)$}
+% \begin{scriptsize}
+% \psdots[dotsize=5pt 0,dotstyle=*,linecolor=darkgray](0,0.74)
+% \psdots[dotsize=5pt 0,dotstyle=*,linecolor=darkgray](1,0.22)
+% \psdots[dotsize=5pt 0,dotstyle=*,linecolor=darkgray](2,0.03)
+% \psdots[dotsize=5pt 0,dotstyle=*,linecolor=darkgray](3,0)
+% \psdots[dotsize=5pt 0,dotstyle=*,linecolor=darkgray](4,0)
+% \end{scriptsize}
+% \end{pspicture*}
+% \hspace{1cm}
+% \psset{xunit=0.6669396110542476cm,yunit=10.0cm,algebraic=true,dotstyle=o,dotsize=3pt 0,linewidth=0.8pt,arrowsize=3pt 2,arrowinset=0.25}
+% \begin{pspicture*}(-1,-0.05)(8,0.4)
+% \psaxes[labelFontSize=\scriptstyle,xAxis=true,yAxis=true,Dx=1,Dy=0.2,ticksize=-2pt 0,subticks=2]{->}(0,0)(-1,-0.05)(8,0.4)
+% \rput[tl](3.85,0.26){$\mathcal{P}(2.4)$}
+% \begin{scriptsize}
+% \psdots[dotsize=5pt 0,dotstyle=*,linecolor=darkgray](0,0.09)
+% \psdots[dotsize=5pt 0,dotstyle=*,linecolor=darkgray](1,0.22)
+% \psdots[dotsize=5pt 0,dotstyle=*,linecolor=darkgray](2,0.26)
+% \psdots[dotsize=5pt 0,dotstyle=*,linecolor=darkgray](3,0.21)
+% \psdots[dotsize=5pt 0,dotstyle=*,linecolor=darkgray](4,0.13)
+% \psdots[dotsize=5pt 0,dotstyle=*,linecolor=darkgray](5,0.06)
+% \psdots[dotsize=5pt 0,dotstyle=*,linecolor=darkgray](6,0.02)
+% \psdots[dotsize=5pt 0,dotstyle=*,linecolor=darkgray](7,0.01)
+% \psdots[dotsize=5pt 0,dotstyle=*,linecolor=darkgray](8,0)
+% \end{scriptsize}
+% \end{pspicture*}
+\end{center}
+
+
+
+
+
+
+Pour schématiser, on peut dire que si $\lambda<1$ le graphe de la loi de Poisson est en forme de "L" et si 
+$\lambda>1$, il est en forme de cloche.
+
+
+\begin{prop}  La loi de Poisson est stable par somme indépendante : si $X\sim \mathcal{P}(\lambda)$ et $Y\sim \mathcal{P}(\mu)$ et si $X$ et $Y$ sont
+indépendantes alors, la somme $X+Y$ suit une loi de Poisson $\mathcal{P}(\lambda+\mu)$.
+\end{prop}
+
+
+\section{Lois usuelles continues} 
+
+
+\subsection[Loi uniforme sur un intervalle]{Loi uniforme sur un intervalle $U[a,b]$}
+La densité de probabilité de $X$ est
+$$
+f(x)=\left \{
+\begin{array}{ll}
+\frac{1}{b-a} & {\mbox {si } } x \in [a,b] \\
+0 & {\mbox{sinon. }}
+\end{array}
+\right.
+$$
+On a $E(X)=\frac{a+b}{2}$ et $Var(X)=\frac{(a-b)^2}{12}$.\\
+
+\subsection[Loi exponentielle]{Loi exponentielle $\mathcal{E}(\lambda)$, avec $\lambda>0$}
+
+Une variable aléatoire continue $X$ suit une loi exponentielle de paramètre $\lambda>0$ si sa densité de probabilité est la 
+fonction $f:\mathbb{R}\longrightarrow \mathbb{R}$ donnée par  $f(x)=0$ si $x<0$ et
+$$
+f(x)=\lambda e^{-\lambda x}\quad {\mbox { si }}\quad  x\geq 0\,.
+$$
+On a représenté ici le graphe de $f$ lorsque $\lambda=2$ :
+
+\begin{center}
+% \newrgbcolor{qqzzqq}{0 0.6 0}
+% \psset{xunit=0.8cm,yunit=1.4285714285714288cm,algebraic=true,dotstyle=o,dotsize=3pt 0,linewidth=0.8pt,arrowsize=3pt 2,arrowinset=0.25}
+% \begin{pspicture*}(-2.1,-0.6)(6,3)
+% \psaxes[labelFontSize=\scriptstyle,xAxis=true,yAxis=true,Dx=1,Dy=0.5,ticksize=-2pt 0,subticks=2]{->}(0,0)(-2.1,-0.6)(6,3)
+% \psplot[linecolor=qqzzqq,plotpoints=200]{0}{6.0}{2*EXP(-2*x)}
+% \rput[tl](0.7,0.77){\qqzzqq{$\lambda=2$}}
+% \psplot[linecolor=qqzzqq,plotpoints=200]{-2.1}{0}{0}
+% \end{pspicture*}
+\end{center}
+
+
+
+La fonction de répartition sera alors la fonction $F$ définie par 
+$F(x)=0$ si $x<0$ et $F(x)=1-e^{-\lambda x}$
+si $x\geq 0$. Un petit calcul montre que la moyenne de $X$ et l'écart-type valent $\frac{1}{\lambda}$.
+
+Une propriété importante de la loi exponentielle est
+$$
+\Pr(X>t+\alpha \,|\, X>t)=P(x>\alpha)\,.
+$$
+On dit souvent que la loi exponentielle est sans mémoire. 
+Si, par exemple, $X$ représente le temps de vie (entre la naissance et la mort) et suit une loi exponentielle, on dit que 
+$X$ modélise la mortalité des êtres qui ne sont pas soumis au vieillissement.
+
+\subsection[Loi de Weibull]{Loi de Weibull $W(a,b)$ avec $a>0$ et $b>0$}
+
+Une variable aléatoire continue $X$ suit une loi de Weibull de paramètres $a>0$ et $b>0$ si sa densité de probabilité est la 
+fonction $f:\mathbb{R}\longrightarrow \mathbb{R}$ définie par  $f(x)=0$ si $x<0$ et
+$$
+f(x)=\frac{a}{b} \big( \frac{x}{b} \big)^{a-1} \mathrm{exp}\big( - \big( \frac{x}{b} \big)^{a} \big) \quad {\mbox { si }}\quad  x\geq 0\,.
+$$
+On a représenté ici le graphe de $f$ lorsque $a=2$ et $b=0.7$ puis lorsque $a=3$ et $b=2$ :
+
+\begin{center}
+% \newrgbcolor{qqzzqq}{0 0.6 0}
+% \newrgbcolor{zzqqqq}{0.6 0 0}
+% \psset{xunit=0.7272727272727273cm,yunit=2.5cm,algebraic=true,dotstyle=o,dotsize=3pt 0,linewidth=0.8pt,arrowsize=3pt 2,arrowinset=0.25}
+% \begin{pspicture*}(-2,-0.5)(9,1.5)
+% \psaxes[labelFontSize=\scriptstyle,xAxis=true,yAxis=true,Dx=1,Dy=0.5,ticksize=-2pt 0,subticks=2]{->}(0,0)(-2,-0.3)(9,1.5)
+% \psplot[linecolor=qqzzqq,plotpoints=200]{0.0}{5.0}{2/0.7*(x/0.7)^1*EXP(-(x/0.7)^2)}
+% \psplot[plotpoints=200]{-2.0}{0.0}{0}
+% \psplot[linecolor=zzqqqq,plotpoints=200]{0.0}{5.0}{3/2*(x/2)^2*EXP(-(x/2)^3)}
+% \rput[tl](0.9,0.99){\qqzzqq{$W(2;0.7)$}}
+% \rput[tl](2.78,0.37){\zzqqqq{$W(3;2)$}}
+% \end{pspicture*}
+\end{center}
+
+
+La fonction de répartition sera alors la fonction $F$ définie par $F(x)=0$ si $x<0$ et 
+$$
+F(x)=1- \mathrm{exp}\big( - \big( \frac{x}{b} \big)^{a} \big)
+$$
+si $x\geq 0$. L'expression de la moyenne et de l'écart-type est un peu compliquée dans ce cas.
+
+Notons que lorsque $a=1$, on retrouve la loi exponentielle.\\
+
+La loi de Weibull est souvent utilisée pour décrire une durée de vie d'un appareil, ou d'un organisme,
+ou le temps d'attente avant une panne ou un accident. 
+
+Dans ce cas, on peut voir que si $a>1$ alors l'appareil se dégrade avec le temps et la probabilité d'avoir une panne
+devient de plus en plus grande avec le temps. Par contre, si $a<1$, l'appareil se bonifie avec le temps.
+
+
+\subsection[Loi normale]{Loi normale $\mathcal{N}(\mu,\sigma)$}
+Elle est également appelée loi gaussienne ou de Laplace-Gauss. La loi Normale approxime la somme de
+phénomènes aléatoires petits, nombreux et indépendants. De nombreuses distributions {\it naturelles}
+sont ainsi approchées par une loi Normale, en particulier dans le domaine de la biologie.  Le théorème Central Limite assure que c'est la loi limite des moyennes empiriques. %dans une suite infinie d'épreuves.
+
+Une variable aléatoire continue $X$ suit une loi normale (ou loi de Gauss) $\mathcal{N}(\mu,\sigma)$ avec
+$\mu\in \mathbb{R}$ et $\sigma>0$ si sa densité de probabilité est la 
+fonction $f:\mathbb{R}\longrightarrow \mathbb{R}$ définie par  
+$$
+f(x)=\frac{1}{\sigma\sqrt{2\pi}} e^{-\frac{(x-\mu)^2}{2\sigma^2}}\,.
+$$
+On a représenté ici le graphe de $f$ pour $\mathcal{N}(4,1)$, $\mathcal{N}(4,2)$  puis $\mathcal{N}(4,3)$ : \\
+
+
+
+\begin{center}
+% \newrgbcolor{zzqqqq}{0.6 0 0}
+% \newrgbcolor{qqzzqq}{0 0.6 0}
+% \newrgbcolor{wwqqqq}{0.4 0 0}
+% \newrgbcolor{ttzzqq}{0.2 0.6 0}
+% \psset{xunit=0.5cm,yunit=10.0cm,algebraic=true,dotstyle=o,dotsize=3pt 0,linewidth=0.8pt,arrowsize=3pt 2,arrowinset=0.25}
+% \begin{pspicture*}(-4.3,-0.05)(14,0.41)
+% \psaxes[labelFontSize=\scriptstyle,xAxis=true,yAxis=true,Dx=2,Dy=0.1,ticksize=-2pt 0,subticks=2]{->}(0,0)(-4.3,-0.05)(14,0.41)
+% \parametricplot{0.0}{8.0}{t|0}
+% \psplot[linecolor=zzqqqq,plotpoints=200]{0.0}{8.0}{EXP((-(x-4)^2)/2)/(sqrt(2*PI)*abs(1))}
+% \psplot[linecolor=qqzzqq,plotpoints=200]{-4.0}{12.0}{EXP((-((x-4)/3)^2)/2)/(sqrt(2*PI)*abs(3))}
+% \rput[tl](4.8,0.33){\wwqqqq{$\mathcal{N}(4,1)$}}
+% \rput[tl](9.4,0.05){\ttzzqq{$\mathcal{N}(4,3)$}}
+% \psplot[plotpoints=200]{-4.0}{12.0}{EXP((-((x-4)/2)^2)/2)/(sqrt(2*PI)*abs(2))}
+% \rput[tl](5.6,0.17){$\mathcal{N}(4,2)$}
+% \end{pspicture*}
+\end{center}
+
+\noindent On ne peut pas donner une forme explicite pour la fonction de répartition. Ceci dit,  un petit calcul montre que la  moyenne de $X$ est $\mu$ et l'écart-type est $\sigma$.
+
+La densité de probabilité d'une variable aléatoire distribuée
+normalement est représentée par une courbe {\it en cloche} et
+symétrique autour de la moyenne $\mu$, ce qui signifie que les
+masses de probabilités de $X$ sont réparties de fa\c con
+équiprobable autour de $\mu$. 
+Concrètement, cela signifie que
+si la variable aléatoire $X$ représente une variable
+quantitative biologique telle que la glycémie à jeun
+par exemple, beaucoup de sujets vont se situer autour de la valeur
+moyenne et qu'on va trouver une nombre progressivement
+décroissant d'individus au fur et à mesure qu'on s'éloigne
+de $\mu$.\\
+
+
+
+
+Le mode d'une variable aléatoire continue est la valeur maximale de la fonction densité de probabilité 
+(il n'est pas forcément unique). 
+Dans le cas d'une
+loi normale $\mathcal{N}(\mu\,;\,\sigma)$, le mode, la moyenne et la médiane sont égaux à $\mu$. La
+symétrie de la fonction densité de probabilité par rapport à l'axe $x=\mu$ est une propriété très importante qui
+rend l'utilisation de la loi normale assez confortable.
+
+La loi normale est la loi la plus utile. Elle décrit la distribution d'énormément de phénomènes naturels. Par ailleurs,
+elle possède une propriété asymptotique très importante qui  permet de dire que, d'une certaine manière, des 
+phénomènes qui a priori sont modélisés par des lois différentes que la loi normale peuvent quand même être 
+approximativement décrits par une loi normale lorsqu'on a un nombre très grand de sujets ou d'individus.
+Elle est utilisée lorsque les observations qu'on fait sont le résultat d'une somme d'un très grand nombre d'autres 
+variables indépendantes entres elles et individuellement négligeables.\\
+
+
+\noindent {\bf Important :} Si $X\sim\mathcal{N}(0,1)$ on dit que
+$X$ suit une loi normale centrée réduite. Les tables
+numériques permettent alors de déterminer $\Pr(X<a)$ ou
+$\Pr(X>a)$. Noter que $\Pr(X<-a)=\Pr(X>a)=1-\Pr(X<a)$.\\
+
+\begin{prop}
+Si $Y$ est une variable aléatoire qui suit une loi normale $\mathcal{N}(\mu,\sigma)$ alors la variable
+aléatoire $Z=(Y-\mu )/ \sigma$ suit une loi centrée réduite $\mathcal{N}(0,1)$. 
+\end{prop}
+
+Concrètement, on a
+$$
+\Pr(Y<a) = \Pr( \frac{Y-\mu}{\sigma} < \frac{a-\mu}{\sigma}) = \Pr(Z< \frac{a-\mu}{\sigma} )
+$$
+on utilise alors les tables de la loi normale centrée réduite.
+
+\begin{prop}
+Si $X_1$ suit une loi normale $\mathcal{N}(\mu_1,\sigma_1)$ et 
+$X_2$ une loi normale $\mathcal{N}(\mu_2,\sigma_2)$ et si $X_1$ et $X_2$ sont indépendantes, alors
+la variable $\alpha X_1 + \beta X_2$ (où $\alpha$ et $\beta$ sont deux réels quelconques) suit une loi
+normale $\mathcal{N}(\alpha\mu_1+\beta\mu_2,\sqrt{\alpha^2\sigma_1^2+\beta^2\sigma_2^2})$.
+\end{prop}
+
+\noindent {\bf Intervalle important :} En utilisant la table de la loi normale centrée réduite, on voit que si $X$
+suit une loi normale $\mathcal{N}(\mu,\sigma)$, on a alors le résultat suivant, très utile lorsqu'on fait de
+l'estimation et des tests :
+\begin{eqnarray*}
+\Pr(\mu-1,96\times \sigma \leq X \leq \mu+1,96\times \sigma) & \approx & 0,95 \\
+\Pr(\mu-2,576 \times\sigma \leq X \leq \mu+2,576 \times \sigma) & \approx & 0,99 \\
+\Pr(\mu-3,29 \times \sigma \leq X \leq \mu+3,29 \times\sigma) & \approx & 0,999
+\end{eqnarray*}
+
+Si $X$ représente par exemple le taux d'hémoglobine, on peut alors dire que $95\%$ des individus ont un 
+taux d'hémoglobine compris entre $\mu-1,96\sigma$ et $\mu+1,96\times \sigma$. En gros, ça donne ce qu'on 
+pourrait appeler un intervalle de "normalité".
+
+
+\subsection[Loi log-normale ]{Loi log-normale $Log-\mathcal{N}(\mu,\sigma)$ avec $\mu\in \mathbb{R}$ et $\sigma>0$}
+
+Une variable aléatoire continue $X$ suit une loi Log-Normale (ou loi de Galton) $Log-\mathcal{N}(\mu,\sigma)$ avec
+$\mu\in \mathbb{R}$ et $\sigma>0$ si $\ln(X)$ suit une loi normale $\mathcal{N}(\mu,\sigma)$.
+La densité de probabilité de $X$ est donc la fonction 
+$f : ]0\,;\,+\infty[ \longrightarrow \mathbb{R}$ définie par  
+$$
+f(x)=\frac{1}{\sigma x\sqrt{2\pi}} e^{-\frac{(\ln (x) -\mu)^2}{2\sigma^2}}\,.
+$$
+On a représenté ici le graphe de $f$ lorsque $\mu=0$ et $\sigma=1$
+
+\begin{center}
+% \psset{xunit=1.0cm,yunit=3.846153846153846cm,algebraic=true,dotstyle=o,dotsize=3pt 0,linewidth=0.8pt,arrowsize=3pt 2,arrowinset=0.25}
+% \begin{pspicture*}(-1,-0.3)(6,1)
+% \psaxes[labelFontSize=\scriptstyle,xAxis=true,yAxis=true,Dx=1,Dy=0.2,ticksize=-2pt 0,subticks=2]{->}(0,0)(-1,-0.3)(6,1)
+% \psplot[plotpoints=200]{0.001}{5.9}{(1/(x*sqrt(2*PI)))*EXP(-((ln(x))^2/2))}
+% \end{pspicture*}
+\end{center}
+
+
+
+
+On ne peut pas donner une forme explicite pour la fonction de répartition. Ceci dit,  un petit calcul montre que la 
+moyenne de $X$ est  $E(X)=e^{(\mu+\sigma^2/2)}$,  la variance  est $\sigma^2(X)=(e^{\sigma^2}-1) e^{2\mu+\sigma^2}$ et le mode vaut $e^{(\mu-\sigma^2)}$.
+
+La loi log-normale est utilisée en biologie pour décrire la distribution du  poids   de certains organismes vivants,
+pour modéliser le dosage de certains médicaments, modéliser le temps de survie de bactéries en présence de désinfectant...
+La loi log-normale peut être utilisée lorsque les observations qu'on fait résultent d'un effet multiplicatif 
+d'un très grand nombre d'autres variables indépendantes entre elles et individuellement négligeables.
+
+
+\subsection[Loi du chi-2]{Loi du $\chi^2$}
+
+On dit qu'une variable aléatoire continue $Y$ suit une loi du $\chi^2$ à $d$ degrés de liberté si on peut écrire
+$$
+Y=X_1^2 + X_2^2 + \hdots + X_d^2
+$$
+où les $X_i$ sont des variables aléatoires indépendantes qui suivent une loi normale centrée réduite $\mathcal{N}(0;1)$.
+
+Clairement, $Y$ est une variable aléatoire continue. On peut démontrer facilement que $E(Y)=d$ et $Var(Y)=2d$.\\
+
+\noindent La densité de probabilité de $Y$ n'est pas très jolie :
+$$
+f_Y(x)=\frac{1}{2^{d/2} \Gamma(d/2)} x^{\frac{d}{2}-1} e^{-x/2}\quad \mathrm{pour} \quad x>0
+$$
+
+\noindent où $\Gamma$ est la  "fameuse" fonction gamma...\\
+
+\noindent On a représenté ici la densité de probabilité pour les degrés de liberté 1 et 2 :
+\begin{center}
+% \newrgbcolor{ffttqq}{1 0.2 0}
+% \newrgbcolor{qqcctt}{0 0.8 0.2}
+% \psset{xunit=0.7272727272727273cm,yunit=1.0cm,algebraic=true,dotstyle=o,dotsize=3pt 0,linewidth=0.8pt,arrowsize=3pt 2,arrowinset=0.25}
+% \begin{pspicture*}(-1,-1)(10,4)
+% \psaxes[labelFontSize=\scriptstyle,xAxis=true,yAxis=true,Dx=1,Dy=1,ticksize=-2pt 0,subticks=2]{->}(0,0)(-1,-1)(10,4)
+% \psplot[linecolor=ffttqq,plotpoints=200]{0}{10.0}{(x^(1/2-1)*EXP((-x)/2))/(2^(1/2)*GAMMA(1/2))}
+% \psplot[linecolor=qqcctt,plotpoints=200]{0}{10.0}{(x^0*EXP((-x)/2))/2}
+% \rput[tl](0.26,0.95){\ffttqq{$d=1$}}
+% \rput[tl](2.71,0.38){\qqcctt{$d=2$}}
+% \end{pspicture*}
+\end{center}
+
+
+\noindent Pour un degré de liberté supérieur à 3, le graphe est légèrement différent :
+
+\begin{center}
+% \newrgbcolor{ttqqzz}{0.2 0 0.6}
+% \newrgbcolor{ffttqq}{1 0.2 0}
+% \newrgbcolor{qqcctt}{0 0.8 0.2}
+% \psset{xunit=0.5594405594405594cm,yunit=8.333333333333332cm,algebraic=true,dotstyle=o,dotsize=3pt 0,linewidth=0.8pt,arrowsize=3pt 2,arrowinset=0.25}
+% \begin{pspicture*}(-1.3,-0.2)(13,0.4)
+% \psaxes[labelFontSize=\scriptstyle,xAxis=true,yAxis=true,Dx=1,Dy=0.1,ticksize=-2pt 0,subticks=2]{->}(0,0)(-1.3,-0.2)(13,0.4)
+% \psplot[linecolor=ttqqzz,plotpoints=200]{0}{13.0}{(x^(3/2-1)*2.718281828^((-x)/2))/(2^(3/2)*GAMMA(3/2))}
+% \psplot[linecolor=ffttqq,plotpoints=200]{0}{13.0}{(x^1*2.718281828^((-x)/2))/4}
+% \psplot[linecolor=qqcctt,plotpoints=200]{0}{13.0}{(x^(5/2-1)*2.718281828^((-x)/2))/(2^(5/2)*GAMMA(5/2))}
+% \psplot[plotpoints=200]{0}{13.0}{(x^4*2.718281828^((-x)/2))/768}
+% \rput[tl](0.64,0.28){\ttqqzz{$d=3$}}
+% \rput[tl](0.53,0.19){\ffttqq{$d=4$}}
+% \rput[tl](1.61,0.13){\qqcctt{$d=5$}}
+% \rput[tl](4.09,0.06){$d=10$}
+% \end{pspicture*}
+\end{center}
+
+
+
+
+
+
+
+
+
+\subsection{La loi de Student}
+On dit que la variable aléatoire continue $T$ suit une loi de Student à $d$ degrés de liberté si on peut écrire
+$$
+T=\frac{X}{\sqrt{Y/d}}
+$$
+
+où la variable aléatoire $X$ suit une loi normale $\mathcal{N}(0;1)$, la variable aléatoire $Y$ suit une loi du $\chi^2$ à 
+$d$ degrés de liberté, $X$ et $Y$ sont indépendantes.
+
+\noindent Là encore, $T$ est une variable aléatoire continue.\\
+
+\noindent Ici, l'espérance et la variance n'existent pas forcément.... On peut démontrer que $E(T)=0$ si $d>1$ et que
+ $Var(T)=\frac{d}{d-2}$ si $d>2$.\\
+
+\noindent La densité de probabilité de $T$ est encore une fonction qui donne la nausée : 
+$$
+f_T(x)=\frac{1}{\sqrt{\pi d}} \frac{\Gamma(\frac{d+1}{2})}{\Gamma(\frac{d}{2})} 
+\frac{1}{(1+\frac{x^2}{d})^{\frac{d+1}{2}}}  
+$$
+
+\vspace{0.2cm}
+
+\noindent Voici la courbe de cette densité de probabilité pour $d=20$ :
+
+\begin{center}
+% \psset{xunit=0.7cm,yunit=5.0cm,algebraic=true,dotstyle=o,dotsize=3pt 0,linewidth=0.8pt,arrowsize=3pt 2,arrowinset=0.25}
+% \begin{pspicture*}(-5,-0.3)(5,0.7)
+% \psaxes[labelFontSize=\scriptstyle,xAxis=true,yAxis=true,Dx=1,Dy=0.2,ticksize=-2pt 0,subticks=2]{->}(0,0)(-5,-0.3)(5,0.7)
+% \psplot[plotpoints=200]{-5.0}{5.0}{GAMMA((20+1)/2)*(1+x^2/20)^(-((20+1)/2))/(GAMMA(20/2)*sqrt(PI*20))}
+% \rput[tl](1.35,0.22){$d=20$}
+% \end{pspicture*}
+\end{center}
+
+
+
+
+
+
+
+
+
+
+On voit que cette courbe ressemble fortement à la courbe de Gauss de la loi normale $\mathcal{N}(0;1)$. En fait, ce n'est
+pas un hasard. On peut démontrer que si $T$ suit une loi de Student à degré de liberté $d$ grand ($d>30$ par exemple) 
+alors $T$ suit approximativement une loi normale centrée réduite $\mathcal{N}(0;1)$.
+
+
+\section{Loi des grands nombres et Théorème Central Limite}  
+
+Soient $n$ variables aléatoires  $X_1, X_2, ..., X_n,$ indépendantes  et identiquement distribuées de moyenne
+$\mu$ et d'écart-type $\sigma$. On s'intéresse au comportement de la moyenne empirique  
+$$
+M_n=\frac{1}{n}\sum_{i=1}^{n} X_i.
+$$
+ La loi des grands nombres donne une information qualitative : la moyenne empirique converge (en un sens qu'il faudrait préciser) vers l'espérance $\mu$. On peut alors se demander à quelle vitesse $M_n$ se rapproche de sa limite. C'est là qu'intervient le théorème central limite : pour $n$ suffisamment
+grand, on peut considérer que la variable aléatoire $M_n$ suit une loi normale
+$\mathcal{N}(\mu,\frac{\sigma}{\sqrt{n}})$ ou bien, si on préfère, la variable
+$\frac{M_n-\mu}{\sigma/\sqrt{n}}$ suit approximativement une loi normale centrée réduite
+$\mathcal{N}(0,1)$. Comme on l'a vu au paragraphe précédent, une variable aléatoire gaussienne est concentrée autour de sa moyenne et on a quantifié cela  en donnant des intervalles de confiance dont la taille dépend de la variance. Ici, la convergence se fait donc à une vitesse de l'ordre de $\frac{\sigma}{\sqrt{n}}$. On fait deux remarques : un fait très intéressant est que ces deux résultats sont indépendants de la loi de probabilité des $X_i$, mais le prix à payer est que la convergence n'est pas très rapide : en effet pour obtenir 3 décimales significatives il faut faire $n=10^6$ répétitions.
+
+Cette discussion peut être résumée par le résultat suivant :
+\begin{prop}
+Si $X_1, X_2, ..., X_n$ sont $n$ variables aléatoires indépendantes suivant des lois de probabilités
+quelconques, d'espérance $E(X_i)$ et de variance finie $\sigma_i^2$, alors la loi suivie par la variable
+aléatoire $M_n=\sum_{i=1}^n X_i$ peut être approximée pour $n$ grand ($n\geq 30$ par exemple) et sous certaines conditions par
+une loi normale $\mathcal{N}(\mu,\sigma)$ avec $\mu = \sum_{i=1}^n E(X_i)$ et
+$\sigma = \sqrt{\sum_{i=1}^n \sigma_i^2}$. 
+\end{prop}
+
+%\noindent Un corollaire important de ce théorème est le suivant :
+%
+%Soient $X_1, X_2, ..., X_n$ $n$ variables aléatoires indépendantes qui suivent la même loi de moyenne
+%$\mu$ et d'écart-type $\sigma$. On note $Y=\frac{1}{n}\sum_{i=1}^{n} X_i$. Alors, pour $n$ suffisamment
+%grand, on peut considérer que la variable aléatoire $Y$ suit une loi normale
+%$\mathcal{N}(\mu,\frac{\sigma}{\sqrt{n}})$ ou bien, si on préfère, la variable
+%$\frac{Y-\mu}{\sigma/\sqrt{n}}$ suit approximativement une loi normale centrée réduite
+%$\mathcal{N}(0,1)$.\\
+
+
+\section{Approximation de lois} 
+
+Les 3 approximations suivantes peuvent s'avérer utiles dans la pratique.
+Les conditions de validité de ces approximations ne sont pas forcément "optimales"; tout dépend de la
+finesse que l'on souhaite donner à ces approximations.\\
+
+\noindent {\bf Approximation d'une loi binomiale par une loi de Poisson :} On suppose que $X$ suit une loi
+binomiale $\mathcal{B}(n,p)$. Si par exemple $n\geq 30$ ($n$ grand), $p\leq 0,1$ ($p$ petit) et $np\leq 10$
+alors on peut approximer
+$X$ par une variable aléatoire $Y$ qui suit une loi de Poisson $\mathcal{P}(np)$.\\
+
+\noindent {\bf Approximation d'une loi binomiale par une loi
+normale :} On suppose que $X$ suit une loi binomiale
+$\mathcal{B}(n,p)$. Si $n\geq 30$, $np\geq 5$ et $n(1-p)\geq 5$
+(ou bien $np\geq 10$ et $n(1-p)\geq 10$ pour avoir une plus grande
+précision) alors on peut approximer $X$
+par une variable aléatoire $Y$ qui suit une loi normale $\mathcal{N}(np, \sqrt{np(1-p)})$.\\
+
+\noindent {\bf Approximation d'une loi de Poisson par une loi normale :} On suppose que $X$ suit une loi de
+Poisson $\mathcal{P}(\lambda)$. Si $\lambda >5$ alors on peut approximer $X$ par une variable aléatoire $Y$
+qui suit une loi normale $\mathcal{N}(\lambda,\sqrt{\lambda})$.\\
+
+\noindent {\bf Attention :} Il faut être prudent lorsqu'on approxime une variable aléatoire discrète $X$ par
+une
+variable aléatoire $Y$ qui suit une loi normale. Par exemple, si $X$ suit une loi binomiale $\mathcal{B}(n,p)$, si
+on veut utiliser cette approximation pour calculer
+$\Pr(X=k)$, on ne peut pas dire que cette probabilité vaut à peu près $\Pr(Y=k)$ car comme $Y$ est une
+variable aléatoire continue, cette dernière probabilité est nulle. Pour contourner cette difficulté, on écrit
+par exemple :
+$$
+\Pr(X=k)=\Pr(k-0,5 \leq X \leq k+0,5) \approx \Pr( k-0,5 \leq Y \leq
+k+0,5)
+$$
+puis on utilise les tables de la loi normale centrée réduite.
+
+
+\iffalse %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Corrélation}
+On considère un couple de variables aléatoires $(X,Y)$ de moyennes $\mu_X$ et $\mu_Y$ et d'écart-types
+$\sigma_X$ et $\sigma_Y$.\\
+
+\noindent {\bf Paramètre :}
+De la même manière qu'en statistique descriptive, on définit la  {\it covariance} de $(X,Y)$ par 
+$cov(X,Y) = E\big[(X-\mu_X)\times(X-\mu_Y)\big]$ et le coefficient de 
+corrélation est alors
+$$
+\rho(X,Y)=\frac{cov(X,Y)}{\sigma_X \sigma_Y}\,.
+$$
+
+\begin{prop}
+Le coefficient de corrélation vérifie les propriétés suivantes :
+\begin{itemize}
+\item $-1\leq \rho(X,Y) \leq 1$
+\item $\rho(X,Y)=1$ ssi $X$ et $Y$ sont liées par $Y=aX+b$ avec $a>0$
+\item $\rho(X,Y)=-1$ ssi $X$ et $Y$ sont liées par $Y=aX+b$ avec $a<0$
+\item Si $X$ et $Y$ sont indépendantes alors $\rho(X,Y)=0$ (la réciproque est fausse)
+\item Si $\rho(X,Y)=0$ et si le couple $(X,Y)$ est {\it binormal} alors $X$ et $Y$ sont indépendantes\\
+\end{itemize}
+\end{prop}
+\fi %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Estimation} \label{chap:estimation}
+
+
+Le problème de l'estimation peut être par exemple formulé de la manière suivante.
+On souhaiterait connaître la valeur d'un paramètre $\mu$ associé à une population d'intérêt, notée $\mathcal{U}$;
+par exemple, le taux d'hémoglobine moyen dans la population humaine.
+Connaître exactement $\mu$ nécessiterait de mesurer le taux  d'hémoglobine de chaque individu de  $\mathcal{U}$;
+cela impliquerait de mettre en oeuvre une logistique extrêmement lourde et très coûteuse.
+En pratique, on se contente d'une valeur approchée de $\mu$
+(en statistique, on parle d'estimation) qui soit suffisamment précise. \\
+
+L'idée naturelle, bien entendu, est de travailler avec un échantillon extrait au hasard dans la population  $\mathcal{U}$,
+et d'estimer le paramètre inconnu $\mu$ à partir d'une fonction bien choisie des mesures faites sur l'échantillon.
+On souhaitera bien sûr pouvoir contrôler la différence entre $\mu$ et son estimation.
+
+Dans ce cours, on ne s'intéressera qu'à trois problèmes d'estimation : estimation de moyennes, de variances
+et de proportions.
+
+
+\section{Estimation de moyennes et variances} 
+
+%On considère une variable aléatoire $X : \Omega \longrightarrow \mathbb{R}$ de moyenne $\mu$ et d'écart-type $\sigma$ définie sur une population $\Omega$. Par exemple, $X$ représente le taux d'hémoglobine et $\Omega$ la population humaine.
+
+%On notera également $\mathcal{E}_n$ l'ensemble formé de tous les échantillons de $n$ individus pris dansla population $\Omega$.\\
+
+On considère une variable aléatoire réelle $X$ de moyenne $\mu$ et d'écart-type $\sigma$ (inconnus). Par exemple, $X$ représente le taux d'hémoglobine d'une personne prise au hasard, à un moment choisi au hasard, dans la population humaine (que l'on notera $\mathcal{U}$).
+
+On désire retrouver le plus précisément possibles des caractéristiques de la loi de $X$, par exemple $\mu$ et $\sigma$. Pour cela, on disposera d'\emph{observations} $x=(x_1,\hdots, x_n)$ mesurées lors d'une expérience aléatoire.
+
+Avant d'aller plus loin, on rappelle que si $x=(x_1,\hdots, x_n)$ est une série statistique, on note alors 
+$\displaystyle \bar{x}=\frac{x_1+\hdots + x_n}{n}$ la moyenne de $x$ et 
+$\displaystyle Var(x)=\frac{1}{n} \sum_{k=1}^n (x_k - \bar{x})^2$ la variance de $x$ (bien entendu, 
+$\sqrt{Var(x)}$ est l'écart-type de $x$). $\bar{x}$ est aussi appelé moyenne \emph{empirique}, et $Var(x)$ variance \emph{empirique}, ce dernier mot signifiant ``calculé à partir d'observations'', par opposition justement à la moyenne théorique ou espérance $\mu$, et à la variance (théorique) $\sigma^2$ de la variable aléatoire $X$. %\\
+Pour le lien entre moyenne empirique et espérance, relire le paragraphe sur la loi des grands nombres dans le chapitre précédent.
+
+On rappelle également une formule qui peut être pratique :
+$\displaystyle Var(x)=\frac{\sum_{k=1}^n x_k^2}{n} - \bar{x}^2$.
+
+\noindent {\bf Modélisation mathématique}\\
+On suppose que les observations $x_k$, $1\leq k\leq n$, sont en réalité les réalisations de $n$ variables aléatoires $X_k$, $1\leq k\leq n$, indépendantes et de même loi que $X$ (on dit alors iid). Dit autrement, ces $n$ variables aléatoires sont définies sur le même ensemble $\Omega$. Réaliser l'expérience aléatoire un jour donné avec un groupe d'individus donnés, c'est choisir un événement élémentaire $\omega\in\Omega$ parmi tous les possibles, et alors
+\[ \forall k \in \{1, \ldots, n\}, x_k = X_k(\omega)\,. \]
+La série statistique $x=(x_1,\hdots, x_n)$ est alors appelée \emph{échantillon} de taille $n$ de la loi de $X$.
+
+Bien sûr, toute modélisation est une approximation, et repose sur un certains nombres d'hypothèses à vérifier (ou au-moins justifier).
+
+\noindent {\bf Exemple:} 
+Dans le cas présenté ci-dessus où $X$ mesure le taux d'hémoglobine dans la population humaine $\mathcal{U}$, réaliser $n$ mesures sur $n$ individus distincts c'est en réalité faire un \emph{sondage}.
+
+Si on ne tient pas compte du temps auquel ce taux est mesuré, l'ensemble $\Omega$ sur lequel on définira les $n$ variables $X_k$ pourra par exemple être l'ensemble $\mathcal{E}_n$ des parties de $\mathcal{U}$ à $n$ éléments. Mais décrire $\Omega$ reste dangereux: dès lors que l'on utilise également d'autres variables aléatoires indépendantes (par exemple $X$), cet ensemble $\Omega$ ne convient plus.\\
+Cependant, en restant dans cette idée de poser $\Omega=\mathcal{E}_n$, le choix d'un événement élémentaire $\omega\in\Omega$ revient au choix d'un échantillon de $n$ individus dans $\mathcal{U}$.
+
+Dans le cas d'un sondage, plusieurs conditions sont nécessaires pour que la modélisation décrite plus haut soit une approximation acceptable:
+\begin{itemize}
+  \item La taille $N$ de la population $\mathcal{U}$ doit être (très) grande;
+	\item Les $n$ individus sélectionnés doivent être équitablement répartis dans la population, et sans liens entre eux (pour garantir l'indépendance). Un façon d'assurer cela est de choisir ces individus au hasard dans la population, l'expression ``au hasard'' signifiant ici que le tirage
+est réalisé de telle sorte qu'il y a équiprobabilité des échantillons de taille $n$ dans $\mathcal{E}_n$.
+	\item La taille de l'échantillon $n$ peut être grande, mais doit rester (relativement) petite devant $N$.
+\end{itemize}
+
+\subsection{Estimation d'une moyenne}
+
+L'idée la plus naturelle pour estimer la moyenne $\mu$ est 
+%donc de réaliser un sondage de taille $n$. On obtient alors une série statistique $x=(x_1,\hdots, x_n)$ dont on peut calculer la moyenne $\bar{x}$. 
+d'utiliser la moyenne $\bar{x}$ d'un échantillon $x=(x_1,\hdots, x_n)$. 
+On dit alors tout naturellement qu'on \emph{estime $\mu$ par $\bar{x}$}.
+
+Mathématiquement, %on construit la variable aléatoire $M_n : \Omega \longrightarrow \mathbb{R}$ 
+on définit la variable aléatoire $M_n = \overline{X}$ 
+par
+\[ M_n = \frac{1}{n} \sum_{k=1}^n X_k = \frac{X_1 + \hdots + X_n}{n}\,, \]
+où, pour tout $k$, $X_k$ est la variable aléatoire qui représente le taux d'hémoglobine du $k$-ième
+individu de l'échantillon. %Ces $n$ variables aléatoires sont supposées indépendantes.
+\\
+La réalisation de $M_n$ est alors $M_n(\omega) = \bar{x}$, le taux d'hémoglobine moyen de l'échantillon.
+
+La variable $M_n$ est appelé un {\bf estimateur} de $\mu$, et $\bar{x}$ est une {\bf estimation} de $\mu$.
+%\`A noter que $M_n$ est souvent noté $\overline{X}$.
+
+Il est important de comprendre la chose suivante. Si on prend un échantillon, on obtient une estimation
+$\bar{x}$ de $\mu$. Si on prend un autre échantillon, on obtient une estimation $\bar{y}$ de $\mu$.
+A priori, on a $\bar{x}\neq\bar{y}$ et on ne sait pas trop laquelle est la plus proche de $\mu$.
+Le résultat de l'estimation dépend donc du choix de l'échantillon. Il convient donc de comprendre
+comment se distribuent les valeurs de $M_n$ en fonction des échantillons, c'est-à-dire, il faut comprendre
+la loi de probabilité de la variable aléatoire $M_n$.
+
+Par ailleurs, l'estimation $\bar{x}$ obtenue à partir d'un échantillon est, a priori, différente de $\mu$ (à moins d'avoir un énorme coup de chance lors du choix de l'échantillon). Il convient donc d'être capable
+de contrôler l'erreur que l'on commet lorsqu'on estime $\mu$ par $\bar{x}$. 
+
+Tout ça pour dire que, d'un point de vue pratique, s'intéresser uniquement à l'estimation qu'on a trouvé 
+lorsqu'on a pris un échantillon particulier n'est pas satisfaisant. Il faut, mathématiquement, comprendre 
+la variable aléatoire $M_n$.
+
+\begin{prop}
+On a  $E(M_n) = \mu$ et $Var(M_n) = \frac{\sigma^2}{n}$.
+\end{prop}
+
+La première relation nous dit que même si on commet une erreur lorsqu'on fait une estimation, on a quand même
+un processus qui, en théorie, est bien centré sur le paramètre $\mu$ que l'on cherche à estimer (en gros, la moyenne de toutes les estimations qu'on peut faire gr\^ace à tous les échantillons qu'on peut former est exactement le paramètre $\mu$). On dit que l'estimateur $M_n$ est {\it sans biais}. 
+
+La seconde relation nous dit que la limite de la variance de $M_n$ tend vers 0 lorsque $n$ tend vers l'infini.
+On rappelle que la variance mesure la dispersion des valeurs autour de la moyenne. Plus la variance est petite plus les valeurs sont regroupées autour de la moyenne. Ainsi, on peut dire ici que plus la taille
+de l'échantillon est grande plus l'erreur qu'on comment en estimant $\mu$ est petite. On dit que
+l'estimateur $M_n$ est \emph{correct}, ou \emph{consistant}.
+
+\subsection{Estimation d'une variance}
+
+On souhaite maintenant estimer la variance $\sigma^2$ de $X$.
+On peut garder la même idée, à savoir définir la variable aléatoire 
+%$V_n : \Omega \longrightarrow \mathbb{R}$ par 
+\[ V_n := \frac{1}{n} \sum_{k=1}^n (X_k - M_n)^2 = \left( \frac{1}{n} \sum_{k=1}^n X_k^2 \right) - M_n^2, \]
+dont la réalisation est $V_n(\omega) = Var(x)$, la variance du taux d'hémoglobine dans l'échantillon.
+
+Si elle est naturelle, cette construction pose malheureusement un problème car on a 
+$\displaystyle E(V_n) = \frac{n-1}{n} \sigma^2 \neq \sigma^2$, c'est-à-dire, $V_n$ a un biais.
+
+Pour remédier à ce problème, on définit alors la variable aléatoire 
+$$
+S_n^2 =\frac{n}{n-1} V_n = \frac{1}{n-1} \sum_{k=1}^n (X_k - M_n)^2,
+$$
+et dont la réalisation, notée $s^2_x$, vérifie
+$$
+s^2_x := S_n^2(\omega) = \frac{1}{n-1} \sum_{k=1}^n (x_k - \bar{x})^2\,.
+$$
+La variable aléatoire $S_n^2$ est donc l'estimateur de $\sigma^2$ que nous garderons, tandis que $s^2_x$ est l'estimation de $\sigma^2$ associée, obtenue à partir de l'échantillon. 
+%Notons que la formule qui définit $s^2_x$ est très proche de celle de la variance $Var(x)$
+
+La variance $V_n$, ainsi que sa réalisation $V_n(\omega)=Var(x)$, sont parfois appelés variance \emph{non-corrigée}, tandis que $S_n^2$ et $s^2_x$ sont appelés variance \emph{corrigée} ; on dit aussi que $s^2_x$ est la {\bf variance estimée}. \\%, ou {\bf variance empirique}.\\
+Bien entendu, si l'échantillon est de grande taille les valeurs $Var(x)$ et $s_x^2$ ne sont pas très éloignées l'une de l'autre et numériquement, on peut ne pas trop sentir de différence.
+
+Une manipulation très simple donne
+$$
+s_x^2 = \frac{n}{n-1} Var(x) = \frac{\sum_{k=1}^n x_k^2}{n-1} - \frac{n}{n-1}\bar{x}^2 \,.
+$$
+
+\begin{prop}
+On a $E(S^2_n) = \sigma^2$ et la variance de $S_n^2$ tend vers 0 lorsque $n$ tend vers l'infini.
+\end{prop}
+
+
+%On a ainsi deux notions de variance qui sont légèrement différentes. Disons que pour une série statistique $x=(x_1,\hdots,x_n)$ correspondant à un échantillon, la variance $Var(x)$ donne des informations sur la dispersion des valeurs de la série statistique autour de la moyenne donc, ça ne concerne que l'échantillon. Par contre, $s_x^2$ donne des informations sur la population car elle donne une estimation de la variance de la population.
+
+\subsection{Lois de probabilités}
+
+L'expression mathématiques de $M_n$ ainsi que le Théorème Central Limite donne la propriété suivante.
+
+\begin{prop}
+Si $n$ est grand alors $M_n$ suit une loi normale $\mathcal{N}(\mu ; \sigma/\sqrt{n})$ approximativement.
+\end{prop}
+
+Que signifie $n$ {\it grand} dans ce résultat ? Il y a un consensus pour dire que lorsqu'on fait de l'estimation, 
+on considère qu'un grand échantillon est un échantillon de taille $n\geq 30$. La valeur 30 est bien entendu une frontière un peu floue. On peut très bien imaginer que la différence entre un échantillon de 28 individus et un échantillon de 32 individus n'est pas énorme.
+
+Que peut-on dire si $n$ n'est pas grand ?
+
+\begin{prop}
+Si la variable aléatoire $X$ est distribuée selon une loi normale $\mathcal{N}(\mu ; \sigma)$ alors 
+$M_n$ suit  une loi normale $\mathcal{N}(\mu ; \sigma/\sqrt{n})$.
+\end{prop}
+
+On verra dans la prochaine partie des résultats un peu plus utiles. Enfin, que peut-on dire de l'estimateur
+de la variance ?
+
+\begin{prop}
+Si la variable aléatoire $X$ est distribuée selon une loi normale $\mathcal{N}(\mu ; \sigma)$ alors 
+la variable aléatoire $\displaystyle T=\frac{(n-1)S^2_n}{\sigma^2}$ suit une loi du $\chi^2$ à $n-1$
+degrés de liberté.
+\end{prop}
+
+
+\subsection{Intervalles de confiance}
+
+
+Lorsqu'on estime la moyenne $\mu$ de la population par la moyenne $\bar{x}$ d'un échantillon, on sait qu'on
+commet une erreur. L'idée des intervalles de confiance est de contrôler l'erreur commise. En gros, on 
+cherche un intervalle du type $[\bar{x} - \varepsilon ; \bar{x} + \varepsilon ]$ dans lequel "on est
+quasiment certain de trouver $\mu$". \\
+
+On suppose pour le moment qu'on travaille avec de \underline{grands échantillons}. On sait alors que l'estimateur $M_n$ suit 
+approximativement une loi normale $\mathcal{N}(\mu;\sigma/\sqrt{n})$, c'est-à-dire, 
+$\displaystyle \frac{M_n-\mu}{\sigma/\sqrt{n}}$ suit une loi normale centrée réduite $\mathcal{N}(0;1)$.
+
+En utilisant la table numérique de la loi normale centrée réduite, on peut écrire
+$$
+\Pr\left(-1.96 \leq \frac{M_n-\mu}{\sigma/\sqrt{n}} \leq 1.96\right) = 0.95
+$$
+
+ce qui équivaut, après quelques lignes de calcul à 
+$$
+\Pr\left(M_n -1.96 \frac{\sigma}{\sqrt{n}} \leq \mu \leq M_n + 1.96 \frac{\sigma}{\sqrt{n}}\right) = 0.95
+$$
+Si on utilise cette relation avec l'échantillon dont on dispose, on obtient alors l'intervalle
+$\displaystyle \left[\bar{x} - 1.96 \frac{\sigma}{\sqrt{n}} ; \bar{x} + 1.96 \frac{\sigma}{\sqrt{n}}\right]$. Le problème est qu'a priori, on
+ne connaît par l'écart-type $\sigma$, on ne peut donc pas expliciter cet intervalle.
+
+L'idée (et on retrouvera souvent cette idée plus tard) est donc de remplacer $\sigma$ par son estimation,
+ou plutôt par son estimateur $S_n$, en fait. On va ainsi définir la variable aléatoire
+$$
+T = \frac{M_n-\mu}{S_n/\sqrt{n}}\,.
+$$
+
+Le paramètre $\sigma$ n'apparaît pas dans cette variable aléatoire. On va pouvoir expliciter les choses
+gr\^ace à notre échantillon. Malgré tout, la question qui se pose est : quelle est la loi de probabilité de 
+$T$ ? 
+
+\begin{prop}
+Lorsque $n$ est grand ($n\geq 30$ par exemple), la variable aléatoire $T$ suit approximativement une 
+loi normale centrée réduite $\mathcal{N}(0;1)$.
+\end{prop}
+
+En gros, remplacer $\sigma$ par son estimateur $S_n$ ne modifie pas trop la loi de probabilité lorsqu'on 
+travaille avec des grands échantillons.
+
+Par conséquent, si on écrit comme plus haut 
+$\displaystyle  \Pr(-1.96  \leq T \leq  1.96 ) = 0.95$
+on obtient 
+$$
+\Pr\left(M_n -1.96 \frac{S_n}{\sqrt{n}} \leq \mu \leq M_n + 1.96 \frac{S_n}{\sqrt{n}}\right) = 0.95
+$$
+
+Maintenant, si on utilise notre échantillon, on obtient l'intervalle parfaitement explicite 
+\[ \left[\bar{x} - 1.96 \frac{s_x}{\sqrt{n}} ; \bar{x} + 1.96 \frac{s_x}{\sqrt{n}}\right]. \]
+Cet intervalle est appelé {\it intervalle de confiance à $95 \%$ de $\mu$}. \\
+
+On serait tenté de dire que $\mu$ a $95 \%$ de chances de se trouver dans cet intervalle mais cette 
+phrase n'est pas très claire. En effet, $\mu$ est un réel et non une variable aléatoire; 
+%$\mu$ est dans l'intervalle ou n'y est pas, mais ce n'est pas un phénomène aléatoire.\\
+en revanche l'intervalle lui-même est aléatoire, et $95 \%$ est la probabilité qu'il contienne effectivement la valeur $\mu$. \\
+
+Si on souhaite un intervalle de confiance à $99 \%$, par exemple, il suffit de remplacer la valeur
+1.96 par 2.576 (cf table numérique). \\
+
+Maintenant, que faire lorsque l'échantillon est de petite taille ? On fait exactement la même chose sauf
+que dans ce cas, lorsqu'on remplace $\sigma$ par $S_n$, on perd la loi normale centrée réduite. On a 
+plutôt la propriété suivante.
+
+\begin{prop}
+Si la variable aléatoire $X$ suit une loi normale $\mathcal{N}(\mu ; \sigma)$ alors la variable $T$ suit
+une loi de Student à $n-1$ degrés de liberté.
+\end{prop}
+
+L'intervalle de confiance à $95 \%$ de $\mu$ aura alors la même forme sauf qu'il faudra remplacer la 
+valeur 1.96 par la valeur correspondante avec la loi de Student. Par exemple, si $n=10$, on prend 2.262 ;
+si $n=20$, on prend 2.093. 
+
+
+\section{Estimation d'une proportion}
+
+Le problème est la suivant : on a une population $\mathcal{U}$ et on cherche  à connaître une estimation 
+de la proportion $\pi$ d'individus présentant une certaine propriété.
+Par exemple, on cherche la proportion $\pi$ de gauchers en France.
+
+On rappelle qu'on note $\mathcal{E}_n$ l'ensemble des échantillons de $n$ individus pris dans la population $\mathcal{U}$.\\
+
+\subsection[L'estimateur]{L'estimateur de $\pi$}
+
+On reprend l'idée naturelle utilisée pour l'estimation d'une moyenne :  on construit 
+l'estimateur $\mathrm{P}_n : \mathcal{E}_n \longrightarrow \mathbb{R}$ par
+\begin{center}
+$\mathrm{P}_n$ (échantillon) $=p=$ proportion de gauchers dans l'échantillon.
+\end{center}
+
+En fait, si on réfléchit un peu, il est clair que la variable aléatoire $n\times \mathrm{P}_n$, le \emph{nombre} de gauchers dans l'échantillon, suit une loi Binomiale $\mathcal{B}(n;\pi)$. On peut démontrer facilement les relations suivantes.
+ 
+\begin{prop} On a 
+ $E(\mathrm{P}_n)=\pi$ (l'estimateur est sans biais)
+et  $Var(\mathrm{P}_n)=\frac{\pi(1-\pi)}{n}$ (l'estimateur est correct).
+\end{prop}
+
+Par ailleurs, on peut donner la loi de probabilité de $\mathrm{P}_n$.
+
+\begin{prop}
+Si $n$ est grand ($n\geq 30$) et si $n\pi\geq 5$ et $n(1-\pi)\geq 5$ alors on peut supposer
+que $\mathrm{P}_n$ suit approximativement une loi normale 
+$\displaystyle \mathcal{N}(\pi;\sqrt{\pi(1-\pi)/n})$.
+\label{loiestprop}
+\end{prop}
+
+
+\subsection[Intervalle de confiance]{Intervalle de confiance de $\pi$}
+
+
+On cherche maintenant à construire  un intervalle de confiance à $95\,\%$ de la proportion $\pi$ de gauchers en France. 
+Si on travaille avec l'estimateur $\mathrm{P}_n$ de $\pi$ sur des échantillons de taille $n$ et qu'on
+recommence ce qu'on a fait pour les moyennes, la propriété \ref{loiestprop} donne
+$$
+\Pr\left(-1.96 \leq \frac{\mathrm{P}_n - \pi}{\sqrt{\frac{\pi (1-\pi)}{n}}} \leq 1.96\right) = 0.95\,.
+$$
+
+Si on note $p$ l'estimation de $\pi$ obtenue avec notre échantillon, on obtient alors l'intervalle 
+$$
+\left[ p -1.96 \sqrt{\frac{\pi(1-\pi)}{n}} \,;\,  p + 1.96 \sqrt{\frac{\pi(1-\pi)}{n}} \right] 
+$$
+c'est-à-dire, on est confronté au même problème que pour la moyenne ; on est incapable d'expliciter
+cet intervalle car on ne connaît pas la valeur de $\sqrt{\frac{\pi(1-\pi)}{n}}$. 
+L'idée pour contourner cette difficulté reste la même. On définit la variable
+$$
+T=\frac{\mathrm{P}_n - \pi}{\sqrt{\frac{\mathrm{P}_n (1-\mathrm{P}_n)}{n}}}\,.
+$$ 
+
+\begin{prop}
+Si $n$ est grand ($n\geq 30$) et si $n\pi\geq 5$ et $n(1-\pi)\geq 5$, alors la variable aléatoire
+$T$ suit approximativement une loi normale centrée réduite $\mathcal{N}(0;1)$.
+\end{prop}
+
+
+En utilisant cette propriété, si on part de $\Pr(-1.96 \leq T \leq 1.96)= 0.95$, on peut alors écrire
+$$
+\Pr\left( \mathrm{P}_n -1.96 \sqrt{\frac{\mathrm{P}_n (1-\mathrm{P}_n)}{n}} \leq \pi \leq  \mathrm{P}_n + 
+1.96 \sqrt{\frac{\mathrm{P}_n (1-\mathrm{P}_n)}{n}} \right)=0.95
+$$
+
+On obtient ainsi avec notre échantillon l'intervalle de confiance à $95 \%$ de $\pi$ :
+$$
+\left[ p -1.96 \sqrt{\frac{p(1-p)}{n}} ; p +1.96 \sqrt{\frac{p(1-p)}{n}} \right]\,.
+$$
+
+\noindent {\it Remarque : } Dans le raisonnement qu'on vient de faire on avait les conditions de validité $n\pi\geq 5$
+et $n(1-\pi)\geq 5$. Le problème est qu'on ne connaît pas $\pi$ donc, on ne peut pas les vérifier... Il y a ici deux 
+façons de vérifier approximativement ces conditions. 
+
+La première façon est de remplacer $\pi$ par l'estimation $p$ qu'on a obtenue sur notre échantillon 
+et de  vérifier donc que $np\geq 5$ et $n(1-p)\geq 5$.
+
+La deuxième façon, plus fine, est de calculer d'abord les bornes de l'intervalle de confiance $[\pi_1\,;\,\pi_2]$ avec
+$$
+\pi_1 = p -1.96 \sqrt{\frac{p(1-p)}{n}}, \quad
+\pi_2 = p +1.96 \sqrt{\frac{p(1-p)}{n}}
+$$
+puis de vérifier que
+$$
+n\times\pi_1 \geq  5 \quad n\times (1-\pi_2) \geq  5\,.
+$$
+
+
+
+%\fi%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Introduction aux tests statistiques}
+ 
+Une question très importante en biologie (et ailleurs) est le problème de {\it reproductibilité} 
+des résultats obtenus par une expérience. 
+
+Prenons un exemple simple. On suppose qu'on a deux traitements pour une 
+maladie et qu'on souhaite comparer les efficacités. On donne le traitement A à un échantillon et le traitement B à un autre échantillon, puis on compare les proportions de guérisons.
+On trouve alors que l'échantillon A a un pourcentage de guérison supérieur à celui de l'échantillon B.
+La question est alors : est-ce que si on refait cette expérience une fois, dix fois, cent fois, on trouvera
+environ presque chaque fois un résultat qui ira dans le même sens (traitement A plus efficace) ?
+
+Dit autrement, est-ce que le résultat constaté sur cette expérience est dû aux aléas de l'échantillonnage
+ou bien sont-il le reflet d'un vrai phénomène qu'on peut généraliser.
+
+Notons qu'en général, on ne peut pas se permettre de refaire l'expérience "échantillon A vs échantillon B" cent fois, c'est pourquoi on a besoin d'un outil qui permettrait de donner des conclusions grâce 
+aux résultats de cette expérience.  Les tests statistiques permettent de faire ce travail.
+
+De façon résumée, le principe du test ici consiste en donner une frontière (probabiliste) qui permet de dire que si l'écart 
+entre les résultats trouvés sur les deux échantillons dépasse cette frontière, c'est que très probablement
+ils traduisent un phénomène généralisable et reproductible.
+
+\section{Tests sur les moyennes} 
+
+Dans cette partie, on distingue deux types de problèmes : 
+le test de {\it conformité} (avec un échantillon)
+et le test {\it d'homogénéité} (avec deux échantillons indépendants).
+On verra plus tard qu'il y en a un troisième type, intermédiaire en ces deux tests, qui est le test avec
+deux échantillons appariés (non indépendants). 
+
+Par ailleurs, nous traiterons ici le cas des grands et petits échantillons.
+
+Notons qu'il est possible de faire des tests de comparaison
+de moyennes avec plus de deux échantillons mais il s'agit alors d'un test ANOVA que nous ne développerons pas dans ce cours, bien qu'il s'agisse d'un test très utile en biologie. 
+
+\subsection{Tests de conformité}
+On se demande si la différence entre la moyenne  $m$
+obtenue à partir d'un échantillon de taille $n$ et une valeur
+théorique connue $\mu_0$ peut être attribuée uniquement à
+des fluctuations dues au hasard (i.e. l'échantillon appartient
+à une population de moyenne $\mu_0$) ou bien si cette
+différence est trop importante pour qu'on puisse admettre que 
+l'échantillon appartienne à une population de moyenne $\mu_0$.
+Pour répondre à cette question, on met en place un test de conformité sur les moyennes.
+Nous allons détailler le fonctionnement de ce test sur un exercice.\\
+
+\noindent {\it Exercice : Les fouines vivent en général en pleine nature dans des forêts, 
+des lisières de bois, des coteaux rocailleux et tout 
+autre paysage relativement ouvert, mais également dans des zones habitées comme des petits villages.
+On sait que la durée de vie moyenne des fouines dans ces conditions de vie est approximativement $\mu_0\approx 12$ ans.
+
+Ces dernières années on observe la présence de fouines dans de grandes agglomérations dans lesquelles 
+elles peuvent être victimes de la pollution,  de la circulation routière, ou d'une alimentation malsaine. 
+On fait une étude pour savoir si ces conditions de vie sont vraiment néfastes pour la fouine. On a ainsi suivi
+un échantillon de 84 fouines citadines. On a alors obtenu les durées de vie (en années) 
+$x_1\,\hdots,x_{84}$ et calculé la moyenne $m\approx 11.1$ et l'écart-type empirique $s_x\approx 2.9$. 
+
+En faisant un test statistique, dites si cette étude a mis en évidence une influence significative 
+des mauvaises conditions de vie dans des grandes agglomérations sur l'espérance de vie de la fouine.\\}
+
+
+ 
+On note $X$ la variable aléatoire qui représente la durée de vie des fouines vivant dans une grande 
+agglomération, avec les paramètres $\mu$ et $\sigma^2$ la moyenne et la variance de $X$. 
+Ces deux paramètres sont a priori inconnus. 
+On notera également $M_n$ et $S^2_n$ les estimateurs de $\mu$ et de $\sigma^2$ pour des
+échantillons de taille $n$ (ici $n=84$).\\
+
+L'{\it hypothèse} que l'on va tester ici ({\it hypothèse nulle}) est $(H_0) : \mu=\mu_0$, c'est-à-dire, il n'y
+a pas de différence de durée de vie entre les fouines des grandes villes et les fouines des campagnes.
+
+On prendra comme {\it hypothèse alternative} $(H_1) : \mu \neq \mu_0$. Cette hypothèse sera la conclusion
+de notre test si on démontre que l'hypothèse $(H_0)$ est fausse. 
+
+L'idée centrale derrière un test statistique est de définir une variable aléatoire entièrement calculable à partir des observations (et ne faisant donc pas intervenir les paramètres inconnus), qui aura un comportement différent selon que $(H_0)$ est vraie ou fausse. Une telle variable aléatoire est appelée \emph{variable}, ou \emph{statistique}, \emph{de test}. Selon la valeur qu'elle prendra lorsqu'on effectuera l'expérience aléatoire, on choisira de valider ou non $(H_0)$.
+
+Intéressons-nous à la variable $\displaystyle \frac{M_n-\mu}{S_n/\sqrt{n}}$. On a vu au chapitre sur l'estimation que comme $n$ est \underline{grand}, cette variable aléatoire suit 
+approximativement une loi normale centrée réduite $\mathcal{N}(0,1)$. 
+
+Malheureusement cette variable fait intervenir le paramètre inconnu $\mu$, et n'est donc pas une statistique de test valable. On choisira donc plutôt
+$$
+T=\frac{M_n-\mu_0}{S_n/\sqrt{n}}\,,
+$$
+qui coïncide avec $\displaystyle \frac{M_n-\mu}{S_n/\sqrt{n}}$ si $(H_0)$ est vraie. Par la suite, la notation $\Pr_{(H_0)}$ désignera un calcul de probabilité lorsque $(H_0)$ est supposée vraie.
+
+On rappelle que si $\alpha$ est une probabilité et $z_{\alpha}$ le seuil correspondant
+vérifiant $\Pr_{(H_0)}(|T|>z_{\alpha}) = \alpha$, on a alors la représentation graphique suivante :
+
+\begin{center}
+% \psset{xunit=2.03125cm,yunit=7.000000000000002cm,algebraic=true,dotstyle=o,dotsize=3pt 0,linewidth=0.8pt,arrowsize=3pt 2,arrowinset=0.25}
+% \begin{pspicture*}(-3.2,-0.3)(3.2,0.7)
+% \psaxes[labelFontSize=\scriptstyle,xAxis=true,yAxis=true,labels=none,Dx=0.5,Dy=0.1,ticksize=-2pt 0,subticks=2]{->}(0,0)(-3.2,-0.3)(3.2,0.7)
+% \pscustom[fillcolor=black,fillstyle=solid,opacity=0.1]{\psplot{-3}{-2}{EXP((-(x)^2)/2)/(sqrt(2*PI)*abs(1))}\lineto(-2,0)\lineto(-3,0)\closepath}
+% \pscustom[fillcolor=black,fillstyle=solid,opacity=0.1]{\psplot{2}{3}{EXP((-(x)^2)/2)/(sqrt(2*PI)*abs(1))}\lineto(3,0)\lineto(2,0)\closepath}
+% \psplot[plotpoints=200]{-3.0}{3.0}{EXP((-(x)^2)/2)/(sqrt(2*PI)*abs(1))}
+% \rput[tl](-2.11,0.01){$-z_{\alpha}$}
+% \rput[tl](1.94,0){$z_{\alpha}$}
+% \psline{->}(-2.18,0.02)(-2.36,0.11)
+% \psline{->}(2.2,0.02)(2.36,0.12)
+% \rput[tl](-2.77,0.18){$\Pr(T<-z_{\alpha})=\alpha/2$}
+% \rput[tl](2.11,0.18){$\Pr(T>z_{\alpha}) =  \alpha/2 $}
+% \rput[tl](0.37,0.45){$\mathcal{N}(0;1)$}
+% \rput[tl](-0.99,-0.06){$\mathbf{\Pr(|T| > z_{\alpha}) = \alpha}$}
+% \end{pspicture*}
+\end{center}
+
+
+
+
+Maintenant, {\it on suppose que l'hypothèse $(H_0)$ est vraie :} $\mu = \mu_0$. 
+
+%On peut donc remplacer $\mu$ par $\mu_0=12$ dans la formule de $T$ et on pourra faire des calculs explicites avec notre échantillon. 
+On prend alors le {\it risque d'erreur} $\alpha=0.05$ et on écrit, en 
+utilisant les propriétés de la loi normale centrée réduite,
+$$
+Pr_{(H_0)}(|T|>1.96)=0.05\,.
+$$
+
+Cette propriété signifie que l'événement $|T|>1.96$ est très rare (presque improbable) et ne doit donc pas 
+arriver dans une ``situation normale''. Par conséquent, si cet événement se réalise sur notre échantillon, on considère que c'est parce que notre hypothèse de départ $(H_0)$ était fausse. Il s'agit là d'une sorte de 
+``raisonnement par l'absurde probabiliste''. 
+
+A partir de l'échantillon, on calcule ainsi
+$$
+t=\frac{m-\mu_0}{\frac{s_x}{\sqrt{n}}} \approx -2.844
+$$
+
+On voit que $|t|>1.96$ donc, on rejette l'hypothèse $(H_0)$ avec une probabilité $\alpha=0.05$ de se tromper, 
+c'est-à-dire, de rejeter $(H_0)$ alors qu'elle est correcte.
+On peut donc conclure que $\mu\neq\mu_0$, il y a une différence entre les durées de vie moyennes. 
+Maintenant, comme sur notre échantillon, on constate que $m<\mu_0$, on peut raisonnablement conclure
+(peut-être à tort mais on prend le risque) que la durée de vie moyenne $\mu$ des fouines dans les grandes 
+villes est inférieure à la durée de vie moyenne $\mu_0$ des fouines des campagnes.\\
+
+
+En gros, la variable $T$, ou plutôt $|T|$, mesure les écarts entre les moyennes $m$ qu'on trouve sur des échantillons et la moyenne théorique $\mu_0$. 
+Lorsque cet écart dépasse une valeur que l'on juge limite en un sens probabiliste, alors on considère que cette différence entre 
+la valeur expérimentale et la valeur théorique est le reflet d'un phénomène qui se produit au niveau des
+populations.\\
+
+%\noindent {\it Remarque :} La variable aléatoire $T$, à partir de laquelle on construit la région de rejet de $H_0$, s'appelle la statistique de test.\\
+
+\noindent {\it Remarque :} Il ne faut pas oublier que nous avons rejeté l'hypothèse $(H_0)$ avec une probabilité $\alpha=0.05$ de se tromper ($5\,\%$ d'erreur). Peut-être pourrions affiner cette probabilité pour se rassurer.
+Le {\it degré de signification} est alors le plus petit $\epsilon$ tel que $|t|>z_\epsilon$.  
+En gros, si on avait pris $\epsilon$ au lieu de $\alpha$ comme risque d'erreur, le seuil critique aurait été
+$z_\epsilon$ et on aurait encore rejeté l'hypothèse mais avec une probabilité $\epsilon<\alpha$ de se tromper.
+Il permet de dire que la probabilité de rejeter l'hypothèse alors qu'elle est correcte est en fait $\epsilon$ qui est plus petit que $\alpha$.
+Ici, la table numérique nous donne $\epsilon = 0.01$. % (un logiciel de calcul serait plus précis).\\
+Cependant, on obtient une valeur plus précise du degré de signification $\epsilon$ avec la formule
+\[ \epsilon = Pr_{(H_0)}(|T|>|t|)\,.\]
+
+\noindent {\it Remarque :} Si on avait trouvé $|t| < 1.96$ quelle aurait été la conclusion ? 
+La conclusion la plus raisonnable est de dire que les données ne permettent pas de
+rejeter l'hypothèse. Maintenant, faut-il considérer que cette hypothèse est vraie ? Ce n'est pas 
+évident. En effet, la théorie des tests statistiques a plutôt été pensée pour rejeter des hypothèse
+et non les accepter.\\
+
+\noindent {\it Remarque :} Le réel 1.96 est le {\it seuil critique} associé au risque d'erreur 0.05.
+les intervalles $]-\infty ; -1.96[$ et $]1.96 ; +\infty[$ forment la {\it zone de rejet} du test.\\
+
+\noindent {\it Remarque :} On serait tenté de penser qu'on peut prendre dès le départ un risque d'erreur très
+faible (encore plus petit que 0.05) pour avoir plus de certitude. Si on prend $\alpha= 0.01$ le seuil 
+critique est alors $z_{\alpha}=2.576$. Si on prend $\alpha= 0.001$ alors $z_{\alpha}=3.29$. On peut 
+voir que
+plus le risque d'erreur est petit, plus le seuil critique est grand et donc plus la zone de rejet est petite.
+Par conséquent, si on fixe a priori un risque d'erreur trop petit, il sera très difficile de rejeter des hypothèses, et donc, on ne fait plus rien car on est trop exigent.\\
+
+
+
+\noindent {\sc {\bf Cas d'un échantillon de petite taille : $n < 30$.}}
+
+Que se passe-t-il lorsqu'on travaille avec des petits échantillons ?
+On a vu dans le chapitre sur l'estimation que dans ce cas, et supposant $(H_0)$ vraie, la variable aléatoire $T$ ne suit plus
+une loi normale centrée réduite ; mais que si on suppose en outre que la variable aléatoire 
+$X$ 	{\it suit une loi normale}, alors la variable $T$ suit une loi de Student à $n-1$ degrés de liberté. 
+
+La procédure du test reste alors le même sauf que le seuil critique n'est plus 1.96 mais doit être
+déterminé par la loi de Student (en utilisant les tables numériques, ou un logiciel de calcul).
+Par exemple, si $n=15$ le seuil critique correspondant au risque d'erreur $\alpha = 0.05$ est 2.145.
+De la même manière, si on rejette l'hypothèse, le degré de signification est déterminé par la loi de 
+Student.\\
+
+
+\noindent {\sc {\bf Tests unilatéraux.}}
+
+Le test que nous avons décrit plus haut est appelé {\it bilatéral} car l'hypothèse alternative, 
+$(H_1)\quad \mu\neq\mu_0$, était exactement le contraire de l'hypothèse $(H_0)$ et était 
+d'une certaine manière symétrique. C'est pourquoi nous avons travaillé avec $|T|$, ce qui donnait une 
+zone de rejet partagée en deux parties symétriques $]-\infty ; -1.96[$ et $]1.96 ; +\infty[$.
+
+On peut très bien imaginer des situations ou, par exemple, la propriété $\mu>\mu_0$ est complètement 
+impensable. Admettons qu'on vienne de créer un médicament pour lutter contre les migraines.
+Si $\mu_0$ est la durée moyenne de guérison naturelle après l'apparition d'une migraine et si 
+$\mu$ est la durée moyenne de guérison après avoir pris le médicament, on ne peut pas imaginer que $\mu$ soit 
+supérieure à $\mu_0$. Dans ce cas, on procède à un test {\it unilatéral}.
+L'hypothèse alternative sera ainsi $(H_1)\quad \mu < \mu_0$. En effet, il n'y a que deux possibilités :
+soit le médicament est sans effet ($\mu=\mu_0$) soit il est efficace ($\mu < \mu_0$).
+
+Dans ce cas, le test se fera de la même manière que plus haut. La différence est que l'on va travailler avec
+la variable $T$ et non $|T|$. La zone de rejet ne sera pas divisée en deux parties symétriques 
+(une positive et une négative) mais sera 
+concentrée sur un côté. Comme $\mu>\mu_0$ n'est pas du tout envisageable, la zone de rejet se situera 
+sur la partie négative de la courbe de Gauss. Si par exemple, on travaille avec de grands échantillons, on obtient le graphique :
+
+\begin{center}
+% \psset{xunit=2.03125cm,yunit=7.0cm,algebraic=true,dotstyle=o,dotsize=3pt 0,linewidth=0.8pt,arrowsize=3pt 2,arrowinset=0.25}
+% \begin{pspicture*}(-3.2,-0.3)(3.2,0.7)
+% \psaxes[labelFontSize=\scriptstyle,xAxis=true,yAxis=true,labels=none,Dx=0.5,Dy=1,ticksize=-2pt 0,subticks=2]{->}(0,0)(-3.2,-0.3)(3.2,0.7)
+% \pscustom[fillcolor=black,fillstyle=solid,opacity=0.1]{\psplot{-3}{-1.65}{EXP((-(x)^2)/2)/(sqrt(2*PI)*abs(1))}\lineto(-1.65,0)\lineto(-3,0)\closepath}
+% \psplot[plotpoints=200]{-3.0}{3.0}{EXP((-(x)^2)/2)/(sqrt(2*PI)*abs(1))}
+% \rput[tl](-1.75,-0.02){-1.65}
+% \psline{->}(-1.84,0.03)(-2.21,0.16)
+% \rput[tl](-2.79,0.23){$\Pr(T<-1.65)=0.05$}
+% \rput[tl](0.31,0.46){$\mathcal{N}(0;1)$}
+% \end{pspicture*}
+\end{center}
+
+Ainsi, en utilisant la table numérique de la loi normale centrée réduite ou un logiciel de calcul, on écrira 
+$$
+Pr_{(H_0)}(T<-1.65)=0.05\,.
+$$
+
+Pour conclure, la discussion se fera selon la position de $t$ par rapport à la valeur limite $-1.65$.
+Si $t<-1.65$ on rejette $(H_0)$ et on accepte $(H_1)$, sinon, on ne rejette pas l'hypothèse $(H_0)$. 
+Le degré de signification $\epsilon$ se lit en utilisant les propriétés de la loi normale :
+$$
+\epsilon = Pr_{(H_0)}(T<t)\,.
+$$
+
+
+
+
+\subsection{Tests d'homogénéité} 
+
+La situation pour ce type de test est la suivante. 
+On a deux échantillons {\it indépendants} qui représentent deux populations. Ces deux échantillons
+donnent deux moyennes $m_1$ et $m_2$ qui sont différentes. La question qu'on se pose est :
+est-ce que la différence entre $m_1$ et $m_2$ est suffisamment grande pour se permettre de dire
+qu'elle se généralise aux populations ?
+
+Là encore, nous allons décrire ce test sur un exercice.\\
+
+{\it Exercice : Le camembert rend-il intelligent ?
+Des étudiants de Licence de Biologie ont tenté une expérience novatrice pour voir si la consommation de 
+camembert avait une influence sur la compréhension des mathématiques...
+
+Les individus d'un échantillon de 50 étudiants pris au hasard en début d'année mangent une portion de 
+camembert à chaque repas pendant toute l'année. 
+A la fin de l'année, ils passent l'examen de mathématiques et ils ont ensuite calculé la moyenne des 
+notes (sur 20) obtenues $m_1\approx 9.1$ et l'écart-type empirique $s_1\approx 1.2$.
+
+Les individus d'un autre échantillon de 60 étudiants pris au hasard en début d'année ne mangent jamais de 
+camembert pendant toute l'année. Ils ont alors calculé après l'examen de mathématiques la note moyenne 
+obtenue $m_2\approx 8.7$ et l'écart-type empirique $s_2\approx 1.5$.
+
+En faisant un test statistique, dites si cette expérience a mis en évidence une quelconque 
+influence de la consommation de camembert sur les résultats en mathématiques à l'examen de fin d'année.}\\
+
+Ici on a deux populations. La première population est formée des étudiants qui mangent du camembert à chaque
+repas ; on note $\mu_1$ et $\sigma_1$ la note moyenne à l'examen de mathématiques et l'écart-type. On note
+également, $M_1$ et $S_1$ les estimateurs de $\mu_1$ et $\sigma_1$ sur des échantillons de taille $n_1$
+($n_1=50$). La seconde population est formée des étudiants qui ne mangent jamais de camembert ; on note
+alors $\mu_2$ et $\sigma_2$ la note moyenne à l'examen de mathématiques et l'écart-type et $M_2$ et $S_2$ 
+les estimateurs sur des échantillons de taille $n_2$ ($n_2=60$).
+Notons que les deux populations sont bien distinctes, les deux échantillons sont indépendants et les variables aléatoires $M_1$ et $M_2$ sont indépendantes.\\
+
+
+L'hypothèse qu'on va tester est ici $(H_0) : \mu_1=\mu_2$ (c'est-à-dire le camembert n'a aucune influence) et l'hypothèse alternative sera $(H_1) : \mu_1\neq\mu_2$.
+
+
+On va distinguer deux cas : grands ou petits échantillons.\\
+
+\noindent {\sc {\bf Cas de deux échantillons de grande taille : $n_1\geq 30$ et $n_2\geq 30$. }}
+
+Considérons la variable aléatoire 
+$\displaystyle 
+\frac{M_1-M_2 - (\mu_1-\mu_2)}{\sqrt{\frac{S_1^2}{n_1}+\frac{S_2^2}{n_2}} }
+$.
+On peut démonter la propriété suivante.
+\begin{prop}
+Si $n_1$ et $n_2$ sont grands (supérieurs à 30) alors la variable %$T$ 
+%$\displaystyle \frac{M_1-M_2 - (\mu_1-\mu_2)}{\sqrt{\frac{S_1^2}{n_1}+\frac{S_2^2}{n_2}} }$ 
+définie ci-dessus 
+suit approximativement une loi normale centrée réduite.
+\end{prop}
+
+Comme précédemment, cette variable dépend des paramètres inconnus $\mu_1$ et $\mu_2$. Mais lorsque $(H_0)$ est vraie, elle peut se réécrire
+\[
+  T = \frac{M_1-M_2}{\sqrt{\frac{S_1^2}{n_1}+\frac{S_2^2}{n_2}} }\,,
+\]
+qui est une statistique de test valable.
+
+La fin du test se fait alors exactement comme pour les tests de conformité. On suppose que $(H_0)$ est vraie,
+on prend le risque d'erreur $\alpha=0.05$ et on a alors $\Pr_{(H_0)}(|T|>1.96)=0.05$. On calcule alors la valeur observée 
+$t$ de $T$ sur nos deux échantillons.
+On a 
+$$
+t= \frac{m_1-m_2}{\sqrt{\frac{s_1^2}{n_1}+\frac{s_2^2}{n_2}} } \approx 1.55 \,.
+$$
+Pour conclure, on compare la valeur de $|t|$ avec 1.96, comme pour le test de conformité :
+\begin{itemize}
+\item Si $|t| \leq 1.96$, les données ne permettent pas de rejeter l'hypothèse, 
+\item si $|t| > 1.96 $, on rejette l'hypothèse $(H_0)$ avec un risque $\alpha=0.05$ de se tromper. 
+\end{itemize}
+ Si on rejette l'hypothèse, le degré de signification est encore le plus petit $\epsilon$ 
+ tel que $|t|>z_\epsilon$.
+
+Ici, comme $|t|<1.96$, on ne peut pas rejeter l'hypothèse.\\
+
+\noindent {\sc {\bf Cas d'au moins un échantillon de petite taille :
+$n_1 < 30$ et/ou $n_2 < 30$.}}
+
+Dans ce cas, c'est plus compliqué. Pour reprendre l'exercice ci-dessus, on note $X_1$ la variable aléatoire qui représente la note de maths d'un étudiant pris au hasard dans la première population (les étudiants qui mangent du camembert à tous les repas) et de même on note $X_2$ la variable aléatoire qui représente la note 
+de maths d'un étudiant de la seconde population.\\
+
+On suppose que $\sigma_1=\sigma_2$ et on définit les deux variables aléatoires
+$$
+S^2=\frac{(n_1-1)S_1^2+(n_2-1)S_2^2}{n_1 + n_2-2} \quad {\mbox { et }} \quad
+%T=\frac{M_1-M_2 - (\mu_1-\mu_2)}{\sqrt{\frac{S^2}{n_1}+\frac{S^2}{n_2}} }\,.
+T=\frac{M_1-M_2}{\sqrt{\frac{S^2}{n_1}+\frac{S^2}{n_2}} }\,.
+$$
+La variable $S^2$ est appelée {\it estimateur de la variance commune} car elle estime la variance 
+commune aux deux populations $\sigma_1^2=\sigma_2^2$, à partir des deux échantillons. La variable $T$ est la variable (ou statistique) du test.
+
+\begin{prop}
+Si $X_1$ et $X_2$ sont distribuées selon une loi normale et si $\sigma_1=\sigma_2$ alors, si $(H_0)$ est vraie, $T$ suit
+une loi de Student à $n_1+n_2-2$ degrés de liberté.
+\end{prop}
+
+%AAAAA
+
+Ensuite, la mise en place du test est la même que dans le cas des grands échantillons sauf qu'il faut travailler avec la loi de Student. Il faut donc calculer
+$$
+s^2=\frac{(n_1-1)s_1^2+(n_2-1)s_2^2}{n_1+n_2-2}\,, \quad {\mbox { et }} \quad
+t= \frac{m_1-m_2}{\sqrt{\frac{s^2}{n_1}+\frac{s^2}{n_2}} }\,,
+$$
+et comparer $|t|$ avec le seuil critique déterminé par la loi de Student.\\
+
+\noindent {\it Remarque : } On voit que pour faire les tests de conformité ou homogénéité avec des
+petits échantillons, on a besoin d'hypothèses supplémentaires (loi normale et/ou même variance) pour 
+que les choses fonctionnent théoriquement. 
+Dans la pratique, comment vérifier ces conditions ?
+
+La condition de distribution selon une loi normale n'a rien d'évident à vérifier si l'on ne dispose 
+que d'un petit échantillon. Ceci dit, il existe des techniques qui permettent de 
+vérifier cette hypothèse, par exemple le test de {\it Shapiro-Wilk}, le test de {\it Bontemps Meddahi}, 
+ou tout simplement un test du $\chi^2$ (sous de bonnes conditions d'application).
+
+Il est possible de vérifier la condition $\sigma_1=\sigma_2$ à partir des données obtenues 
+sur nos échantillons (même s'ils sont petits). En effet, il ``suffit'' de faire un {\it test de Fisher-Snedecor} (ou ``test F'') qui permet de 
+tester l'égalité de deux variances. Le principe est le même que les tests sur les moyennes sauf
+qu'il faut définir la bonne variable aléatoire et donner sa loi de probabilité (loi de Fisher-Snedecor).
+Les curieux peuvent consulter les bouquins  ce sujet...
+
+
+
+\section{Tests sur des proportions (ou probabilités)}
+
+Là encore, on distingue deux types de problèmes : le test de {\it conformité} (avec un échantillon)
+et le test {\it d'homogénéité} (avec deux échantillons indépendants).  
+Par contre, on ne traitera que le cas des grands échantillons.\\
+
+\subsection{Tests de conformité}
+
+On se demande si la différence entre la proportion $p$ d'individus possédant une certaine propriété 
+ dans un échantillon donné de taille $n$ et une valeur théorique $\pi_0$ peut être attribuée 
+ uniquement à des fluctuations dues au hasard ou bien à un vrai phénomène. 
+ 
+\noindent {\it Exercice : Il arrive parfois que le bouchon d'une bouteille de vin se décompose légèrement et vienne gâcher le vin. On dit alors que la bouteille est bouchonnée.
+
+Le liège qu'on utilise pour faire les bouchons des bouteilles de vin peut venir de diverses 
+régions du monde. On sait que d'une manière générale, la proportion de bouteilles bouchonnées 
+est $0,1$. On prend un échantillon de 500
+bouteilles fermées par des bouchons en liège du Portugal et on remarque que 35 de ces bouteilles sont 
+bouchonnées. En utilisant un test statistique, dites si on peut affirmer que le liège portugais est d'une 
+meilleure qualité. }\\
+
+
+On note $\pi$ la proportion de bouteilles bouchonnées dans la population des bouteilles fermées avec un 
+bouchon en liège du Portugal et $P_n$ son estimateur pour des échantillons de taille $n$.
+L'hypothèse que l'on teste ici est $(H_0) : \pi=\pi_0$ et l'hypothèse alternative est 
+$(H_1) : \pi \neq \pi_0$. 
+On considère alors la variable aléatoire 
+$$
+\frac{ P_n-\pi}{\sqrt{\frac{\pi(1-\pi)}{n}}}
+$$
+On sait (voir le chapitre sur l'estimation) que si $n\geq 30$, $n\pi\geq 5$ et $n(1-\pi)\geq 5$ alors cette 
+variable aléatoire suit approximativement une loi normale $\mathcal{N}(0,1)$.
+
+Comme d'habitude, on pose
+$\displaystyle T=\frac{ P_n-\pi_0}{\sqrt{\frac{\pi_0(1-\pi_0)}{n}}}$ 
+(cas particulier de la variable précédent lorsque $(H_0)\, \pi=\pi_0$ est vraie), 
+et on vérifie les conditions $n\pi_0\geq 5$ et $n(1-\pi_0)\geq 5$. 
+
+La fin du test est alors exactement la même que pour le test de conformité sur les moyennes.
+On a 
+$$
+Pr_{(H_0)}(|T|>1.96) = 0.05\,.
+$$
+On calcule la valeur $t$ de $T$ sur notre échantillon :
+$$
+t=\frac{p-\pi_0}{\sqrt{\frac{\pi_0(1-\pi_0)}{n}}} \approx -2.24
+$$
+où $p=\frac{35}{500}$ est la proportion de bouteilles bouchonnées dans l'échantillon.
+On a $|t|>1.96$ donc, on peut rejeter $(H_0)$, et comme $p<\pi_0$ on peut conclure que les bouchons en liège 
+du Portugal sont plus efficaces. Le degré de signification est 0.03.
+
+
+
+\subsection{Tests d'homogénéité}
+
+On utilise ce test lorsque l'on souhaite comparer deux proportions obtenues sur deux échantillons
+{\it indépendants} et voir si la différence entre ces deux proportions est significative, c'est-à-dire, 
+si elle est le reflet d'un phénomène qui se généralise aux deux populations dont sont tirées les deux échantillons.\\
+
+\noindent {\it Exercice : Des chercheurs ont découvert une bactérie qui infecte les platanes et 
+ralentit leur croissance.
+On sait que cette bactérie est particulièrement présente dans des eaux non 
+mobiles et on a retrouvé des traces de cette bactérie dans l'eau du canal du midi à Toulouse.  
+Des chercheurs toulousains se sont alors mis à étudier les platanes qui bordent le canal et ont prouvé que les platanes qui bordent le canal du midi sont particulièrement 
+attaqués par cette bactérie via les eaux du canal.
+
+Ils ont ainsi mis au point deux traitements A et B qui éliminent la bactérie du platane et ils les ont 
+testés sur deux échantillons indépendants de platanes malades. Ils ont traité le premier 
+échantillon de 126 platanes avec le produit A et ont observé 99 guérisons. De même, ils ont 
+ traité le deuxième échantillon de 130 platanes avec le produit B et ont observé 95 guérisons. 
+Peut-on dire qu'ils ont mis en évidence une différence d'efficacité entre ces deux traitements ? }\\
+
+On a donc deux populations : la population des platanes traités avec le produit A et 
+la population des platanes traités avec le produit B. Ces deux populations sont bien indépendantes.
+On note $\pi_1$ et $\pi_2$ les taux de guérison
+dans ces deux populations et $\mathrm{P}_1$ et $\mathrm{P}_2$ les estimateurs sur des échantillons de taille $n_1$ 
+et $n_2$. 
+Nos deux échantillons donnent une estimation $p_1=99/126$ de $\pi_1$ et une estimation $p_2 =95/130$
+de $\pi_2$.
+
+L'hypothèse que l'on teste ici est $(H_0) : \pi_1=\pi_2$
+et l'hypothèse alternative est alors $(H_1) : \pi_1 \neq \pi_2$.
+
+On suppose que l'hypothèse est vraie. On a alors $\pi_1=\pi_2$. 
+
+On définit la variable aléatoire 
+$$
+\mathrm{P}=\frac{n_1 \mathrm{P}_1 + n_2 \mathrm{P}_2}{n_1+n_2}
+$$
+Cette variable aléatoire est l'estimateur de la proportion commune $\pi_1=\pi_2$.
+
+On définit alors la variable aléatoire du test :
+$$
+T=\frac{\mathrm{P}_1-\mathrm{P}_2}{\sqrt{\mathrm{P}(1-\mathrm{P})} \sqrt{\frac{1}{n_1} + \frac{1}{n_2}} }\,.
+$$
+
+On peut alors montrer la propriété suivante.
+\begin{prop}
+Si $n_1\geq 30$, $n_2\geq 30$, $n_1 \pi_1>5$,  $n_1(1-\pi_1)>5$, $n_2 \pi_2>5$ et  $n_2(1-\pi_2)>5$,
+alors sous $(H_0)$ la variable $T$ suit approximativement une loi normale centrée réduite $\mathcal{N}(0;1)$.
+\end{prop}
+
+Concrètement, on calcule alors sur nos deux échantillons $p=\frac{99 + 95}{126 + 130}\approx 0.758$ et
+$$
+t=\frac{p_1-p_2}{\sqrt{p(1-p)} \sqrt{\frac{1}{n_1} + \frac{1}{n_2}} } \approx 1.026
+$$
+On en déduit que cette expérience n'a pas mis en évidence une différence significative entre les efficacités
+des deux produits.
+
+Comment vérifier les conditions de validité données ci-dessus alors qu'on ne connaît pas les valeurs
+de $\pi_1$ et $\pi_2$ ? Il suffit en fait de les vérifier en remplaçant $\pi_1$ et $\pi_2$ par leur 
+estimation commune $p$.
+
+
+\section{Tests sur données appariées}
+
+On dit qu'on réalise un appariement lorsqu'on se trouve dans l'une des deux situations suivantes :
+\begin{itemize}
+\item[-] on fait deux expériences sur le même échantillon et on compare ensuite les résultats obtenus
+\item[-] on considère deux échantillons choisis de manières non indépendantes, c'est-à-dire, les individus des deux échantillons ont certaines caractéristiques communes.
+\end{itemize}
+
+Comme nous allons voir, la mise en place d'un test de comparaison entre deux échantillons appariés
+semble être un mélange du test d'homogénéité avec le test de conformité.
+
+\subsection{Comparaison de deux moyennes}
+
+\noindent {\it Exercice  : 
+On souhaite comparer deux traitements A et B censés améliorer la durée de vie sans infection
+opportune dans le cas de l'infection au VIH.
+On sait que dans ce cas, le critère de jugement "durée sans infection opportune" est très corrélé 
+au nombre de lymphocytes CD4. 
+Si l'on fait un essai thérapeutique sans tenir compte de ce fait, le critère de jugement est très 
+variable d'un sujet à l'autre et le nombre de sujets nécessaires pour mettre en évidence un éventuel effet du traitement est grand.
+
+On réalise alors un {\it appariement}. Au lieu de travailler avec deux échantillons indépendants, on 
+réalise des couples de patients ayant le même nombre de CD4 (à peu près); 
+à l'un des patients on attribue le traitement A et on donne le traitement B  à
+l'autre, par tirage au sort. 
+On note $X$ la variable aléatoire donnant la durée de vie (en mois) sans infection 
+opportune des patients traités avec A ; de même $Y$ pour le traitement B. 
+On note $\mu_A$ et $\sigma_A$ (resp. $\mu_B$ et $\sigma_B$) la moyenne et l'écart-type de $X$ (resp. $Y$).
+
+On a un échantillon de 100 couples de patients.
+Les durées de vie des couples de patients sont notées $(x_1,y_1),\hdots,(x_{100},y_{100})$ ($x$ pour le 
+traitement A et $y$ pour le B). On regarde alors les différences $z_i=x_i-y_i$, ce qui donne une série 
+statistique $z_1,\hdots,z_{100}$.
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+valeur de $z$ & -4 & -3 & -2 & -1 & 0 & 1 & 2 & 3 & 4 & 6 \\
+\hline
+nombre de couples & 2 & 4 & 8 & 15 & 22 & 23 & 14 & 8 & 3 & 1 \\
+\hline
+\end{tabular}
+\end{center}
+On a alors $\displaystyle \sum_{i=1}^{100} z_i =42$ et $\displaystyle \sum_{i=1}^{100} z_i^2 =350$.
+A l'aide d'un test statistique, dites si un des deux traitements est plus efficace que l'autre. }\\
+
+
+Comme on a dit dans l'énoncé, l'idée ici est de travailler avec des couples de patients. Au lieu de distinguer les deux populations et les deux variables aléatoires $X$ et $Y$, 
+on considère qu'on n'a qu'une seule population (donc un seul échantillon) et qu'on travaille avec $Z=X-Y$. 
+
+De façon plus précise, on peut noter $\mathcal{U}$ %$\Omega$ 
+la population formée des couples {\it (patient A ; patient B)} où 
+le patient A a le même nombre de CD4 que le patient B. Il s'agit ici d'une population ``double'', un peu abstraite. Un échantillon de taille $n$ pris 
+dans cette population est la donnée de 100 couples (patient A ; patient B) où pour chaque couple, 
+le patient A a le même nombre de CD4 que le patient B.
+
+Ainsi, la variable $Z$ %$Z : \Omega \longrightarrow \mathbb{R}$ 
+est définie par    
+$Z(patient A ; patient B) = x - y$ où $x$ est la durée de vie du patient A et $y$ celle du patient B.
+
+On a $E(Z) = \mu_A - \mu_B$ mais attention, a priori on n'a pas $Var(Z) = Var(X) + Var(Y)$ car les variables $X$ et $Y$ ne sont pas franchement indépendantes. On notera $\mu=E(Z)$ et $\sigma^2=Var(Z)$.\\
+
+L'hypothèse qu'on va tester est $(H_0)\; \mu = 0$ contre l'hypothèse alternative $(H_1)\; \mu \neq 0$.\\
+
+A partir de là, le test ressemble énormément à un test de conformité sur les moyennes. 
+On note $M$ l'estimateur de $\mu$ sur des échantillons de taille $n=100$ et $S^2$ l'estimateur de 
+$\sigma^2$. Notons que si on prend un échantillon de 100 couples dans la population $\mathcal{U}$, %$\Omega$, 
+on obtient la série statistique $(x_1,y_1),\hdots,(x_{100},y_{100})$ qui donne lieu à la série statistique
+$z_1,\hdots,z_{100}$,
+où comme d'habitude $z_k = Z_k(\omega)$ est la réalisation de la variable $Z_k$ obtenue lorsqu'on a effectué  l'expérience aléatoire, 
+et on aura
+$$
+%M(echantillon) 
+M(\omega)
+= \bar{x}-\bar{y} = \bar{z}
+$$
+et 
+\begin{eqnarray*}
+%S^2(echantillon) 
+S^2(\omega)
+ & = & s_{xy}^2  =  \frac{1}{n-1}\sum_{i=1}^n \big( (x_i-y_i) -   (\overline{x}-\overline{y}) \big)^2 \\
+                & = & \frac{n}{n-1} Var(x-y)\\
+                & = &   \frac{n}{n-1}\Big[ \big( \frac{1}{n} \sum_{i=1}^n (x_i-y_i)^2\big) -(\overline{x}-\overline{y})^2 \Big] \\
+                & = & s^2_z
+\end{eqnarray*}
+
+
+On définit alors la variable aléatoire
+$$
+%T=\frac{M-\mu}{S/\sqrt{n}}\,.
+T=\frac{M}{S/\sqrt{n}}\,.
+$$
+
+
+La propriété suivante permet de faire les tests de comparaison de moyennes sur des échantillons appariés.
+
+\begin{prop} 
+La loi de probabilité de la variable aléatoire $T$ possède les propriétés suivantes :
+
+1) Si $n$ est grand ($n\geq 30$) alors sous $(H_0)$ la variable $T$ suit approximativement une loi normale centrée réduite $\mathcal{N}(0\,;\,1)$.
+
+2) Si $X$ et $Y$ sont distribuées selon une loi normale, alors sous $(H_0)$ la variable $T$ suit une loi de Student à $n-1$ degrés de liberté.
+\end{prop}
+
+La fin du test se fait donc de façon traditionnelle. Ici, on travaille avec un grand échantillon. On aura
+donc $\Pr_{(H_0)}(|T|>1.96) = 0.05$. Si on suppose que l'hypothèse $(H_0)$ est vraie, on peut calculer la réalisation $t=T(\omega)$ sur notre échantillon avec  
+$$
+t = \frac{\overline{x}-\overline{y}}{\frac{s_{xy}}{\sqrt{n}}}\,.
+$$
+On trouve $t\approx 2.29$ donc, on 
+peut rejeter $(H_0)$, il y a bien une différence significative. On peut conclure que $\mu_A > \mu_B$,
+c'est-à-dire le traitement A est plus efficace. Le degré de signification est 0.03.
+
+
+\subsection{Comparaison de deux proportions}
+
+\noindent {\it Exercice : Il existe (au moins) deux méthodes pour dessouler :
+l'absorption d'un bol de café et l'absorption d'un bol de vinaigre.
+Des journalistes de {\it Pétanque hebdo}, grand magazine d'investigation, ont testé ces deux méthodes.
+Lors de deux soirées différentes, 45 journalistes ont bu exactement la même quantité d'alcool jusqu'à ce qu'ils soient bien soûls.
+
+Lors de la première soirée, ils ont ensuite bu un gros bol de café bien fort.
+Lors de la deuxième soirée, ils ont ensuite bu un gros bol de vinaigre de cidre à l'estragon.
+A chaque fois, ils ont compté le nombre de succès.
+
+On notera C+ (et C-) l'événement "la technique du bol de café a marché" (resp. "n'a pas marché") et de même pour
+V+ et V- avec la technique du vinaigre. On a répertorié les résultats dans le tableau :
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Résultat Café & Résultat Vinaigre & nombre d'individus \\
+\hline
+C- & V- & 5 \\
+\hline
+C- & V+ &  13\\
+\hline
+C+ & V- &   19\\
+\hline 
+C+ & V+ &   11 \\
+\hline
+\end{tabular}
+\end{center}
+}
+
+
+On dira qu'un individu est, par exemple, $(C+,V-)$ si la technique du café a réussi et celle du vinaigre
+a échoué.
+Pour comparer l'efficacité des deux produits, on ne s'intéresse qu'aux individus qui sont soit $(C+,V-)$ soit $(C-,V+)$. Les autres individus (ceux chez qui les deux techniques ont marché et ceux chez qui aucune
+des deux technique n'a marché) n'apportent pas de différence entre les deux produits. 
+Par conséquent, on se place dans la population abstraite $\mathcal{U}$ formée des individus de type 
+$(C+,V-)$ ou  $(C-,V+)$ et on note $\pi$ la proportion (théorique...) d'individus qui sont du type $(C+,V-)$ dans cette population. 
+
+L'hypothèse qu'on va tester sera alors $(H_0) \, \pi=0.5$ contre $(H_1) \, \pi\neq 0.5$ .\\
+
+%On note $\mathcal{E}_n$ l'ensemble des échantillons de taille $n$ dans la population $\mathcal{U}$.
+
+On définit alors la variable aléatoire $T$ %$T : \Omega \longrightarrow \mathbb{R}$ 
+par 
+$$
+T(\omega) = \frac{x-y}{\sqrt{n}}
+$$
+où $x$ est le nombre d'individus de l'échantillon qui sont de type $(C+,V-)$ et $y$ est le nombre d'individus de l'échantillon qui sont de type $(C-,V+)$ (noter que $n=x+y$).\\
+
+La propriété suivante permet de faire les tests de comparaison de moyennes sur des échantillons appariés.\\
+
+\begin{prop} 
+Si $n$ est grand ($n\geq 30$) alors sous $(H_0)$ la variable aléatoire $T$ suit approximativement une loi normale centrée réduite $\mathcal{N}(0\,;\,1)$.
+\end{prop}
+
+Ici, on peut écrire
+$$
+Pr_{(H_0)}(|T|>1.96)=0.05\,.
+$$
+
+Il ne reste plus qu'à calculer la valeur $t$ de $T$ sur notre échantillon et comparer $|t|$ avec 1.96. 
+On a 
+$$
+t=\frac{13-19}{\sqrt{32}} \approx -1.06\,.
+$$
+On ne peut donc pas rejeter l'hypothèse. On n'a pas démontré qu'il y a une différence significative entre
+les deux méthodes.\\
+
+\noindent {\it Remarque : } Présenté de cette manière, on ne voit pas trop que ce test ressemble
+beaucoup à un test de conformité (comparer avec le test de conformité sur des proportions). Pourtant,
+ce sont deux tests très proches. En effet, si on note $\mathrm{P}_n$ l'estimateur de $\pi$ sur des 
+échantillons de taille $n$, on définit alors, comme pour le test de conformité, la variable aléatoire
+$$
+T'=\frac{\mathrm{P}_n - 0.5}{\sqrt{\frac{0.5\times 0.5}{n}}} = 
+\frac{\mathrm{P}_n - 0.5}{\frac{0.5}{\sqrt{n}}}\,.
+$$
+
+Avec les mêmes notations que plus haut, on a alors
+\begin{eqnarray*}
+T'(\omega) & = & \frac{\frac{x}{x+y} - \frac{1}{2}}{\frac{0.5}{\sqrt{x+y}}} \\
+               & = & \frac{\frac{2x-(x+y)}{2(x+y)}}{\frac{0.5}{\sqrt{x+y}}} \\
+               & = & \frac{x-y}{\sqrt{x+y}} \\
+               & = & T(\omega) 
+\end{eqnarray*}
+
+
+\section[Tests du chi-2]{Tests du $\chi^2$}
+
+On utilise les tests du $\chi^2$ lorsqu'on travaille avec des populations dans lesquelles
+chaque individu peut être classé dans une catégorie parmi 
+$k$ catégories deux à deux distinctes. Un exemple évident est la population humaine avec les quatre groupes sanguins.
+
+Ce test permet de comparer la répartition des proportions selon les $k$ catégories. 
+Notons qu'on peut dire que les problèmes résolus à l'aide des tests sur les proportions peuvent également être résolus grâce à des tests du $\chi^2$ avec 2 catégories.
+
+On verra en TD qu'on peut également utiliser le test du $\chi^2$ pour vérifier si une variable aléatoire
+suit une certaine loi (Poisson, normale, etc.) ou pour montrer l'indépendance d'événements, etc. 
+C'est donc un test très riche et très utile.
+
+Là encore, on peut distinguer le test de conformité du test d'homogénéité et on verra qu'on peut généraliser.
+
+\subsection{Tests de conformité} 
+
+
+\noindent {\it Exercice : On peut distinguer 3 types d'allergies  à l'aspirine : 
+"bénigne", "grave" et "très grave". Une étude a déterminé la répartition des gravités des
+allergies en France :
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+bénigne & grave & très grave \\
+\hline
+$45\,\%$ & $35\,\%$ & $20\,\%$\\
+\hline
+\end{tabular}
+\end{center}
+
+Ursule est médecin  en Lozère et a observé sur 150 habitants qui ont présenté une allergie à 
+l'aspirine la répartition suivante : 50 avaient une allergie bénigne, 62 une allergie grave et
+38 une allergie très grave.
+
+Peut-on dire que la Lozère présente une particularité du point de vue de l'allergie
+à l'aspirine ?}\\
+
+Ici, on a trois catégories. On note $\pi_1$, $\pi_2$ et $\pi_3$ les proportions des trois catégories
+ d'allergie dans la région de la Lozère. L'hypothèse qu'on va tester est alors  
+$$
+(H_0) : \pi_1=0.45, \, \pi_2=0.35 \, {\mbox { et }}  \pi_3=0.2\,.
+$$
+Notons que l'hypothèse alternative sera alors 
+$(H_1)\,$ $\pi_1\neq 0.45$, ou $\pi_2\neq 0.35$, ou $\pi_3\neq 0.2$. 
+
+On définit la variable aléatoire sur l'ensemble des échantillons de $n=150$ individus pris dans la population
+des  allergiques à l'aspirine de Lozère par  
+$$
+q = Q(\omega)=\sum\frac{ ({\mbox { effectif observé }} -  {\mbox { effectif théorique }})^2}
+ { {\mbox { effectif théorique }}} \,.
+$$
+
+Les {\it effectifs observés} sont tout simplement les effectifs $n_1$, $n_2$ et $n_3$ des 3 catégories 
+qu'on a  observés sur notre échantillon.
+ 
+Les {\it effectifs théoriques} sont les effectifs qu'on s'attend à trouver théoriquement dans un 
+échantillon de taille $n$ si les proportions des trois catégories sont $\pi_1$, $\pi_2$ et $\pi_3$ ;  ce sont
+donc $n\pi_1$, $n\pi_2$ et $n\pi_3$. 
+
+\begin{prop}
+Si $n\geq 30$ et $n\pi_i \geq 5$ pour tout $i$, alors sous $(H_0)$ la variable aléatoire $Q$ suit une loi du $\chi^2$
+à 3-1=2 degrés de liberté.
+\end{prop}
+
+En utilisant les propriétés de la loi du $\chi^2$, on peut donc écrire la relation
+$$
+Pr_{(H_0)}(Q > 5.991) = 0.05
+$$
+
+On suppose que l'hypothèse $(H_0)$ est vraie. Dans ce cas, $\pi_1=0.45$, $\pi_2=0.35$ et $\pi_3=0.2$.
+On peut donc vérifier les conditions de validité de la propriété ci-dessus et on a le tableau des effectifs.\\
+
+\begin{tabular}{|l|c|c|c|}
+\hline
+        & bénigne & grave & très grave\\
+\hline
+Effectifs observés & $n_1=50$ & $n_2=62$ & $n_3=38$ \\
+\hline
+Effectifs théoriques & $n\times 0.45=67.5$ & $n\times 0.35=52.5$ & $n\times 0.2=30$ \\
+\hline
+\end{tabular}
+\\
+
+Le calcul de la valeur $q$ de $Q$ sur notre échantillon donne alors
+$$
+q = \frac{(n_1 - n\times 0.45)^2}{n\times 0.45} + \frac{(n_2 - n\times 0.35)^2}{n\times 0.35}
++ \frac{(n_3 - n\times 0.2)^2}{n\times 0.2} \approx 8.39\,.
+$$
+
+Comme $q>5.991$ on en déduit qu'il y a bien une différence des répartitions des degrés d'allergie à
+l'aspirine. Le degré de signification est 0.02. \\
+
+\noindent {\it Remarque :} Dans les cas simples comme ici, le degré de liberté de la loi du $\chi^2$ est
+égal au {\it nombre de catégories -1.} 
+
+Le fait qu'on doive enlever un degré de liberté au nombre de catégories vient du fait que s'il y a $k$
+catégories, la connaissance des proportions de $k-1$ catégories est suffisante pour tout connaître (car la 
+somme de toutes les proportions est égale à 1). On a donc un système qui ne dépend en fait que de $k-1$
+paramètres indépendants.
+
+Dans certaines situations, on est obligé de faire une estimation d'un paramètre pour mener à bien le test du $\chi^2$ ; par exemple, pour vérifier si une variable aléatoire suit une loi de Poisson dont on doit estimer le paramètre. Dans ce cas, on perd encore un autre degré de liberté.
+
+
+\subsection{Tests d'homogénéité} 
+
+{\it Exercice : On se demande si les préférences de consommation du vin sont les mêmes dans la région
+Midi-Pyrénées et la région Languedoc. On s'est intéressé aux trois couleurs de vin : rouge, blanc et rosé 
+(sans rentrer dans les détails de cépage et domaines).
+On a pris un échantillon de 200 habitants de la région toulousaine et un échantillon de 250 habitants de la région de Montpellier et on leur a demandé leur préférence parmi ces trois types de vin. 
+
+Pour l'échantillon de la région Midi-Pyrénées, on a comptabilisé 110 individus qui préfèrent le rouge, 
+70 qui préfèrent le blanc et 20 qui préfèrent le rosé.
+
+Pour l'échantillon de la région Languedoc, on a comptabilisé 120 individus qui préfèrent le rouge, 
+70 qui préfèrent le blanc et 60 qui préfèrent le rosé.
+
+A l'aide d'un test statistique, dites si cette étude a mis en évidence une différence significative 
+entre les répartitions des 
+préférences de la couleur des vins entre ces deux régions.\\
+}
+
+On a deux populations (les habitants de Midi-Pyrénées et les habitants du Languedoc). 
+Dans la population de Midi-Pyrénées, on note $\pi_1$ la proportion d'individus qui préfèrent le vin rouge,
+$\pi_2$ la proportion d'individus qui préfèrent le blanc et 
+$\pi_3$ la proportion d'individus qui préfèrent le rosé.
+De la même manière, on note $\pi'_1$ $\pi'_2$ $\pi'_3$ les trois proportions pour la population du Languedoc.
+
+L'hypothèse qu'on va tester sera $(H_0)$ $\pi_1=\pi'_1$, $\pi_2=\pi'_2$ et $\pi_3=\pi'_3$.
+L'hypothèse alternative sera alors  $(H_1)$ $\pi_1\neq\pi'_1$, ou $\pi_2\neq\pi'_2$ ou $\pi_3\neq\pi'_3$.
+
+La variable aléatoire du test est encore définie par 
+$$
+Q(\omega)=\sum\frac{ ({\mbox { effectif observé }} -  {\mbox { effectif théorique }})^2}
+ { {\mbox { effectif théorique }}} \,.
+$$
+sauf que cette variable est définie sur l'ensemble des couples d'échantillons indépendants
+{\it (échantillon Midi-Pyrénées de taille $n$; échantillon Languedoc de taille $n'$)} et donc, 
+la somme se fait sur les deux échantillons (il y aura donc ici 6 termes dans la somme).
+Là encore, on peut montrer que si $(H_0)$ est vraie, et si $n\geq 30$, $n'\geq 30$, $n\pi_i \geq 5$ et $n'\pi'_i \geq 5$ pour tout 
+$i$, alors la variable aléatoire $Q$ suit une loi du $\chi^2$ à 3-1=2 degrés de liberté.
+
+En utilisant les propriétés de la loi du $\chi^2$ à 2 degrés de liberté, on peut encore écrire la relation
+$$
+Pr_{(H_0)}(Q > 5.991) = 0.05
+$$
+
+On suppose que l'hypothèse est vraie $\pi_1=\pi'_1$, $\pi_2=\pi'_2$ et $\pi_3=\pi'_3$. 
+Ceci dit, la différence avec le test de conformité est qu'on ne dispose 
+pas des valeurs de ces {\it proportions théoriques}. On ne peut donc pas tout de suite faire les calculs.
+On va d'abord faire une estimation de ces trois proportions.
+
+Pour un échantillon de $n$ individus de Midi-Pyrénées, on note $n_1$, $n_2$ et $n_3$ le nombre d'individus
+qui préfèrent le vin rouge, blanc et rosé.
+
+De même,  pour un échantillon de $n'$ individus du Languedoc, on note $n'_1$, $n'_2$ et $n'_3$ le nombre 
+d'individus qui préfèrent le vin rouge, blanc et rosé.
+
+On estime les trois proportions théoriques en calculant :
+$$
+p_1 = \frac{n_1+n'_1}{n+n'}\approx 0.51 \quad p_2 = \frac{n_2+n'_2}{n+n'}\approx 0.31 \quad 
+p_3 = \frac{n_3+n'_3}{n+n'}\approx 0.18
+$$
+Au passage, on peut vérifier les conditions de validité en remplaçant les $\pi_i$ et $\pi'_i$ par les trois
+proportions estimées $p_1$, $p_2$ et $p_3$.
+On peut alors remplir le tableau des effectifs. \\
+
+\begin{tabular}{|l|c|c|c|}
+\hline
+        & rouge & blanc & rosé \\
+\hline
+Effectifs observés (Midi-Pyrénées) & $n_1=110$ & $n_2=70$ & $n_3=20$ \\
+\hline
+Effectifs théoriques (Midi-Pyrénées) & $n\times p_1=102 $ & $n\times p_2=62 $ 
+ & $n\times p_3=36 $ \\
+\hline
+Effectifs observés (Languedoc) & $n'_1=120$ & $n'_2=70$ & $n'_3=60$ \\
+\hline
+Effectifs théoriques (Languedoc) & $n'\times p_1= 127.5$ & $n'\times p_2=77.5 $ 
+& $n'\times p_3 = 45$ \\
+\hline
+\end{tabular}
+\\
+
+Le calcul de la valeur $q$ de $Q$ sur notre échantillon donne alors
+\begin{eqnarray*}
+q & = & \frac{(n_1 - n\times p_1)^2}{n\times p_1} + \frac{(n_2 - n\times p_2)^2}{n\times p_2}
++ \frac{(n_3 - n\times p_3)^2}{n\times p_3} \\
+  &    &  + \frac{(n'_1 - n'\times p_1)^2}{n'\times p_1} + \frac{(n'_2 - n'\times p_2)^2}{n'\times p_2}
++ \frac{(n'_3 - n'\times p_3)^2}{n'\times p_3}\\
+  & \approx & 14.9
+\end{eqnarray*}
+
+Comme $q>5.991$ on en déduit qu'il y a bien une différence significative entre les préférences de vin
+des deux régions. Le degré de signification est 0.001. \\
+
+\noindent {\it Remarque :} Le degré de liberté est encore {\it nombre de catégories -1}. 
+
+En fait, on pourrait
+faire le même test, exactement de la même manière, avec $k$ échantillons ($k\geq 2$) afin de comparer $k$
+populations. Si le nombre de catégories est $c$ (ici $c=3$) alors le degré de liberté serait 
+$$
+d = (k-1)\times (c-1)
+$$
+Pour arriver à visualiser cette formule, on peut dire la chose suivante. Il y a $k$ populations avec $c$
+catégories pour chaque population donc, il y a $kc$ proportions. Pour chaque population, on a 
+la propriété "somme des 
+proportions égale 1" donc, on perd 1 degré de liberté pour chaque population. On a donc $kc-k$ pour le 
+moment. Ensuite, on a vu qu'on a été obligé d'estimer $c-1$ proportions théoriques (attention, on en a bien 
+estimé $c-1$ et non $c$ car la dernière proportion découle automatiquement des $c-1$ premières, toujours à 
+cause de la propriété : "somme des proportions égale 1"), on doit donc retrancher $c-1$ degrés de liberté. 
+En effet, l'estimation d'un paramètre théorique à l'aide des échantillons ajoute une relation entre les proportions et fait donc perdre un degré de liberté.
+ 
+Au final, on a bien 
+$$
+d=kc - k - (c-1) = (k-1)(c-1)
+$$
+
+\appendix
+
+\chapter{Quelques précisions sur l'estimation et les tests}
+
+Nous donnons ici quelques remarques complémentaires aux chapitres précédents pour utiliser correctement
+l'estimation et les tests statistiques.
+
+\section{Clarifier les notations avant toutes choses}
+
+Avant de se lancer dans des calculs, aussi bien pour une estimation que pour un test statistique, il convient de définir proprement les objets qui interviennent dans l'expérience aléatoire.
+\begin{description}
+ \item[Quelle est la population sur laquelle on travaille ?]
+  On n'a pas en général accès à la totalité de la population d'intérêt, mais seulement à un échantillon d'individus qui constituent la base de notre étude statistique. Attention, cet échantillon est seulement une sous-partie de la population totale, que l'on considère comme tirée au hasard.
+ \item[Quelles sont les quantités d'intérêt ?]
+  Ces quantités \emph{théoriques} sont définies sur la population totale, et il convient de les définir proprement. Ce sont elles que l'on cherche à estimer, ou plus tard qui définiront les hypothèses d'un test statistique.
+  
+  Exemple : une moyenne (théorique) ou espérance $\mu$.
+ \item[Quels sont leurs correspondants empiriques ?]
+  On n'a pas accès directement aux quantités théoriques, mais à leurs pendants \emph{empiriques}, ou estimateurs. Ce sont des variables aléatoires construites à partir des observations. Attention, ils sont en général différents de la quantité théorique qu'ils estiment.
+  
+  Au niveau des notations, on utilise en général des majuscules pour un estimateur en tant que variable aléatoire, définies à l'aide d'une règle de calcul à partir des observations elles-mêmes vues comme variables aléatoires. On utilise alors des minuscules pour leur \emph{réalisation, ou valeur observée}, c'est-à-dire la valeur concrète calculée à partir des données réellement observées lors de l'expérience aléatoire.
+  
+  Exemple : l'estimateur $M_n = \overline{X} =\frac{1}{n} \sum_{k=1} X_k$, et sa valeur observée, l'estimation $m_n = \bar{x}$.
+\end{description}
+
+\section{Test bilatéral ou unilatéral ?}
+
+\paragraph{Rappel du contexte :} 
+Lors de la conception d'un test statistique, on construit une variable aléatoire $T$, appelée statistique de test, choisie de sorte que l'on connaisse sa loi sous l'hypothèse $H_0$, ainsi qu'un comportement typique sous l'hypothèse $H_1$ ($T$ a tendance à prendre des valeurs plus grandes sous $H_1$ que sous $H_0$, ou à prendre des valeurs plus éloignées de $0$ mais potentiellement négatives, etc.). À partir de ce comportement, et avant d'observer les données, on construit une zone de conformité ou d'acceptation de l'hypothèse $H_0$. Puis on calcule la valeur observée $t$ de la statistique $T$, ou encore sa réalisation dans le cadre de l'expérience aléatoire. On accepte $H_0$ si $t$ appartient à la zone d'acceptation (on préfère alors dire qu'on n'a pas observé d'écart significatif au niveau d'erreur $\alpha$).
+
+Parmi les exemples classiques, il y a les tests du $\chi^2$, qui sont unilatéraux: $T$ suit une loi du $\chi^2$ sous $H_0$, avec un nombre $d$ de degrés de liberté à préciser. Dans ce cas l'intervalle d'acceptation de $H_0$ est du type $[0, z_\alpha]$, avec le seuil $z_\alpha$ défini en fonction du niveau d'erreur $\alpha$ par $\Pr_{(H_0)}(T>z_\alpha)=\alpha$.
+
+Nous nous intéressons plutôt ici aux cas où $T$ suit une loi symétrique, par exemple lorsque la loi de $T$ est approximativement $\mathcal{N}(0,1)$. Dans cette situation on peut être confronté à des tests bilatéraux ou unilatéraux. Dans les deux cas l'hypothèse $H_0$ sera du type $\mu=0$ ou $\mu_1=\mu_2$ (tests de conformité ou bien d'homogénéité).
+
+La plupart du temps on choisira un test bilatéral. L'hypothèse $H_1$ sera alors du type $\mu\neq 0$ ou $\mu_1\neq\mu_2$ (selon les cas). La zone d'acceptation de $H_0$ sera $[-z_\alpha, z_\alpha]$, avec le seuil $z_\alpha$ défini en fonction du niveau d'erreur $\alpha$ par $\Pr_{(H_0)}(|T|>z_\alpha)=\alpha$, soit encore $\Pr_{(H_0)}(T>z_\alpha)=\alpha/2$. \\
+Si $H_0$ est rejetée, on conclut alors qu'il y a un écart significatif à la situation par défaut exprimée dans $H_0$, et on précise alors si cet écart est du côté positif ou négatif selon le signe de $t$. 
+
+Dans certaines situations, on peut supposer a priori, c'est-à-dire \emph{indépendemment des données observées}, que l'un des deux côtés est exclu. Par exemple, si l'on teste l'efficacité d'un procédé sensé faire baisser la concentration d'un composé chimique, on peut savoir a priori que le procédé ne l'augmentera pas. Dans ce cas on réalise un test unilatéral. \\
+En revanche, si on n'a pas cette connaissance a priori, mais uniquement grâce aux observations, on doit réaliser un test bilatéral et, s'il rejette $H_0$, préciser au moment de conclure si le paramètre d'intérêt est augmenté au diminué significativement, comme expliqué précédemment. \\
+Dans le cas d'un test unilatéral, il faut choisir le sens de l'inégalité dans l'hypothèse $H_1$ (Attention à bien choisir) :
+\begin{description}
+ \item[Hypothèse $H_1$ du type $\mu> 0$ ou $\mu_1>\mu_2$] 
+ (respectivement test de conformité et test d'homogénéité). La zone d'acceptation de $H_0$ sera $]-\infty, z_\alpha]$, avec le seuil $z_\alpha$ défini en fonction du niveau d'erreur $\alpha$ par $\Pr_{(H_0)}(T>z_\alpha)=\alpha$. On rejette $H_0$ si $t>z_\alpha$. Si la table ne donne pas directement le seuil $z_\alpha$, on peut utiliser la table qui donne les seuils pour les tests bilatéraux, \emph{en faisant comme si} le niveau d'erreur était $2\alpha$.
+ \item[Hypothèse $H_1$ du type $\mu< 0$ ou $\mu_1<\mu_2$.] La zone d'acceptation de $H_0$ sera $[-z_\alpha, +\infty[$, avec le seuil $z_\alpha$ défini par $\Pr_{(H_0)}(T>z_\alpha)=\alpha$ comme précédemment. Rejet de $H_0$ si $t<-z_\alpha$. 
+\end{description}
+
+\section{Déterminer un degré de signification}
+
+Le degré de signification ou p-valeur est le niveau $\alpha$ limite auquel le test passe de rejet de $H_0$ (si $\alpha$ est plus grand) à acceptation de $H_0$ (si $\alpha$ est plus petit). 
+Pour le calculer, la première méthode est de chercher dans la table quel est le seuil auquel le test change d'avis : cela donne un intervalle contenant le degré de signification. 
+Autrement, il faut revenir à la définition du test lui-même.
+\begin{description}
+ \item[Cas d'un test bilatéral.] Supposons qu'on dispose d'une statistique de test $T$, dont la loi sous $H_0$ est symétrique. Dans le cas d'un test bilatéral, la zone d'acceptation de $H_0$ est du type $[-z_\alpha, z_\alpha]$, avec le seuil $z_\alpha$ défini en fonction du niveau d'erreur $\alpha$ par $\Pr_{(H_0)}(|T|>z_\alpha)=\alpha$, soit encore $\Pr_{(H_0)}(T>z_\alpha)=\alpha/2$.
+ 
+ Le niveau limite auquel le test change d'avis est lorsque le seuil $z_\alpha$ correspond à la valeur observée $|t|$ de la statistique. En remplaçant $z_\alpha$ par $|t|$ dans le définition précédente, on obtient
+ \[ \text{p-valeur} = Pr_{(H_0)}(|T|>|t|) = 2 Pr_{(H_0)}(T>|t|). \]
+ \item[Cas d'un test unilatéral.] Supposons que la zone d'acceptation de $H_0$ soit du type $]-\infty, z_\alpha]$ ou $[0, z_\alpha]$, avec le seuil $z_\alpha$ défini en fonction du niveau d'erreur $\alpha$ par $\Pr_{(H_0)}(T>z_\alpha)=\alpha$. Le principe est le même, avec une expression simplifiée : le niveau limite auquel le test change d'avis est lorsque le seuil $z_\alpha$ correspond à la valeur observée $t$ de la statistique, ce qui donne
+ \[ \text{p-valeur} = Pr_{(H_0)}(T>t). \]
+ Si la zone d'acceptation de $H_0$ est du type $[-z_\alpha, +\infty[$, alors le niveau limite est atteint lorsque le seuil $-z_\alpha$ correspond à la valeur observée $t$ de la statistique, ce qui donne
+ \[ \text{p-valeur} = Pr_{(H_0)}(T<t). \]
+\end{description}
+
+\section{Estimation de la variance.}
+
+\medskip\noindent
+Il existe en pratique deux estimations possibles de la variance $\sigma^2$ d'une variable aléatoire $X$, 
+à savoir:
+$Var(x) = {\frac 1n} \sum_{i=1}^n (x_i - \overline{x})^2$ et $s_x^2= \frac{1}{n-1} \sum_{i=1}^n  
+(x_i - \overline{x})^2$. 
+Se pose alors la question de savoir quelle estimation choisir. L'habitude est de choisir $s_x^2$ arguant du 
+fait que l'estimateur associé  (noté $S_n^2$ dans ce cours) est sans biais (ce n'est pas le cas de 
+l'autre estimateur qui lui est baisé).
+
+
+\smallskip\noindent
+Or un estimateur sans biais peut fournir une estimation qui soit relativement éloignée de la quantité 
+que l'on cherche à estimer ! En fait, le bon critère pour juger de la qualité d'un estimateur 
+(ou comparer deux estimateurs entre eux) est le risque quadratique. Il est défini comme suit. 
+Si $M$ désigne un estimateur, alors le risque quadratique de $M$ (appelé aussi erreur moyenne quadratique) est:
+$$
+R(M) := E[(M-\mu)^2] = [E(M)-\mu]^2 + Var(M) =[\hbox{biais de }(M)]^2 + Var(M) \, . 
+$$ 
+Il  fait donc intervenir non seulement le biais (éventuel) de $M$, mais également sa variance.
+Le risque quadratique  d'un estimateur s'interprète comme une mesure de la qualité de cet estimateur:
+plus son risque  quadratique  est petit, et meilleur il est. On dit qu'un estimateur
+$M_1$ est meilleur qu'un estimateur $M_2$ si $R(M_1) <  R(M_2)$. Pour pouvoir comparer
+les quantités  $R(M_1)$ et  $R(M_2)$ il faut, en général, faire une hypothèse de loi sur les $X_i$.
+En revenant au problème de l'estimation de la variance, on peut montrer que si les variables aléatoires 
+$X_i$ sont indépendantes et toutes distribuées selon la même loi normale, alors c'est l'estimateur   
+$V_n = \frac 1n \sum_{i=1}^n (X_i - \overline{X})^2$ qui est le meilleur. Cela implique,
+qu'il est préférable d'estimer $\sigma^2$ par la variance non-corrigée des $x_i$ (plutôt que par la variance corrigée $s_x^2$)
+quand la population est gaussienne (pour la variable $X$ considérée).\\
+
+Quand $n$ est grand, les deux estimations sont très proches l'une
+de l'autre, et peu importe, en pratique, celle qui est retenue. Le développement ci-dessus n'a en fait 
+d'intérêt que pour les petites tailles d'échantillon.
+
+
+
+\end{document}

@@ -1,0 +1,469 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}   % pour pouvoir taper les accents directement     
+\usepackage{amsfonts,amssymb,amsmath}
+\usepackage{tikz}
+\usepackage{array}
+\usepackage{calc}
+\usetikzlibrary{patterns}
+\usepackage[absolute,showboxes,overlay]{textpos}     
+\textblockorigin{0pt}{0pt}                          
+\TPshowboxesfalse  
+ \usepackage{lmodern,multido}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+
+\newcommand{\pop}{\mathcal{U}} % pour ne pas confondre avec la loi de Poisson
+
+\begin{document}
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ % Afficher le numéro de diapos 
+  \addtobeamertemplate{navigation symbols}{}{ \hspace{1em}    \usebeamerfont{footline}%
+    \insertframenumber/\inserttotalframenumber }
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Introduction aux statistiques}
+\begin{textblock*}{\textwidth}(1cm,2cm)
+
+\begin{center}{\bf \Large Chapitre 5} \end{center}
+\begin{center}{\bf \Large Statistique sur proportions} \end{center}
+\vspace{0.5cm}
+\begin{itemize}
+\item Estimation  
+\item Intervalle de confiance
+\item Tests statistiques d'hypothèses
+\end{itemize}
+\vspace{0.5cm}
+\begin{itemize}
+\item Variables quantitatives : moyenne et variance (chapitre 4)
+\item {\bf Variables qualitatives : proportion} (chapitre 5)
+\end{itemize}
+
+ \end{textblock*}
+
+\end{frame}
+
+
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Estimation}
+\begin{textblock*}{\textwidth}(1cm,2cm)
+
+\begin{center}{\bf \Large Estimation d'une proportion} \end{center}
+
+ $\pi$  proportion d'individus de la population $\pop$ présentant une certaine propriété
+ 
+ \
+
+Estimateur de la proportion : \\
+\begin{center}
+$\mathrm{P}_n : \mathcal{E}_n \longrightarrow \R$ défini par 
+\end{center}
+
+\begin{center}
+$\mathrm{P}_n\mbox{(échantillon)} =p=$ proportion dans l'échantillon 
+\end{center}
+
+ \begin{itemize}
+ \item $n\times \mathrm{P}_n \sim \mathcal{B}(n;\pi)$ approximativement
+ \item $E(\mathrm{P}_n)=\pi$ (estimateur sans biais)
+ \item $Var(\mathrm{P}_n)=\frac{\pi(1-\pi)}{n}$ (estimateur correct)
+ \end{itemize}
+
+
+\end{textblock*}
+
+\end{frame}
+
+
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Estimation}
+\begin{textblock*}{\textwidth}(1cm,2cm)
+
+\begin{center}{\bf \Large Estimation d'une proportion} \end{center}
+
+\vspace{0.5cm}
+De plus, si
+\begin{itemize}
+\item $n$  grand ($n\geq 30$)
+\item $n\pi\geq 5$
+\item $n(1-\pi)\geq 5$
+\end{itemize} 
+
+\
+ $\mathrm{P}_n$ suit approximativement une loi normale 
+$\displaystyle \mathcal{N}\left(\pi;\sqrt{\pi(1-\pi)/n}\right)$.
+
+\end{textblock*}
+
+\end{frame}
+
+
+
+
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Intervalle de confiance}
+\begin{textblock*}{\textwidth}(1cm,2cm)
+
+\begin{center}{\bf \Large Intervalle de confiance d'une proportion} \end{center}
+
+
+On pose 
+$$
+T=\frac{\mathrm{P}_n - \pi}{\sqrt{\frac{\mathrm{P}_n (1-\mathrm{P}_n)}{n}}} \sim \mathcal{N}(0 ; 1) \text{ approximativement}
+$$ 
+\
+à condition que :
+\begin{itemize}
+\item $n$ grand ($n\geq 30$)
+\item $n\pi\geq 5$ ; $n(1-\pi)\geq 5$
+\end{itemize}
+\vspace{0.3cm}
+{\bf Intervalle de confiance à $95 \%$ de $\pi$} :
+$$
+\left[ p -1.96 \sqrt{\frac{p(1-p)}{n}} ; p +1.96 \sqrt{\frac{p(1-p)}{n}} \right]
+$$
+
+
+
+ \end{textblock*}
+
+\end{frame}
+
+
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Intervalle de confiance}
+\begin{textblock*}{\textwidth}(1cm,2cm)
+
+\begin{center}{\bf \Large Intervalle de confiance d'une proportion} \end{center}
+
+\vspace{0.5cm}
+
+\noindent {\it Remarque : }  
+
+conditions de validité $n\pi\geq 5$
+et $n(1-\pi)\geq 5$ mais $\pi$  inconnu
+
+\
+\begin{itemize}
+\item remplacer $\pi$ par l'estimation $p$
+
+\
+
+\item calculer d'abord les bornes de l'intervalle de confiance $[\pi_1\,;\,\pi_2]$ et vérifier $n\times\pi_1 \geq  5 \quad n\times (1-\pi_2) \geq  5\,.
+$
+\end{itemize}
+
+ \end{textblock*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Tests statistiques}
+\begin{textblock*}{\textwidth}(1cm,2cm)
+
+
+\begin{center}{\bf \Large Tests de proportions} \end{center}
+
+
+\
+
+\
+
+\begin{itemize}
+\item Conformité
+\begin{itemize}
+\item Comparaison à une valeur de référence
+\end{itemize}
+
+\
+\item Homogénéité
+\begin{itemize}
+\item Comparaison de 2 proportions
+\end{itemize}
+
+\
+\item Grands échantillons
+\end{itemize}
+
+
+\end{textblock*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Test de conformité de proportion}
+\begin{textblock*}{\textwidth}(1cm,1.5cm)
+
+\begin{center}{\bf \Large Exemple  } \end{center}
+
+
+\begin{itemize}
+\item  Proportion de bouteilles bouchonnées : $0.1$
+\item  500 bouteilles avec bouchons en liège du Portugal
+\item  35 bouteilles bouchonnées
+\item Qualité du liège portugais ?
+\end{itemize}
+
+\
+Notations 
+\begin{itemize}
+\item $\pi$ proportion de bouteilles bouchonnées parmi les bouteilles 
+avec un bouchon portugais
+\item $P_n$ estimateur de $\pi$ pour des échantillons de taille $n$
+\item $p$ estimation de $\pi$ sur l'échantillon observé
+\end{itemize}
+
+\end{textblock*}
+
+\end{frame}
+  
+  
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Test de conformité de proportion}
+\begin{textblock*}{\textwidth}(1cm,1cm)
+
+\begin{center}{\bf \Large Principe  } \end{center}
+
+\begin{itemize}
+\item Hypothèse testée :
+\begin{itemize}
+\item  $H_0 : \pi=\pi_0$
+\item $H_1 : \pi \neq \pi_0$
+\end{itemize}
+
+\
+
+\item Statistique de test : $\displaystyle T=\frac{ P_n-\pi_0}{\sqrt{\frac{\pi_0 (1-\pi_0)}{n}}}$
+\begin{itemize}
+\item Si  $n\geq 30$, $n\pi\geq 5$ et $n(1-\pi)\geq 5$
+$$\displaystyle \frac{ P_n-\pi}{\sqrt{\frac{\pi(1-\pi)}{n}}}
+\sim \mathcal{N}(0,1) \text{ approximativement}$$
+\item Sous $H_0$ : $\pi=\pi_0$ $\Rightarrow$
+$\displaystyle T=\frac{ P_n-\pi_0}{\sqrt{\frac{\pi_0(1-\pi_0)}{n}}} \sim \mathcal{N}(0,1)$ approximativement, \emph{si $n\geq 30$, $n\pi_0\geq 5$ et $n(1-\pi_0)\geq 5$}.
+\end{itemize}
+\end{itemize}
+\end{textblock*}
+
+\end{frame}
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Test de conformité de proportion}
+\begin{textblock*}{\textwidth}(1cm,1.5cm)
+
+\begin{center}{\bf \Large Principe  } \end{center}
+
+\begin{itemize}
+\item Définition de la zone de rejet de $H_0$
+$$
+Pr(|T|>z_{\alpha}) = \alpha
+$$
+\item Calcul de $t$ sur les données de l'échantillon \\
+
+\
+
+\item Régle de décision 
+\begin{itemize}
+\item Si $|t| > z_{\alpha} \; \Rightarrow \; $ Rejet de $H_0$ \\
+$\rightsquigarrow$ Mise en évidence d'une différence significative entre $p$ et $\pi_0$ \\
+$\rightsquigarrow$ Il est crédible que $\pi\neq\pi_0$
+
+\
+\item Si $|t| < z_{\alpha} \; \Rightarrow \; $ Non-rejet de $H_0$ \\
+
+$\rightsquigarrow$ Pas de différence significative entre $p$ et $\pi_0$ \\
+$\rightsquigarrow$ On ne peut pas exclure que $\pi = \pi_0$
+
+\end{itemize}
+\end{itemize}
+\end{textblock*}
+
+\end{frame}
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Test de conformité de proportion}
+\begin{textblock*}{\textwidth}(1cm,1.5cm)
+
+\begin{center}{\bf \Large Exemple  } \end{center}
+ 
+ 
+\begin{itemize}
+\item Les conditions sont vérifiées :  $n\geq 30$, $n\pi_0\geq 5$ et $n(1-\pi_0)\geq 5$
+
+\
+\item $t=\frac{p-\pi_0}{\sqrt{\frac{\pi_0(1-\pi_0)}{n}}} \approx -2.24
+$
+\\
+avec  $p=\frac{35}{500}$ proportion dans l'échantillon.
+
+\
+\item  $|t|>1.96$ on rejette  $H_0$
+
+\
+\item Comme $p<\pi_0$,  bouchons en liège 
+du Portugal meilleurs
+
+\
+\item Degré de significativité 0.03
+\end{itemize}
+
+\end{textblock*}
+
+\end{frame}
+ 
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Test d'homogénéité de proportions}
+\begin{textblock*}{\textwidth}(1cm,2cm)
+
+\begin{center}{\bf \Large Exemple  } \end{center}
+
+
+
+ \
+ 
+ Traitement contre bactérie du platane
+
+\begin{itemize}
+\item 126 platanes traités avec le produit A  : 99 guérisons
+\item 130 platanes traités avec le produit B : 95 guérisons
+\item Deux populations (traitement A / traitement B) indépendantes
+\item Efficacité différente des deux traitements ?
+\end{itemize}
+
+\end{textblock*}
+
+\end{frame}
+
+
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Test d'homogénéité de proportions}
+\begin{textblock*}{\textwidth}(1cm,1.5cm)
+
+\begin{center}{\bf \Large Notations} \end{center}
+
+
+
+ \
+ 
+ Traitement contre bactérie du platane
+
+\begin{itemize}
+\item $\pi_1$ et $\pi_2$ les taux de guérison dans ces deux populations 
+\item  $\mathrm{P}_1$ et $\mathrm{P}_2$ les estimateurs sur des échantillons de taille $n_1$  et $n_2$
+\item  estimation $p_1=99/126$ de $\pi_1$ et  estimation $p_2 =95/130$ de $\pi_2$
+
+\
+\item On teste \\ 
+$H_0 : \pi_1=\pi_2$ contre $H_1 : \pi_1 \neq \pi_2$.
+\end{itemize}
+
+\end{textblock*}
+
+\end{frame}
+ 
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Test d'homogénéité de proportions}
+\begin{textblock*}{\textwidth}(1cm,1.5cm)
+
+\begin{center}{\bf \Large Principe  } \end{center}
+
+
+
+ \
+On définit :  
+\begin{itemize}
+\item Estimateur de la proportion commune $\pi_1=\pi_2$ : 
+$\mathrm{P}=\frac{n_1 \mathrm{P}_1 + n_2 \mathrm{P}_2}{n_1+n_2}$
+\item Statistique de test :
+$
+T=\frac{\mathrm{P}_1-\mathrm{P}_2}{\sqrt{\mathrm{P}(1-\mathrm{P})} \sqrt{\frac{1}{n_1} + \frac{1}{n_2}} }$
+\end{itemize}
+
+Si
+\begin{itemize}
+\item $n_1\geq 30$, $n_2\geq 30$ 
+\item  $n_1 \pi_1>5$,  $n_1(1-\pi_1)>5$
+\item $n_2 \pi_2>5$,  $n_2(1-\pi_2)>5$
+\end{itemize}
+
+alors $T\sim \mathcal{N}(0;1)$ approximativement.
+
+\end{textblock*}
+
+\end{frame}
+
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Test d'homogénéité de proportions}
+\begin{textblock*}{\textwidth}(1cm,1.5cm)
+
+\begin{center}{\bf \Large Exemple  } \end{center}
+
+ \
+On calcule
+
+\
+\begin{itemize}
+\item $\displaystyle p=\frac{99 + 95}{126 + 130}\approx 0.758$
+
+\
+\item $
+\displaystyle t=\frac{p_1-p_2}{\sqrt{p(1-p)} \sqrt{\frac{1}{n_1} + \frac{1}{n_2}} } \approx 1.026
+<1.96$
+\end{itemize}
+
+\
+
+Pas de différence significative entre les efficacités
+des deux produits
+
+\
+
+Conditions de validité vérifiées \emph{a porteriori} en remplaçant $\pi_1$ et $\pi_2$ par leur 
+estimation commune $p$ : $\min(n_1, n_2) \min(p, 1-p) > 5$.
+
+
+\end{textblock*}
+
+\end{frame}
+
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+\end{document}
+
+
+
+
+ 
+
+
+
+
+
+
+
+

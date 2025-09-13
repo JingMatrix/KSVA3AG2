@@ -1,0 +1,158 @@
+\documentclass{article}
+\usepackage{amsfonts,amssymb,epsfig}
+%\usepackage[latin1]{inputenc}
+\usepackage[all]{xy}
+\usepackage{amsmath}
+\usepackage{delarray}
+\usepackage{pdfpages}
+\usepackage[frenchb]{babel}
+
+\usepackage[utf8]{inputenc} 
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+%\theoremstyle{definition}
+\newtheorem{defn}[thm]{Definition}
+%\theoremstyle{remark}
+\newtheorem{rem}[thm]{Remark}
+\numberwithin{equation}{section}
+\newtheorem{example}[thm]{Example}
+
+\newcommand{\D}{\displaystyle}
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\K}{{\mathbb K}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+
+\setlength{\textwidth}{17.2cm}
+\setlength{\textheight}{24cm}
+\hoffset=-2.2cm
+\voffset=-2.5cm
+
+%-----------------------------------------------------------------------------
+\begin{document}
+\noindent Université Paul Sabatier -- Toulouse III
+\hfill L2 BCP\\
+\noindent Introduction aux Statistiques
+%\hfill Année 2022-2023
+
+\bigskip
+\bigskip
+
+
+\begin{center}
+{\bf \large TD 2 : Estimations et tests de comparaison de moyennes}\\
+{\bf \large }
+\end{center}
+
+\bigskip
+%\bigskip
+
+
+
+\subsection*{  Exercice 1 :  (Examen Janvier 2016)} 
+
+\noindent La bosse des dromadaires constitue une  réserve énergétique importante, pleine de matières grasses (acides
+palmitiques, acide oléitique...). 
+
+\noindent On note $X$ la variable aléatoire qui représente le taux d'acide palmitique dans la bosse d'un dromadaire pris au hasard. On note également $\mu$ et $\sigma$ la moyenne et l'écart-type de $X$.
+Sur un échantillon de 120 dromadaires, on a mesuré le taux d'acide palmitique présent dans la bosse de chaque
+dromadaire. On a ainsi obtenu la série statistique $x_1,\hdots, x_{120}$. On a alors calculé 
+$\displaystyle \sum_{k=1}^{120} x_k \approx 36$ et $\displaystyle \sum_{k=1}^{120} x_k^2 \approx 12$.
+\begin{enumerate}
+\item Donnez une estimation de $\mu$ et $\sigma$.
+\item Donnez un intervalle de confiance à $95\%$ (puis à $98\%$) de $\mu$.
+\item On suppose que $X$ suit une loi normale $\mathcal{N}(\mu ; \sigma)$. Reprenez la question précédente en supposant que l'échantillon contient 17 dromadaires avec $\displaystyle \sum_{k=1}^{17} x_k=5.4$  et $\displaystyle \sum_{k=1}^{17} x_k^2=2.23$.
+%\item Question subsidiaire pour le TD : On suppose que $X$ suit une loi normale $\mathcal{N}(\mu ; \sigma)$. On prendra pour valeurs de $\mu$ et de $\sigma$ les estimations calculées à la question 1. 
+%\begin{enumerate}
+%\item Donnez la médiane de $X$. 
+%\item Calculez la probabilité que la bosse d'un dromadaire pris au hasard ait un taux d'acide palmitique supérieur à 0.41. \\
+%\end{enumerate}
+\end{enumerate}
+
+
+
+\bigskip
+
+
+
+
+\subsection*{ Exercice 2 : } 
+
+\noindent On sait que le taux d'hémoglobine moyen chez l'homme est $\mu_0= 15\, g/dL$ de sang.
+
+\begin{enumerate}
+\item Un scientifique qui a de l'intuition décide d'étudier l'hémoglobine chez les coureurs cyclistes professionnels. 
+On note $\mu$ le taux d'hémoglobine moyen chez les cyclistes et $\sigma$ l'écart-type. Il a alors mesuré le taux d'hémoglobine de chaque individu d'un échantillon de $50$ cyclistes et a calculé la moyenne $\bar{x}\approx 15.8$ et l'écart-type empirique $s_x\approx 2.35$. \\
+Utilisez un test statistique avec le risque d'erreur $\alpha=0.05$ pour tester l'hypothèse $(H_0) \,\mu=\mu_0$ contre l'hypothèse alternative $(H_1)\, \mu\neq\mu_0$. Peut-on conclure que le taux d'hémoglobine moyen des cyclistes est anormal ? Donnez le degré de signification si nécessaire.
+
+\item On note $\alpha$ le risque d'erreur (ou {\it risque de première espèce}) ;  c'est la probabilité de
+rejeter l'hypothèse alors qu'elle est correcte. On note $\beta$ le risque de {\it deuxième espèce} ; c'est la probabilité de ne pas rejeter l'hypothèse $(H_0)$ alors qu'elle est fausse. La {\it puissance} du test est alors la probabilité de rejeter $(H_0)$ alors qu'elle est effectivement fausse. \\
+Représentez géométriquement ces trois probabilités. \\
+Si $\alpha$ est pris très petit, que devient $\beta$ ?
+
+\item Un chercheur invente un produit à base d'une molécule connue pour favoriser l'augmentation 
+du taux d'hémoglobine. Il cherche à savoir si son produit est vraiment efficace.
+On note $\tilde{\mu}$ le taux
+d'hémoglobine moyen lorsqu'on consomme ce produit, et $\tilde{\sigma}$ l'écart-type. \\
+Sur un échantillon de $40$ individus auxquels le chercheur a injecté son produit, il a  calculé la moyenne 
+$\bar{y}\approx 15.6$ et l'écart-type empirique $s_y\approx 1.5$. \\
+Testez l'hypothèse $(H_0) \,\tilde{\mu}=\mu_0$ contre l'hypothèse alternative $(H_1)\, \tilde{\mu} > \mu_0$ pour vérifier si ce produit est efficace. Expliquez le choix de  cette hypothèse alternative. \\
+Expliquez pourquoi ce test est "plus puissant" que celui fait au 1).
+
+\item Refaites le test du 1) en supposant cette fois que l'échantillon est formé
+de 20 cyclistes. Quelle hypothèse supplémentaire doit-on avoir pour que ce soit correct ?\\
+\end{enumerate}
+
+\bigskip
+
+
+\subsection*{ Exercice 3 : (Examen Juin 2022)} 
+On se propose d'étudier l'effet de l'âge sur le temps de réaction (en millisecondes) entre un 
+stimulus visuel et une  réponse motrice.
+
+On a mesuré le temps de réaction de $52$ individus de $30$ ans. On a obtenu un temps de réaction moyen 
+de $m_1=255$ et un écart-type empirique de $s_1=32$.
+
+On a mesuré le temps de réaction de $35$ individus de $55$ ans. 
+On a obtenu un temps moyen de réaction de $m_2=264$ et un écart-type empirique de $s_2=35.5$.  \\
+
+Cette expérience permet-elle de conclure à une différence de temps de réaction entre les âges 
+$30$ et $50$ ans ? Donner le degré de signification si nécessaire.
+
+\bigskip
+
+
+\subsection*{ Exercice 4 : } 
+Le chat est un gros dormeur ! On s'intéresse à la durée quotidienne de sommeil des chats et on voudrait savoir si les chats de campagne et de ville dorment autant. 
+On a relevé, pour un jour donné, la durée de sommeil de $15$ chats de campagne et de $16$ chats de ville.  
+
+Sur l'échantillon des chats de campagne, on a obtenu une durée moyenne $\overline{x} \approx 16.44$ et un écart-type $s_x \approx 2.9$. 
+
+Sur l'échantillon des chats de ville, on a obtenu les résultats intermédiaires suivants (où $y_i$ représente la durée de sommeil d'un 
+chat de ville $i$, avec $i=\{1, ...,16\}$) : 
+$$
+\sum_{i=1}^{16} y_i = 310 \;\;\;\;\;\; \sum_{i=1}^{16} y_i^2 = 6128 
+$$
+%Sur l'échantillon des chats de ville, on a obtenu une durée moyenne $\overline{y} \approx 19.21$ et un écart-type $s_y \approx 2.85$. \\
+\begin{enumerate}
+\item Calculer la moyenne et l'écart-type de la durée de sommeil pour l'échantillon des chats de ville.
+\item A l'aide d'un test statistique (au risque $5\%$), peut-on conclure que les chats de ville et 
+campagne dorment autant ? \\
+Quelles sont les conditions pour que ce test soit applicable ? \\
+Donner le degré de signification s'il y a lieu.\\
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+\end{document}
