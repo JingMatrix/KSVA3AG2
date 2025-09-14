@@ -1,0 +1,139 @@
+\documentclass[12pt, a4paper]{article}
+
+% --- PAQUETS ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\linespread{1.2}
+\usepackage{xcolor}
+
+% --- ENVIRONNEMENT PERSONNALISÉ POUR LES MÉTA-INFORMATIONS ---
+\newenvironment{metadata}{%
+    \par\vspace{1ex}
+    \quote\small\color{gray}
+}{%
+    \par\nobreak\vspace{1ex}\centerline{\rule{0.5\linewidth}{0.4pt}}
+    \endquote
+    \vspace{2ex}
+}
+
+% --- COMMANDE PERSONNALISÉE POUR LES NOTES DE DIAPOSITIVE ---
+\newcommand{\slidenote}[1]{%
+    \par\vspace{1.5ex}%
+    \noindent\texttt{\small\color{gray}#1}\par\nopagebreak\vspace{1.5ex}%
+}
+
+% --- TITRE ---
+\title{Script du Cours 1 : Introduction aux Statistiques}
+\author{Jianyu MA}
+\date{Semestre 2025-26}
+
+% --- DÉBUT DU DOCUMENT ---
+\begin{document}
+
+\maketitle
+
+\begin{metadata}
+\subsection*{Plan de la Séance (Temps Estimés)}
+\begin{itemize}
+    \item Mise en Route et Introduction (5 min)
+    \item Partie 1 : Présentation du Cours (15 min)
+    \item Partie 2 : Rappels sur les Probabilités (45 min)
+    \item Partie 3 : Variables Aléatoires Discrètes (50 min)
+    \item Conclusion et Transition (5 min)
+\end{itemize}
+\end{metadata}
+
+\section*{Mise en Route et Introduction}
+Bonjour à toutes et à tous. Je suis \textbf{Jianyu MA}.
+
+Mes informations de contact sont les suivantes :
+\begin{itemize}
+    \item \textbf{Bureau :} 1R1 - 205
+    \item \textbf{Email professionnel :} \texttt{jianyu.ma@univ-tlse3.fr}
+    \item \textbf{Email personnel :} \texttt{jingmatrix@gmail.com}
+\end{itemize}
+
+Avant de commencer, je souhaite vous dire quelques mots. Comme vous l'entendez, mon français n'est pas parfait. Pour m'assurer d'être le plus clair possible, je vais m'aider d'un script. Si, à un moment, vous ne comprenez pas ce que je dis, s'il vous plaît, interrompez-moi. Mon objectif est de vous aider à comprendre les mathématiques.
+
+D'ailleurs, si ce script vous intéresse, vous pouvez m'envoyer un email et je vous le transmettrai. Cependant, je dois insister sur un point crucial : la référence absolue pour le contenu du cours, ce qui fait foi pour les examens, est et restera le \textbf{polycopié} sur Moodle.
+
+\section*{Partie 1 : Présentation du Cours}
+
+\slidenote{Référence : Présentation du cours.pdf - Diapositive 1}
+Alors, commençons par l'organisation. Comme vous le voyez sur cette diapositive, le cours est structuré en 9 séances de Cours-TD. Pour l'évaluation, ce sera un QCM pour 30\% et un examen terminal pour 70\%. Je vous distribue maintenant le formulaire qui sera votre seul allié pendant les examens. Tout le reste est sur Moodle.
+
+\slidenote{Référence : Présentation du cours.pdf - Diapositive 2}
+Maintenant, quel est le projet de ce semestre ? Le programme que vous voyez à l'écran n'est pas une simple liste, mais une progression logique pour acquérir un langage et une méthode.
+
+Le langage, ce sont les \textbf{Probabilités}, que l'on peut voir comme une \textbf{extension de la logique classique}. La logique binaire (VRAI/FAUX) est insuffisante en science. Les probabilités sont le cadre mathématique pour quantifier la \textbf{plausibilité} d'une proposition.
+
+La méthode, c'est \textbf{l'art de l'inférence}, que l'on appelle les \textbf{Statistiques}. C'est l'art de passer du \textit{spécifique} (votre échantillon) au \textit{général} (la population) pour tirer des \textbf{conclusions convaincantes} à partir de données limitées.
+
+Concrètement, voici comment nous allons construire cette compétence :
+\begin{itemize}
+    \item \textbf{Rappels de probabilités et variables discrètes :} Nous allons d'abord maîtriser le vocabulaire de base.
+    \item \textbf{Variables aléatoires continues :} Nous étendrons ce vocabulaire pour pouvoir modéliser des grandeurs mesurables.
+    \item \textbf{Théorie de l'estimation :} Notre premier outil d'inférence pour estimer une caractéristique d'une population.
+    \item \textbf{Tests statistiques :} L'aboutissement, pour prendre une décision et répondre à une question scientifique.
+\end{itemize}
+
+\section*{Partie 2 : Rappels sur les Probabilités}
+
+\slidenote{Référence : Rappels probas.pdf - Diapositive 2}
+Comment formaliser l'incertitude ? Le premier pas est de définir notre terrain de jeu : l'univers, $\Omega$.
+
+Une probabilité, c'est la \textbf{plausibilité que nous assignons} à une proposition. Le rôle des mathématiques de la probabilité est de nous fournir un \textbf{système de raisonnement} pour s'assurer que nos jugements de plausibilité sont cohérents entre eux. Si j'assigne une plausibilité à "A" et une autre à "B", les maths me diront quelle plausibilité je dois logiquement assigner à "A et B".
+
+\slidenote{Référence : Rappels probas.pdf - Diapositives 3, 4 \& 6}
+Maintenant, faisons un pas de plus. Au départ, nous avons vu l'univers $\Omega$ comme un ensemble de \textit{résultats}. Pour un événement $A$ (qui est un sous-ensemble de résultats), on peut former une \textit{proposition} qui affirme : "le résultat de l'expérience appartiendra à l'ensemble A". Ainsi, notre univers de résultats génère un univers de propositions, et ce sont les plausibilités de ces propositions que nous allons manipuler.
+
+Regardons la règle de l'union. Pourquoi la formule $\Pr(A \cup B) = \Pr(A) + \Pr(B) - \Pr(A \cap B)$ ? L'intuition est simple : c'est pour éviter de compter deux fois. Imaginez que vous comptez les personnes dans deux groupes, A et B. Si vous additionnez simplement le nombre de personnes dans A et le nombre de personnes dans B, vous avez compté deux fois celles qui appartiennent aux deux groupes (l'intersection). Il faut donc les soustraire une fois. C'est exactement la même logique pour les probabilités.
+
+Passons maintenant à la probabilité conditionnelle, $\Pr(A|B)$. C'est peut-être le concept le plus important des probabilités. Intuitivement, c'est une \textbf{mise à jour de notre connaissance}.
+Prenons un exemple simple. Quelle est la probabilité de tirer un Roi d'un jeu de 52 cartes ? C'est 4 sur 52.
+Maintenant, je vous donne une information : "la carte que vous avez tirée est une figure (Valet, Dame ou Roi)". Votre univers de possibilités n'est plus les 52 cartes, il s'est \textit{réduit} aux 12 figures. Dans ce nouvel univers, il y a toujours 4 Rois. Votre nouvelle probabilité, \textit{sachant} cette information, est donc de 4 sur 12. C'est ça, la probabilité conditionnelle.
+
+C'est le \textbf{moteur de la déduction} en sciences. C'est l'outil qui nous permet de répondre à la question fondamentale : "Étant donné les données que j'ai observées (l'événement B), quelle est la nouvelle plausibilité de mon hypothèse (l'événement A) ?". Toute l'inférence statistique repose sur cette idée.
+
+\section*{Partie 3 : Variables Aléatoires Discrètes}
+
+\slidenote{Référence : Rappels sur variables aleatoires discretes.pdf - Diapositive 2}
+Passons maintenant à la variable aléatoire. L'univers $\Omega$ est souvent abstrait. Vous n'observez jamais "un patient" dans sa totalité. Vous observez des \textit{mesures}.
+La variable aléatoire est notre \textbf{instrument de mesure}, le pont entre le monde réel complexe et les nombres que nous pouvons analyser.
+
+\slidenote{Référence : Rappels sur variables aleatoires discretes.pdf - Diapositive 3}
+Ces mesures peuvent être de deux types : \textbf{discrètes} (on compte) ou \textbf{continues} (on mesure). Aujourd'hui, nous nous concentrons sur le comptage.
+
+\slidenote{Référence : Rappels sur variables aleatoires discretes.pdf - Diapositive 10}
+La loi de Bernoulli est l'atome de l'incertitude : une question binaire (oui/non).
+\begin{itemize}
+    \item \textbf{Exemple :} Un patient répond-il à un traitement (X=1) ou non (X=0) ? Si le taux de succès connu est de 80\%, alors $X$ suit une loi de Bernoulli $\mathcal{B}(0.8)$.
+\end{itemize}
+
+\slidenote{Référence : Rappels sur variables aleatoires discretes.pdf - Diapositives 11 \& 12}
+La loi Binomiale compte le nombre de succès sur $n$ répétitions indépendantes d'une épreuve de Bernoulli.
+\begin{itemize}
+    \item \textbf{Exemple :} Un traitement est censé avoir 80\% de succès ($p=0.8$). Sur 100 patients, on s'attend à $np=80$ guérisons. Si on n'en observe que 50, la loi binomiale nous permettra de calculer la probabilité d'un tel résultat, et donc de juger si notre hypothèse de 80\% est plausible.
+\end{itemize}
+
+\slidenote{Référence : Rappels sur variables aleatoires discretes.pdf - Diapositives 13 \& 14}
+La loi de Poisson est la loi des événements \textit{rares}.
+\begin{itemize}
+    \item \textbf{Exemple :} En écologie, on compte les animaux d'une espèce rare capturés par un piège. Si en moyenne, on observe $\lambda=2$ individus par jour, le nombre exact chaque jour suivra une loi de Poisson $\mathcal{P}(2)$.
+\end{itemize}
+
+\section*{Conclusion}
+
+Voilà pour aujourd'hui. Nous avons posé des bases conceptuelles solides et terminé notre rappel sur les variables aléatoires discrètes.
+
+La semaine prochaine, nous ouvrirons un nouveau chapitre crucial : celui des \textbf{variables aléatoires continues}.
+
+Pour ceux qui souhaiteraient s'assurer que les bases vues aujourd'hui sont bien en place, je vous suggère de jeter un coup d'œil au \textbf{TD0} sur Moodle. Il porte justement sur les variables discrètes. C'est un bon outil d'auto-évaluation, il ne sera pas traité en classe, mais il peut vous aider.
+
+Merci de votre attention, et à la semaine prochaine.
+
+\end{document}
