@@ -1,0 +1,208 @@
+\documentclass[12pt, a4paper]{article}
+
+% --- PAQUETS ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\linespread{1.2}
+\usepackage{xcolor}
+
+% --- ENVIRONNEMENT PERSONNALISÉ POUR LES MÉTA-INFORMATIONS ---
+\newenvironment{metadata}{%
+    \par\vspace{1ex}
+    \quote\small\color{gray}
+}{%
+    \par\nobreak\vspace{1ex}\centerline{\rule{0.5\linewidth}{0.4pt}}
+    \endquote
+    \vspace{2ex}
+}
+
+% --- COMMANDE PERSONNALISÉE POUR LES NOTES DE DIAPOSITIVE ---
+\newcommand{\slidenote}[1]{%
+    \par\vspace{1.5ex}%
+    \noindent\texttt{\small\color{gray}#1}\par\nopagebreak\vspace{1.5ex}%
+}
+
+% --- TITRE ---
+\title{Script du Cours 2 : Variables Aléatoires Continues et TD1}
+\author{Jianyu MA}
+\date{Semestre 2025-26}
+
+% --- DÉBUT DU DOCUMENT ---
+\begin{document}
+
+\maketitle
+
+\begin{metadata}
+\subsection*{Plan de la Séance (Temps Estimés)}
+\begin{itemize}
+    \item Introduction et Révision Rapide (10 min)
+    \item Partie 1 : Variables Aléatoires Continues - La Théorie (40 min)
+        \begin{itemize}
+            \item Densité de probabilité et fonction de répartition (10 min)
+            \item Lois Uniforme et Exponentielle (10 min)
+            \item La Loi Normale : la reine des lois (20 min)
+        \end{itemize}
+    \item Partie 2 : Correction Dirigée du TD1 (65 min)
+        \begin{itemize}
+            \item Exercice 1 : Application directe de la loi normale (25 min)
+            \item Exercice 2 : Symétrie et lecture inverse de la table (20 min)
+            \item Exercice 3 : Loi exponentielle et analyse de survie (20 min)
+        \end{itemize}
+    \item Conclusion et Transition (5 min)
+\end{itemize}
+\end{metadata}
+
+\section*{Introduction et Révision Rapide}
+Bonjour à toutes et à tous. Aujourd'hui, nous allons accélérer et couvrir l'ensemble du premier chapitre sur les variables continues. La séance sera dense, car notre objectif est non seulement de voir la théorie, mais surtout de la mettre en pratique immédiatement avec la correction du TD1.
+
+\slidenote{Référence : Variables aléatoires continues.pdf - Diapositives 2 \& 3}
+Pour commencer, en 10 minutes, rappelons l'essentiel. La semaine dernière, nous avons établi une hiérarchie : la réalité, complexe, est simplifiée en un univers $\Omega$. Pour explorer cet univers, nous utilisons des fenêtres, des instruments de mesure : les \textbf{variables aléatoires}. Quand on compte, la variable est \textbf{discrète}. Aujourd'hui, nous allons \textbf{mesurer} : le poids, la taille, le temps... nous entrons dans le monde des variables \textbf{continues}. Gardez cette image en tête : la variable aléatoire est le pont entre un concept abstrait ($\Omega$) et des données analysables.
+
+\subsection*{Script Détaillé de la Révision (pour votre référence)}
+
+La semaine dernière, nous avons dit que les probabilités sont une \textbf{extension de la logique}. La logique classique (VRAI/FAUX) est insuffisante en science, où nous travaillons avec des \textbf{plausibilités}. Les probabilités offrent un \textbf{système de raisonnement cohérent} pour manipuler ces degrés de croyance. Le concept clé est la \textbf{probabilité conditionnelle} : $\Pr(A|B)$, qui est la mise à jour de notre jugement sur A quand on apprend B. Dans ce cadre, \textbf{l'indépendance} signifie que savoir B ne nous apprend rien de nouveau sur A.
+
+Notre démarche de modélisation part de la réalité complexe, que l'on simplifie en un \textbf{univers $\Omega$}. Mais cet univers est souvent trop abstrait. La \textbf{variable aléatoire} est notre \textbf{instrument de mesure} pour observer $\Omega$. Par exemple, pour un patient ($\omega \in \Omega$), on ne mesure pas "le patient" mais sa pression artérielle, son rythme cardiaque. Ce sont des variables aléatoires. Si on compte (nombre de bus passant en une heure), on a une variable discrète (loi de Poisson). Le paramètre $\lambda$ est notre \textbf{espérance}, le centre de gravité de nos croyances sur la fréquence moyenne. La variance, aussi $\lambda$, mesure notre "degré de surprise" attendu. Le modèle suppose l'indépendance (voir un bus à 9h10 n'influence pas la probabilité d'en voir un à 9h20), une simplification de la réalité.
+
+Aujourd'hui, nous passons de l'observation par comptage à l'observation par \textbf{mesure}.
+
+\section*{Partie 1 : Variables Aléatoires Continues - La Théorie}
+
+\slidenote{Référence : Variables aléatoires continues.pdf - Diapositive 4}
+Le passage du discret au continu impose un changement majeur. Pour une variable continue, la probabilité que celle-ci prenne une valeur \textit{exacte} est nulle. $\Pr(X = 3.14159...) = 0$.
+
+Nous ne pouvons donc plus parler de $\Pr(X=x)$. Nous devons parler de la probabilité que $X$ se trouve dans un intervalle, $\Pr(a \le X \le b)$. Pour cela, nous utilisons la \textbf{densité de probabilité} $f(x)$. Ce n'est pas une probabilité, mais une mesure de la plausibilité locale.
+
+\slidenote{Référence : Variables aléatoires continues.pdf - Diapositive 5}
+La probabilité est \textbf{l'aire sous la courbe} de cette densité. $\Pr(a \le X \le b) = \int_a^b f(t)dt$. L'aire totale sous la courbe vaut 1.
+
+\slidenote{Référence : Variables aléatoires continues.pdf - Diapositive 8}
+\textbf{La Loi Uniforme $\mathcal{U}[a, b]$} est la plus simple. Toutes les valeurs entre $a$ et $b$ sont équiprobables. La densité est un rectangle. C'est le modèle de l'incertitude totale à l'intérieur de bornes connues.
+
+\slidenote{Référence : Variables aléatoires continues.pdf - Diapositive 9}
+\textbf{La Loi Exponentielle $\mathcal{E}(\lambda)$} est cruciale pour modéliser des \textbf{temps d'attente} ou des \textbf{durées de vie}. Elle est liée à la loi de Poisson : si des événements arrivent avec une fréquence moyenne $\lambda$, le temps d'attente entre eux suit $\mathcal{E}(\lambda)$. Sa propriété fondamentale est l'absence de mémoire : un composant qui a déjà fonctionné 100h a la même espérance de vie qu'un composant neuf.
+
+\slidenote{Référence : Variables aléatoires continues.pdf - Diapositives 12 à 14}
+\textbf{La Loi Normale $\mathcal{N}(\mu, \sigma^2)$} est la loi la plus importante des statistiques. Le \textbf{Théorème Central Limite} nous dit que toute somme d'un grand nombre de petits phénomènes aléatoires indépendants tend vers une loi Normale. C'est pourquoi tant de mesures biologiques (taille, poids, etc.) peuvent être modélisées par cette loi.
+
+\slidenote{Référence : Variables aléatoires continues.pdf - Diapositives 15 \& 16}
+Elle est définie par sa moyenne $\mu$ (le centre de la cloche) et son écart-type $\sigma$ (la largeur de la cloche).
+
+\slidenote{Référence : Variables aléatoires continues.pdf - Diapositives 18 à 20}
+Pour calculer les probabilités (les aires), on utilise une astuce universelle : le \textbf{centrage et la réduction}. Quelle que soit la loi normale $X \sim \mathcal{N}(\mu, \sigma^2)$, la variable $Z = \frac{X-\mu}{\sigma}$ suit toujours la loi normale centrée réduite $\mathcal{N}(0, 1)$. Cette formule est la clé de presque tous les exercices. Elle nous permet de n'utiliser qu'une seule table de probabilités.
+
+\section*{Partie 2 : Correction Dirigée du TD1}
+Maintenant, mettons tout cela en pratique. L'objectif n'est pas de recopier une correction, mais de construire le raisonnement ensemble, en reliant chaque question aux concepts que nous venons de voir.
+
+\subsection*{Exercice 1 : Le poids des larves}
+Le contexte : le poids d'une larve $X$ suit une loi $\mathcal{N}(3.4g, 0.42g)$.
+
+\begin{enumerate}
+    \item \textbf{Probabilité qu'une larve pèse 3g ?}
+    C'est $\Pr(X=3)$. Le concept testé ici est fondamental : pour toute variable continue, la probabilité en un point est nulle. Donc $\Pr(X=3)=0$.
+
+    \item \textbf{Probabilité d'être gardée pour la reproduction ?}
+    On garde les larves de poids supérieur à la moyenne $\mu$. On cherche $\Pr(X > \mu)$. La loi normale est symétrique par rapport à sa moyenne. La moyenne est donc aussi la médiane. Par définition de la médiane, 50\% des valeurs sont au-dessus, 50\% en dessous. Donc $\Pr(X > \mu) = 0.5$.
+
+    \item \textbf{Probabilité qu'une larve pèse moins de 3.75g ?}
+    On cherche $\Pr(X < 3.75)$. C'est un calcul d'aire. On doit passer par la loi centrée réduite.
+    Étape 1 : Centrer-réduire. $Z = \frac{X-\mu}{\sigma}$.
+    $\Pr(X < 3.75) = \Pr\left(\frac{X-\mu}{\sigma} < \frac{3.75 - 3.4}{0.42}\right) = \Pr(Z < 0.833)$.
+    Étape 2 : Lire la table. On cherche la valeur pour 0.833 dans la table de la loi $\mathcal{N}(0,1)$, qui nous donne la fonction de répartition. La table nous donne environ 0.7967. La probabilité est donc de 79.7\%.
+
+    \item \textbf{Proportion de larves de plus de 3g ?}
+    On cherche $\Pr(X > 3)$.
+    Étape 1 : Centrer-réduire. $\Pr(X > 3) = \Pr\left(Z > \frac{3 - 3.4}{0.42}\right) = \Pr(Z > -0.95)$.
+    Étape 2 : Utiliser la symétrie. Les tables ne donnent pas les valeurs pour les nombres négatifs, ni pour les probabilités de type "supérieur à". On utilise la symétrie de la cloche : l'aire à droite de -0.95 est la même que l'aire à gauche de +0.95.
+    Donc $\Pr(Z > -0.95) = \Pr(Z < 0.95)$.
+    Étape 3 : Lire la table. Pour Z=0.95, la table donne 0.8289. Environ 83\% des larves sont utilisables.
+
+    \item \textbf{Loi du poids total de 50 larves ?}
+    \slidenote{Référence : Variables aléatoires continues.pdf - Diapositive 22}
+    On note $Z = X_1 + ... + X_{50}$. Nous avons vu une propriété cruciale : la somme de variables normales indépendantes suit une loi normale.
+    L'espérance de la somme est la somme des espérances : $E(Z) = 50 \times \mu = 50 \times 3.4 = 170g$.
+    La variance de la somme est la somme des variances : $Var(Z) = 50 \times \sigma^2 = 50 \times 0.42^2 = 8.82$.
+    L'écart-type est la racine de la variance : $\sigma_Z = \sqrt{8.82} \approx 2.97g$.
+    Donc, $Z \sim \mathcal{N}(170, 2.97)$.
+\end{enumerate}
+
+\subsection*{Exercice 2 : Le CO2 et les moustiques}
+Le contexte : $Y \sim \mathcal{N}(22g, 5g)$.
+
+\begin{enumerate}
+    \item \textbf{Quantité médiane de CO2 ?} Même raisonnement que l'exercice 1.2. Loi normale, donc moyenne = médiane. La médiane est 22g.
+
+    \item \textbf{Expliquer pourquoi $\Pr(Y \le 17) = \Pr(Y \ge 27)$.}
+    On teste encore la symétrie. $17 = 22 - 5 = \mu - \sigma$. Et $27 = 22 + 5 = \mu + \sigma$.
+    La probabilité d'être à plus d'un écart-type EN DESSOUS de la moyenne est, par symétrie, égale à la probabilité d'être à plus d'un écart-type AU-DESSUS de la moyenne. C'est visible sur le dessin de la cloche.
+
+    \item \textbf{Probabilité d'être entre 20g et 26g ?}
+    On cherche $\Pr(20 < Y < 26)$. C'est l'aire d'une bande. On la calcule en prenant l'aire totale jusqu'à 26, et en soustrayant l'aire totale jusqu'à 20.
+    $\Pr(20 < Y < 26) = \Pr(Y < 26) - \Pr(Y < 20)$.
+    On centre-réduit les deux bornes :
+    $z_1 = (26-22)/5 = 0.8$. $z_2 = (20-22)/5 = -0.4$.
+    $\Pr(Z < 0.8) - \Pr(Z < -0.4)$.
+    On utilise la symétrie pour la borne négative : $\Pr(Z < -0.4) = \Pr(Z > 0.4) = 1 - \Pr(Z < 0.4)$.
+    En lisant les tables pour 0.8 et 0.4, on trouve : $0.7881 - (1 - 0.6554) = 0.4435$.
+
+    \item \textbf{Seuil M pour les 5\% qui dégagent le plus de CO2 ?}
+    Ici, on fait le chemin inverse. On connaît la probabilité (0.05) et on cherche la valeur.
+    On cherche M tel que $\Pr(Y > M) = 0.05$.
+    Cela équivaut à $\Pr(Y \le M) = 0.95$.
+    On centre-réduit : $\Pr\left(Z \le \frac{M-22}{5}\right) = 0.95$.
+    On lit la table "à l'envers" : quelle valeur de z nous donne une aire de 0.95 ? La table montre que cette valeur est entre 1.64 et 1.65. On prend la moyenne : 1.645.
+    Donc $\frac{M-22}{5} = 1.645$. On résout : $M = 5 \times 1.645 + 22 = 30.225g$.
+
+    \item \textbf{Intervalle centré contenant 95\% des individus ?}
+    On cherche un intervalle $[\mu-a, \mu+a]$ contenant 95% de la population.
+    \slidenote{Référence : Variables aléatoires continues.pdf - Diapositive 21}
+    Si 95\% est à l'intérieur, alors 5\% est à l'extérieur, réparti symétriquement : 2.5\% dans chaque queue.
+    On utilise la table des valeurs extrêmes, ou on cherche la valeur $z$ telle que $\Pr(Z > z) = 0.025$. Cette valeur est $z=1.96$.
+    Cela signifie que 95\% des valeurs se trouvent entre $-1.96$ et $+1.96$ écarts-types de la moyenne.
+    L'intervalle est donc $[\mu - 1.96\sigma, \mu + 1.96\sigma]$.
+    Calcul : $[22 - 1.96 \times 5, 22 + 1.96 \times 5] = [12.2, 31.8]$.
+\end{enumerate}
+
+\subsection*{Exercice 3 : Temps de survie d'une cellule}
+Le contexte : Temps de survie T suit une loi $\mathcal{E}(\lambda)$ avec $\lambda=0.01$.
+
+\begin{enumerate}
+    \item \textbf{Fonction de survie, Espérance et Ecart-type ?}
+    La fonction de survie est $S(t) = \Pr(T > t) = 1 - \Pr(T \le t) = 1 - (1 - e^{-\lambda t}) = e^{-\lambda t}$.
+    Pour la loi exponentielle, $E(T) = 1/\lambda = 1/0.01 = 100$ jours.
+    Et $\sigma(T)$ est aussi $1/\lambda = 100$ jours.
+
+    \item \textbf{Calculer $\Pr(T < 40)$.}
+    C'est la fonction de répartition : $F(40) = 1 - e^{-0.01 \times 40} \approx 0.329$. Environ 33% de chance de mutation avant 40 jours.
+
+    \item \textbf{Médiane de T ?}
+    On cherche M tel que $\Pr(T > M) = 0.5$. Donc $S(M) = 0.5$.
+    $e^{-0.01 \times M} = 0.5$. On prend le logarithme : $-0.01 \times M = \ln(0.5)$.
+    $M = -\ln(0.5)/0.01 \approx 69.3$ jours.
+
+    \item \textbf{Probabilité conditionnelle et absence de mémoire.}
+    On calcule $\Pr(T \ge t+\epsilon | T > t)$. Par définition, c'est $\frac{\Pr(T \ge t+\epsilon \text{ et } T > t)}{\Pr(T > t)}$.
+    L'intersection est simplement $T \ge t+\epsilon$.
+    Donc on a $\frac{S(t+\epsilon)}{S(t)} = \frac{e^{-\lambda(t+\epsilon)}}{e^{-\lambda t}} = e^{-\lambda\epsilon} = S(\epsilon) = \Pr(T > \epsilon)$.
+    C'est la propriété d'absence de mémoire. La probabilité de survivre $\epsilon$ jours de plus ne dépend pas du fait qu'on a déjà survécu $t$ jours.
+    Dans l'exemple numérique : $\Pr(T>80|T>40) = \Pr(T>40)$. La cellule ne "vieillit" pas.
+
+    \item \textbf{Le modèle exponentiel est-il pertinent ?}
+    En biologie, le vieillissement existe. Une cellule plus âgée a généralement plus de chances de muter. Le modèle exponentiel, qui suppose un taux de risque constant, est donc une simplification. Un modèle de Weibull, où le taux de risque peut changer avec le temps (paramètre $a$), serait plus réaliste. Si le risque augmente avec le temps (vieillissement), on s'attendrait à $a > 1$.
+\end{enumerate}
+
+\section*{Conclusion}
+Aujourd'hui, la séance a été très dense. Nous avons couvert tout le chapitre 1, de la définition d'une variable continue à ses lois les plus importantes. Surtout, nous avons vu comment utiliser ces outils pour résoudre des problèmes concrets en biologie, grâce au TD.
+
+Retenez surtout ceci :
+1.  Pour les variables continues, on raisonne avec des \textbf{intervalles} et des \textbf{aires sous la courbe}.
+2.  La \textbf{loi Normale} est partout, et la clé pour l'utiliser est de savoir \textbf{centrer et réduire} ($Z = (X-\mu)/\sigma$).
+3.  Chaque loi de probabilité est un \textbf{modèle}, une simplification de la réalité avec ses propres hypothèses (comme l'absence de mémoire pour la loi exponentielle).
+
+Merci de votre attention.
+
+\end{document}$
