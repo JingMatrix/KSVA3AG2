@@ -1,0 +1,243 @@
+\documentclass[12pt, a4paper]{article}
+
+% --- PAQUETS ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\linespread{1.2}
+\usepackage{xcolor}
+
+% --- ENVIRONNEMENT PERSONNALISÉ POUR LES MÉTA-INFORMATIONS ---
+\newenvironment{metadata}{%
+    \par\vspace{1ex}
+    \quote\small\color{gray}
+}{%
+    \par\nobreak\vspace{1ex}\centerline{\rule{0.5\linewidth}{0.4pt}}
+    \endquote
+    \vspace{2ex}
+}
+
+% --- COMMANDES PERSONNALISÉES POUR LES NOTES ---
+\newcommand{\slidenote}[1]{%
+    \par\vspace{1.5ex}%
+    \noindent\texttt{\small\color{gray}#1}\par\nopagebreak\vspace{1.5ex}%
+}
+% --- Note pour le professeur ---
+\newcommand{\teachernote}[1]{%
+	\par\vspace{1ex}\noindent\small\textsf{\color{brown}\textbf{Note au professeur :} #1}\par\vspace{1ex}%
+}
+
+% --- TITRE ---
+\title{Script du Cours 3 : Fin du TD1 et Introduction aux Approximations}
+\author{Jianyu MA}
+\date{Semestre 2025-26}
+
+% --- DÉBUT DU DOCUMENT ---
+\begin{document}
+
+\maketitle
+
+\begin{metadata}
+	\subsection*{Plan de la Séance (Temps Estimés)}
+	\begin{itemize}
+		\item Introduction et Objectifs (5 min)
+		\item Partie 1 : Fin de la Correction du TD1 (60 min)
+		      \begin{itemize}
+			      \item Reprise de l'Exercice 2 (Questions 3 à 5) (25 min)
+			      \item Exercice 3 : Loi Exponentielle et le concept de mémoire (35 min)
+		      \end{itemize}
+		\item Partie 2 : Chapitre 2 - Le Pouvoir du Nombre (50 min)
+		      \begin{itemize}
+			      \item Loi des Grands Nombres : De l'échantillon à la vérité (15 min)
+			      \item Théorème Central Limite : La magie de la courbe en cloche (20 min)
+			      \item Approximations de lois : Un outil pratique (15 min)
+		      \end{itemize}
+		\item Conclusion et Perspectives (5 min)
+	\end{itemize}
+\end{metadata}
+
+\section*{Introduction et Objectifs}
+Bonjour à toutes et à tous. Bienvenue dans cette troisième séance.
+
+Aujourd'hui, nous allons accomplir deux choses importantes. D'abord, nous allons terminer notre travail sur le chapitre 1 en finissant la correction du TD1. Je veux m'assurer que les calculs et, plus important encore, les concepts derrière la loi Normale et la loi Exponentielle sont bien clairs pour tout le monde. N'hésitez surtout pas à m'arrêter si quelque chose n'est pas clair.
+
+Ensuite, nous ouvrirons le chapitre 2. Nous allons passer de l'étude d'UNE SEULE variable aléatoire à ce qui se passe quand on en observe des DIZAINES, des MILLIERS. C'est le cœur des statistiques : comment tirer des conclusions fiables à partir d'un grand nombre d'observations.
+
+\section*{Partie 1 : Fin de la Correction du TD1 (60 min)}
+La dernière fois, nous nous sommes arrêtés à la question 2 de l'exercice 2. Reprenons ensemble. Le contexte est celui de la quantité de CO2 dégagée par un être humain, modélisée par une loi Normale $Y \sim \mathcal{N}(22g, 5g)$.
+
+\subsection*{Exercice 2 : Le CO2 et les moustiques (suite)}
+
+\begin{enumerate}
+	\setcounter{enumi}{2}
+	\item \textbf{Probabilité d'être entre 20g et 26g ?}
+
+	      La question est de calculer $\Pr(20 < Y < 26)$. Géométriquement, sur la courbe en cloche, cela correspond à l'aire d'une bande entre 20 et 26. Pour la calculer, la stratégie est toujours la même : on calcule la grande aire jusqu'à 26, et on lui soustrait la petite aire non désirée, celle jusqu'à 20.
+	      Donc, $\Pr(20 < Y < 26) = \Pr(Y < 26) - \Pr(Y < 20)$.
+
+	      Maintenant, il faut traduire ces deux probabilités dans le langage de la loi centrée réduite $Z$, car c'est la seule pour laquelle nous avons une table.
+	      Pour la borne supérieure : $z_1 = (26-22)/5 = 0.8$.
+	      Pour la borne inférieure : $z_2 = (20-22)/5 = -0.4$.
+	      Le calcul devient : $\Pr(Z < 0.8) - \Pr(Z < -0.4)$.
+
+	      On lit la table pour $\Pr(Z < 0.8)$, qui nous donne $0.7881$.
+	      Pour $\Pr(Z < -0.4)$, on se souvient que la table ne donne pas de valeurs négatives. On utilise la symétrie de la cloche : l'aire à gauche de -0.4 est identique à l'aire à droite de +0.4.
+	      Et l'aire à droite de +0.4, c'est $1$ moins l'aire à gauche de +0.4.
+	      Donc $\Pr(Z < -0.4) = 1 - \Pr(Z < 0.4)$. La table pour 0.4 nous donne 0.6554.
+	      Le calcul final est donc : $0.7881 - (1 - 0.6554) = 0.4435$. Il y a environ 44\% de chances qu'un individu se situe dans cet intervalle.
+
+	\item \textbf{Seuil M pour les 5\% qui dégagent le plus de CO2 ?}
+
+	      Cette question est l'inverse de la précédente. Ici, on nous donne une probabilité (5\% ou 0.05) et on doit trouver la valeur de CO2 correspondante.
+	      On cherche M tel que $\Pr(Y > M) = 0.05$.
+	      Les tables nous donnent des probabilités du type $\Pr(Y \le M)$. C'est simple, si 5\% des gens sont au-dessus de M, cela signifie que 95\% sont en dessous. Donc, on cherche M tel que $\Pr(Y \le M) = 0.95$.
+
+	      On passe à la loi centrée réduite : $\Pr\left(Z \le \frac{M-22}{5}\right) = 0.95$.
+	      Maintenant, on lit la table "à l'envers". On cherche 0.95 dans le corps de la table et on regarde à quel z cela correspond. On voit que 0.95 se situe entre les valeurs pour z=1.64 et z=1.65. On prend la moyenne : 1.645.
+	      Cela nous donne l'équation : $\frac{M-22}{5} = 1.645$.
+	      On isole M : $M = 5 \times 1.645 + 22 = 30.225g$. C'est le seuil qui sépare les 5\% plus grands "émetteurs" de CO2 du reste de la population.
+
+	\item \textbf{Intervalle centré contenant 95\% des individus ?}
+
+	      On cherche un intervalle symétrique autour de la moyenne, $[\mu-a, \mu+a]$, qui contienne 95\% des valeurs.
+	      Si 95\% des valeurs sont à l'intérieur de l'intervalle, cela signifie que les 5\% restants sont à l'extérieur, répartis équitablement dans les deux queues de la distribution : 2.5\% à gauche, et 2.5\% à droite.
+
+	      On cherche donc la valeur $z$ qui laisse 2.5\% à sa droite, c'est-à-dire une valeur $z$ telle que $\Pr(Z > z) = 0.025$. Cela revient à $\Pr(Z \le z) = 0.975$.
+	      En lisant la table à l'envers pour 0.975, on trouve une valeur très célèbre en statistiques : $z = 1.96$.
+	      Cela signifie que 95\% des données d'une loi normale se situent toujours entre -1.96 et +1.96 écarts-types de la moyenne. C'est une règle fondamentale.
+	      L'intervalle est donc $[\mu - 1.96\sigma, \mu + 1.96\sigma]$.
+	      Application numérique : $[22 - 1.96 \times 5, 22 + 1.96 \times 5] = [12.2, 31.8]$.
+\end{enumerate}
+
+\subsection*{Exercice 3 : Temps de survie d'une cellule}
+Maintenant, changeons de loi et de contexte. Nous modélisons un temps de survie avec une loi exponentielle $\mathcal{E}(\lambda)$ où $\lambda=0.01$.
+
+\begin{enumerate}
+	\item \textbf{Fonction de survie, Espérance et Ecart-type ?}
+
+	      La fonction de répartition est $F(t) = \Pr(T \le t) = 1 - e^{-\lambda t}$.
+	      La fonction de survie, $S(t)$, est la probabilité de survivre \textit{au-delà} de l'instant t. C'est donc le complémentaire : $S(t) = \Pr(T > t) = 1 - F(t) = 1 - (1 - e^{-\lambda t}) = e^{-\lambda t}$.
+	      Pour une loi exponentielle, les formules sont simples : l'espérance $E(T)$ et l'écart-type $\sigma(T)$ sont tous les deux égaux à $1/\lambda$.
+	      Ici, $1/0.01 = 100$ jours.
+
+	\item \textbf{Calculer $\Pr(T < 40)$.}
+
+	      C'est une application directe de la fonction de répartition : $F(40) = 1 - e^{-0.01 \times 40} \approx 0.329$. Environ une cellule sur trois aura muté avant 40 jours.
+
+	\item \textbf{Médiane de T ?}
+
+	      La médiane M est le temps pour lequel la moitié de la population a disparu. C'est le temps M tel que $\Pr(T > M) = 0.5$.
+	      On utilise la fonction de survie : $S(M) = e^{-0.01 \times M} = 0.5$.
+	      Pour résoudre, on prend le logarithme naturel des deux côtés : $-0.01 \times M = \ln(0.5)$.
+	      $M = -\ln(0.5)/0.01 \approx 69.3$ jours.
+
+	\item \textbf{Propriété "sans mémoire".}
+
+	      Ici, on teste le concept le plus étrange et le plus important de cette loi. On calcule $\Pr(T > t+\epsilon | T > t)$.
+	      Mathématiquement, on a vu dans la correction que cela se simplifie en $\frac{P(T > t+\epsilon)}{P(T > t)} = \frac{e^{-\lambda(t+\epsilon)}}{e^{-\lambda t}} = e^{-\lambda\epsilon} = \Pr(T > \epsilon)$.
+	      Que signifie ce résultat ? Il signifie que la probabilité de survivre $\epsilon$ jours de plus, sachant qu'on a déjà survécu $t$ jours, est exactement la même que la probabilité de survivre $\epsilon$ jours pour une cellule neuve. Le passé ($t$) a été complètement effacé de l'équation. C'est pour cela qu'on l'appelle "loi sans mémoire".
+
+	\item \textbf{Pertinence du modèle et choix de la loi de Weibull.}
+
+	      La propriété "sans mémoire" implique que le risque de mutation est constant dans le temps. Une cellule ne "vieillit" pas. Est-ce réaliste en biologie ? Souvent, non. Le risque de mutation ou de mort augmente avec l'âge. Le modèle exponentiel est donc une simplification.
+
+	      \teachernote{Voici comment introduire la perspective logarithmique pour justifier le choix de Weibull de manière visuelle et convaincante.}
+
+	      Comment choisir un meilleur modèle, comme la loi de Weibull ? Et comment justifier que le paramètre $a$ doit être supérieur à 1 ?
+	      Ici, une perspective graphique est très puissante. Au lieu de regarder la fonction de survie $S(t)$, regardons son logarithme, $\ln(S(t))$.
+
+	      \begin{itemize}
+		      \item Pour notre \textbf{loi exponentielle}, on a $S(t) = e^{-\lambda t}$. Si on prend le logarithme, on obtient $\ln(S(t)) = -\lambda t$. C'est l'équation d'une \textbf{droite} qui passe par l'origine, avec une pente constante de $-\lambda$.
+		      \item Cette \textbf{pente constante} est la représentation visuelle du \textbf{risque constant}. C'est la signature graphique de l'absence de mémoire.
+	      \end{itemize}
+
+	      Maintenant, que se passe-t-il si on a un phénomène de vieillissement ?
+	      \begin{itemize}
+		      \item Le "vieillissement" signifie que le risque de mourir n'est pas constant, il \textbf{augmente avec le temps}.
+		      \item Graphiquement, sur notre diagramme log-survie, cela signifie que la pente doit devenir de plus en plus négative. La courbe ne sera plus une droite, mais une courbe qui "plonge" de plus en plus vite vers le bas.
+		      \item Ce comportement (une courbe concave qui plonge) est précisément ce que modélise une loi de Weibull avec un paramètre de forme \textbf{a > 1}.
+	      \end{itemize}
+
+	      Donc, pour répondre à la question : modéliser par une loi de Weibull est pertinent car elle est plus flexible. Et nous pensons que $a>1$ car nous nous attendons à un phénomène de vieillissement, ce qui se traduit par un risque croissant, et donc par une courbe de log-survie qui n'est pas une droite mais une courbe qui s'accentue vers le bas.
+\end{enumerate}
+
+\section*{Partie 2 : Chapitre 2 - Le Pouvoir du Nombre}
+\slidenote{Référence : Chapitre 2.pdf - Diapositive 1}
+\teachernote{Ici, il est crucial de marquer une transition claire. Le changement de chapitre doit être ressenti comme un nouveau départ.}
+Très bien. Nous avons terminé notre premier chapitre. Nous savons maintenant modéliser UNE observation. Mais toute la puissance des statistiques vient de l'étude d'échantillons, c'est-à-dire de MULTIPLES observations.
+Ce chapitre explore deux théorèmes fondamentaux qui décrivent ce qui se passe quand on additionne ou quand on fait la moyenne d'un grand nombre de variables aléatoires.
+
+\subsection*{La Loi des Grands Nombres}
+\slidenote{Référence : Chapitre 2.pdf - Diapositive 2}
+\teachernote{Présentez ce théorème comme une idée simple et rassurante. C'est le fondement de notre intuition sur l'échantillonnage.}
+
+Commençons par le premier théorème, le plus intuitif : la Loi des Grands Nombres.
+
+Que nous dit cette diapositive ?
+\begin{itemize}
+	\item On a une série d'observations $X_1, X_2, \ldots, X_n$. Imaginez que vous mesurez la taille de $n$ étudiants en biologie. Chaque $X_i$ est une mesure. On suppose qu'elles sont "iid" : \textbf{indépendantes et identiquement distribuées}. Cela signifie que la taille d'un étudiant n'influence pas celle du suivant, et qu'ils viennent tous de la même "population" avec la même loi de probabilité.
+	\item Cette loi de probabilité a une moyenne théorique, $\mu$. C'est la "vraie" taille moyenne de tous les étudiants en biologie qui aient jamais existé ou existeront. C'est un concept abstrait, une constante que nous ne connaîtrons jamais parfaitement.
+	\item Nous, ce que nous pouvons calculer, c'est la moyenne de notre échantillon, $M_n = \frac{1}{n}\sum X_i$. On l'appelle la \textbf{moyenne empirique}.
+\end{itemize}
+La Loi des Grands Nombres nous dit simplement que si notre échantillon devient très, très grand ($n \to \infty$), alors la moyenne que nous calculons ($M_n$) va se rapprocher de plus en plus de la vraie moyenne théorique ($\mu$).
+
+Le graphique sur la diapositive l'illustre parfaitement. Chaque ligne colorée est une expérience où l'on calcule la moyenne au fur et à mesure qu'on ajoute des observations. Au début (à gauche, $n$ petit), les moyennes calculées sont très volatiles. Mais à mesure que $n$ augmente (vers la droite), toutes les expériences convergent inexorablement vers la vraie valeur $\mu$.
+C'est ce théorème qui justifie que l'échantillonnage fonctionne ! C'est la garantie que plus on collecte de données, plus notre estimation de la moyenne devient fiable.
+
+\subsection*{Le Théorème Central Limite}
+\slidenote{Référence : Chapitre 2.pdf - Diapositive 3}
+\teachernote{Présentez le TCL comme une surprise, un résultat "magique". Le contraste avec la simplicité de la LGN rend le TCL plus impressionnant.}
+Maintenant, le théorème le plus important, le plus "magique" de toutes les statistiques : le Théorème Central Limite (TCL).
+
+La Loi des Grands Nombres nous dit OÙ la moyenne de l'échantillon converge. Le TCL, lui, nous dit COMMENT elle se comporte autour de cette valeur.
+
+Regardons les conditions :
+\begin{itemize}
+	\item On prend une somme de variables aléatoires, $M_n = \sum X_i$.
+	\item La condition magique est ici : les lois des $X_i$ peuvent être \textbf{quelconques} ! L'une peut suivre une loi uniforme, une autre une loi exponentielle... peu importe ! Tant qu'elles sont indépendantes et ont une variance finie.
+\end{itemize}
+Le résultat :
+Pour un $n$ suffisamment grand (en pratique, on dit souvent $n \ge 30$), la somme $M_n$ (et aussi la moyenne) se comportera \textbf{approximativement comme une loi Normale}.
+
+C'est stupéfiant. Peu importe le chaos des distributions de départ, leur somme adopte la forme universelle et ordonnée de la courbe en cloche. C'est pour cela que la loi normale est si importante : elle émerge naturellement partout où des phénomènes sont le résultat de l'addition de nombreuses petites causes indépendantes (erreurs de mesure, facteurs génétiques, etc.).
+
+\subsection*{Les Approximations de Lois}
+\slidenote{Référence : Chapitre 2.pdf - Diapositive 4 \& 5}
+\teachernote{Expliquez que c'est une application pratique du TCL. L'aspect historique (avant les ordinateurs) aide à comprendre pourquoi on a développé ces techniques.}
+Le TCL a une conséquence pratique très importante : il nous permet d'approximer certaines lois par la loi Normale.
+
+\textbf{Pourquoi faire cela ?} Historiquement, avant les ordinateurs, calculer des probabilités pour une loi binomiale avec un grand $n$ (par exemple, calculer $\binom{100}{50} p^{50}(1-p)^{50}$) était un cauchemar. La loi normale, avec sa table unique, était un raccourci de calcul extraordinaire.
+
+\subsubsection*{Approximation de la Binomiale par la Normale (Diapositive 4)}
+\begin{itemize}
+	\item Si $X \sim \mathcal{B}(n, p)$, alors pour $n$ grand ($n \ge 30$) et $p$ pas trop proche de 0 ou 1 ($np \ge 5, n(1-p) \ge 5$), on peut dire que $X$ se comporte comme une loi normale avec la même espérance et le même écart-type. L'espérance d'une binomiale est $np$, sa variance est $np(1-p)$.
+	\item Donc $X \approx \mathcal{N}(np, \sqrt{np(1-p)})$.
+\end{itemize}
+
+\subsubsection*{Approximation de la Poisson par la Normale (Diapositive 5)}
+\begin{itemize}
+	\item De même, si $X \sim \mathcal{P}(\lambda)$ et que $\lambda$ est assez grand ($\lambda > 5$), l'histogramme de la loi de Poisson commence à ressembler à une courbe en cloche symétrique.
+	\item On peut donc l'approximer par une loi normale de même espérance et variance. Pour Poisson, c'est simple : $E(X) = \lambda$ et $Var(X) = \lambda$.
+	\item Donc $X \approx \mathcal{N}(\lambda, \sqrt{\lambda})$.
+\end{itemize}
+
+\textbf{Attention : la correction de continuité.}
+\teachernote{C'est un point technique mais crucial. Utilisez l'analogie de l'histogramme pour le rendre visuel.}
+Il y a un détail crucial. On approxime une loi DISCRÈTE (qui ne prend que des valeurs entières) par une loi CONTINUE.
+Si on cherche $\Pr(X=k)$ pour une loi discrète, la probabilité n'est pas nulle. Mais pour la loi normale continue, $\Pr(Y=k)=0$. Comment résoudre ce problème ?
+On se rappelle qu'un histogramme représente la valeur entière $k$ par un rectangle qui va de $k-0.5$ à $k+0.5$. Pour approximer la surface de ce rectangle, on doit calculer l'aire sous la courbe normale entre ces deux mêmes bornes.
+Donc, $\Pr(X_{discret}=k)$ est approximé par $\Pr(k-0.5 \le Y_{continu} \le k+0.5)$. C'est ce qu'on appelle la \textbf{correction de continuité}.
+
+\section*{Conclusion}
+Aujourd'hui, nous avons solidifié nos connaissances sur les variables continues en terminant le TD1. J'espère que l'explication sur la mémoire des lois et la perspective logarithmique vous a aidés.
+
+Plus important encore, nous avons ouvert un nouveau chapitre qui nous fait entrer dans le cœur des statistiques. Retenez ces deux idées fondamentales :
+\begin{enumerate}
+	\item \textbf{Loi des Grands Nombres :} Avec assez de données, la moyenne de notre échantillon devient une excellente estimation de la vraie moyenne.
+	\item \textbf{Théorème Central Limite :} La loi Normale est reine, car les sommes et les moyennes de presque n'importe quoi tendent à se comporter comme une loi Normale. C'est le fondement de la plupart des tests statistiques que nous verrons plus tard.
+\end{enumerate}
+
+\end{document}
