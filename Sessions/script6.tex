@@ -1,0 +1,189 @@
+\documentclass{article}
+
+% --- PAQUETS ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{geometry}
+\usepackage{xcolor}
+\definecolor{brown}{rgb}{0.64, 0.16, 0.16}
+
+% --- ENVIRONNEMENT PERSONNALISÉ POUR LES MÉTA-INFORMATIONS ---
+\newenvironment{metadata}{%
+    \par\vspace{1ex}
+    \quote\small\color{gray}
+}{%
+    \par\nobreak\vspace{1ex}\centerline{\rule{0.5\linewidth}{0.4pt}}
+    \endquote
+    \vspace{2ex}
+}
+
+% --- COMMANDES PERSONNALISÉES POUR LES NOTES ---
+\newcommand{\slidenote}[1]{%
+    \par\vspace{1.5ex}%
+    \noindent\texttt{\small\color{gray}#1}\par\nopagebreak\vspace{1.5ex}%
+}
+% --- Note pour le professeur ---
+\newcommand{\teachernote}[1]{%
+    \par\vspace{1ex}\noindent\small\textsf{\color{brown}\textbf{Note au professeur :} #1}\par\vspace{1ex}%
+}
+
+% --- TITRE ---
+\title{Script Détaillé du Cours 5 : Maîtrise des Tests de Comparaison}
+\author{Jianyu MA}
+\date{Semestre 2025-26}
+
+% --- DÉBUT DU DOCUMENT ---
+\begin{document}
+
+\maketitle
+
+\begin{metadata}
+\subsection*{Plan de la Séance (Temps Estimés)}
+\begin{itemize}
+    \item Introduction : La Comparaison, au Cœur de la Science (5 min)
+    \item Partie 1 : Fin du TD2 - La Comparaison de Deux Moyennes (60 min)
+        \begin{itemize}
+            \item Théorie : Le Test d'Homogénéité (Diapos 29-31)
+            \item Application : Exercice 3 (Grands échantillons indépendants)
+            \item Théorie : Le Cas des Petits Échantillons (Diapos 32-33)
+            \item Application : Exercice 4 (Petits échantillons indépendants)
+        \end{itemize}
+    \item Partie 2 : Nouveau Chapitre - L'Inférence sur les Proportions (50 min)
+        \begin{itemize}
+            \item Théorie : Estimer une proportion et son Intervalle de Confiance (Diapos 1-5 du Chap. 5)
+            \item Pratique : Exercice 1 du TD3 (Sondage Clinton/Trump)
+        \end{itemize}
+    \item Conclusion et Prochaines Étapes (5 min)
+\end{itemize}
+\end{metadata}
+
+\section*{Introduction : La Comparaison, au Cœur de la Science}
+Bonjour à toutes et à tous. La semaine dernière, nous avons appris à faire des estimations et à mener nos premiers tests d'hypothèses. Nous avons comparé la moyenne d'un échantillon à une valeur de référence connue.
+
+Aujourd'hui, nous allons nous attaquer à la situation la plus fréquente et la plus utile en recherche : la \textbf{comparaison de deux groupes}.
+\begin{itemize}
+    \item Le groupe A a-t-il un temps de réaction différent du groupe B ?
+    \item Les chats de campagne dorment-ils autant que les chats de ville ?
+    \item Le traitement A est-il plus efficace que le traitement B ?
+\end{itemize}
+C'est le cœur de la démarche scientifique. Dans la première partie de la séance, nous finirons le TD2 en apprenant à comparer des \textbf{moyennes}. Dans la seconde partie, nous verrons que la même logique s'applique pour comparer des \textbf{proportions}, et nous commencerons le chapitre suivant.
+
+\section*{Partie 1 : La Comparaison de Deux Moyennes (60 min)}
+\teachernote{Faites une transition claire. "Jusqu'à présent, nous avons fait des tests de conformité. Maintenant, nous passons aux tests d'homogénéité. Le nom change, mais la logique reste la même."}
+
+\slidenote{Référence : Chapitre 3.pdf - Diapositives 29 à 31}
+La question à laquelle nous allons répondre est la suivante : "J'ai deux échantillons, chacun avec sa propre moyenne, $\overline{x_1}$ et $\overline{x_2}$. La différence que j'observe entre ces deux nombres est-elle 'réelle' et généralisable aux populations, ou est-ce juste le fruit du hasard de l'échantillonnage ?".
+
+L'hypothèse nulle ($H_0$) sera donc presque toujours : "Il n'y a pas de vraie différence entre les deux groupes". Mathématiquement, $H_0: \mu_1 = \mu_2$.
+L'hypothèse alternative ($H_1$) sera : "Il y a une différence", $H_1: \mu_1 \neq \mu_2$.
+
+Pour décider, nous allons construire une statistique de test qui prend en compte la différence des moyennes, mais aussi la variabilité et la taille de chaque échantillon. Appliquons cela directement avec l'exercice 3.
+
+\subsection*{Application : Exercice 3 du TD2 (Temps de réaction)}
+\textbf{Contexte :} On compare le temps de réaction de $n_1=52$ jeunes de 30 ans ($m_1=255, s_1=32$) et $n_2=35$ personnes de 55 ans ($m_2=264, s_2=35.5$).
+
+\teachernote{Décomposez à nouveau la réponse en 5 étapes claires. C'est la méthode que les étudiants doivent acquérir et reproduire.}
+\begin{enumerate}
+    \item \textbf{Étape 1 : Poser les hypothèses.}
+    L'hypothèse nulle est l'absence d'effet de l'âge : $H_0: \mu_{30ans} = \mu_{55ans}$.
+    L'hypothèse alternative est qu'il y a un effet : $H_1: \mu_{30ans} \neq \mu_{55ans}$. C'est un test bilatéral.
+
+    \item \textbf{Étape 2 : Choisir la statistique de test.}
+    Nous avons deux échantillons \textbf{grands} ($n_1=52$ et $n_2=35$, tous deux $>30$). Nous pouvons donc utiliser la statistique de test qui suit une loi Normale $\mathcal{N}(0,1)$.
+    La formule est donnée dans vos diapositives : $T = \frac{M_1 - M_2}{\sqrt{\frac{S_1^2}{n_1} + \frac{S_2^2}{n_2}}}$.
+
+    \item \textbf{Étape 3 : Calculer la valeur observée du test.}
+    On remplace par nos valeurs :
+    $t_{obs} = \frac{255 - 264}{\sqrt{\frac{32^2}{52} + \frac{35.5^2}{35}}} = \frac{-9}{\sqrt{19.69 + 36}} = \frac{-9}{\sqrt{55.69}} \approx \frac{-9}{7.46} \approx -1.206$.
+
+    \item \textbf{Étape 4 : Définir la règle de décision.}
+    Pour un test bilatéral avec un risque $\alpha = 0.05$, les valeurs critiques de la loi normale sont $-1.96$ et $+1.96$.
+
+    \item \textbf{Étape 5 : Conclure.}
+    La valeur absolue de notre statistique, $|t_{obs}| = 1.206$, est \textbf{inférieure} à 1.96. Elle tombe dans la zone de non-rejet de $H_0$.
+    \textbf{Conclusion :} Bien que nous ayons observé une différence de 9 millisecondes entre nos deux échantillons, cette différence n'est pas assez grande pour être statistiquement significative. Sur la base de ces données, nous ne pouvons pas rejeter l'hypothèse nulle. Nous n'avons pas prouvé que l'âge a un effet sur le temps de réaction.
+\end{enumerate}
+
+\slidenote{Référence : Chapitre 3.pdf - Diapositives 32 \& 33}
+\teachernote{C'est le moment d'introduire la complexité supplémentaire des petits échantillons.}
+Maintenant, que se passe-t-il si, comme c'est souvent le cas en biologie, nos échantillons sont petits ($n < 30$) ? Le Théorème Central Limite ne nous sauve plus. Pour pouvoir faire un test, nous devons faire des hypothèses plus fortes :
+\begin{enumerate}
+    \item Les deux populations d'origine doivent suivre une loi Normale.
+    \item Les variances des deux populations doivent être égales ($\sigma_1^2 = \sigma_2^2$).
+\end{enumerate}
+Si ces conditions sont remplies, nous pouvons utiliser un test basé sur la loi de Student. La logique est la même, mais les calculs sont un peu plus longs car nous devons d'abord calculer une estimation "moyenne" de la variance commune.
+
+\subsection*{Application : Exercice 4 du TD2 (Sommeil des chats)}
+\textbf{Contexte :} On compare $n_x=15$ chats de campagne et $n_y=16$ chats de ville. Ce sont des petits échantillons !
+
+\begin{enumerate}
+    \item \textbf{Calculs préliminaires pour les chats de ville.}
+    D'abord, calculons la moyenne et l'écart-type pour le deuxième échantillon.
+    $\overline{y} = \frac{\sum y_i}{n_y} = \frac{310}{16} = 19.375$ heures.
+    $s_y^2 = \frac{1}{n_y-1} \left( \sum y_i^2 - n_y\overline{y}^2 \right) = \frac{1}{15} (6128 - 16 \times 19.375^2) \approx 9.31$.
+    $s_y = \sqrt{9.31} \approx 3.05$ heures.
+
+    \item \textbf{Le test d'homogénéité.}
+    \textbf{Étape 1 : Hypothèses.}
+    $H_0$: Les deux types de chats dorment autant. $H_0: \mu_{campagne} = \mu_{ville}$.
+    $H_1$: Ils ne dorment pas autant. $H_1: \mu_{campagne} \neq \mu_{ville}$.
+    \textbf{Conditions d'application :} Pour que le test soit valide, nous devons supposer que la durée de sommeil est distribuée normalement dans les deux populations de chats, et que les variances de ces deux distributions sont égales.
+
+    \textbf{Étape 2 : Calcul de la variance "poolée" ($s_p^2$).}
+    C'est une moyenne pondérée des deux variances d'échantillon.
+    $s_p^2 = \frac{(n_x-1)s_x^2 + (n_y-1)s_y^2}{n_x+n_y-2} = \frac{14 \times 2.9^2 + 15 \times 9.31}{15+16-2} = \frac{117.74 + 139.65}{29} \approx 8.875$.
+
+    \textbf{Étape 3 : Calcul de la statistique de test.}
+    $t_{obs} = \frac{\overline{x} - \overline{y}}{\sqrt{s_p^2 (\frac{1}{n_x} + \frac{1}{n_y})}} = \frac{16.44 - 19.375}{\sqrt{8.875 (\frac{1}{15} + \frac{1}{16})}} \approx \frac{-2.935}{\sqrt{1.14}} \approx -2.75$.
+
+    \textbf{Étape 4 : Règle de décision.}
+    C'est un test de Student. Nous cherchons la valeur critique dans la table avec $n_x+n_y-2 = 29$ degrés de liberté pour un risque $\alpha=0.05$ bilatéral. La table nous donne $t_{critique} = 2.045$.
+
+    \textbf{Étape 5 : Conclusion.}
+    Notre valeur $|t_{obs}| = 2.75$ est \textbf{supérieure} à la valeur critique de 2.045. Elle tombe dans la zone de rejet.
+    \textbf{Conclusion :} Au risque de 5\%, nous rejetons l'hypothèse nulle. Nous avons mis en évidence une différence statistiquement significative dans la durée de sommeil entre les chats de campagne et les chats de ville. (Les données suggèrent que les chats de ville dorment plus longtemps).
+\end{enumerate}
+
+\section*{Partie 2 : L'Inférence sur les Proportions (50 min)}
+\slidenote{Référence : Chapitre 5.pdf - Diapositives 1 à 5}
+\teachernote{Prenez une respiration et annoncez clairement le changement de chapitre. "Très bien, nous sommes maintenant des experts pour comparer des moyennes. Mais que se passe-t-il si nos données ne sont pas des mesures, mais des comptages de type 'oui/non' ?"}
+Nous entrons maintenant dans le Chapitre 5. Nous quittons le monde des variables quantitatives pour celui des variables qualitatives. Le paramètre d'intérêt n'est plus la moyenne $\mu$, mais la proportion $\pi$.
+La bonne nouvelle, c'est que la logique que nous venons de passer une heure à pratiquer reste exactement la même. La seule chose qui change, c'est la formule de l'écart-type.
+
+Souvenez-vous du Chapitre 2 : nous avons vu que la loi Binomiale (qui régit les comptages) peut être approximée par une loi Normale si l'échantillon est grand. C'est grâce à cela que nous pouvons utiliser les mêmes outils.
+
+L'estimation ponctuelle de $\pi$ est la proportion observée $p$.
+L'intervalle de confiance à 95\% pour $\pi$ est donné par la formule :
+$$ IC_{95\%}(\pi) = \left[ p \pm 1.96 \sqrt{\frac{p(1-p)}{n}} \right] $$
+C'est la même structure que pour la moyenne : \textit{estimation $\pm$ 1.96 $\times$ erreur standard}.
+Voyons cela en action.
+
+\subsection*{Pratique : Exercice 1 du TD3 (Sondage Clinton/Trump)}
+\textbf{Contexte :} Un sondage sur $n=1055$ personnes. 506 pour Clinton, 454 pour Trump.
+
+\begin{enumerate}
+    \item \textbf{Estimation et intervalle de confiance pour Clinton.}
+    \begin{itemize}
+        \item Estimation ponctuelle : $p_C = \frac{506}{1055} \approx 0.48$.
+        \item Vérification des conditions : $n=1055$ (grand), $np_C = 506 > 5$, $n(1-p_C) = 549 > 5$. L'approximation Normale est valide.
+        \item Intervalle de confiance : Marge d'erreur = $1.96 \sqrt{\frac{0.48(0.52)}{1055}} \approx 0.03$. L'intervalle est donc $[0.45, 0.51]$.
+    \end{itemize}
+    
+    \item \textbf{Les journalistes donnent Clinton gagnante. Qu'en pensez-vous ?}
+    Notre intervalle de confiance pour Clinton est [45\%, 51\%]. Cet intervalle contient des valeurs inférieures à 50\%. Il est donc plausible, au vu de ces données, que le vrai score de Clinton soit de 49\% ou 48\%. Nous ne pouvons pas être confiants à 95\% qu'elle dépassera la barre des 50\%.
+    De plus, si nous calculions l'intervalle pour Trump, nous verrions que les deux intervalles se chevauchent.
+    \textbf{Conclusion de statisticien :} Le sondage montre une avance pour Clinton, mais l'incertitude due à l'échantillonnage (la marge d'erreur) est telle que nous ne pouvons pas conclure à une victoire certaine. L'élection est trop serrée pour être prédite par ce sondage.
+\end{enumerate}
+
+\section*{Conclusion et Prochaines Étapes}
+Aujourd'hui, nous avons terminé notre exploration des tests sur les moyennes en apprenant à comparer deux groupes, ce qui est une compétence essentielle. Nous avons vu la différence entre le cas des grands échantillons (loi Normale) et celui des petits échantillons (loi de Student).
+
+Ensuite, nous avons commencé notre nouveau chapitre et nous avons vu que toute la logique de l'inférence se transpose très facilement au cas des proportions.
+
+La prochaine fois, nous continuerons sur cette lancée. Nous pratiquerons les tests d'hypothèses sur les proportions (conformité et homogénéité), en résolvant les derniers exercices du TD3.
+
+Merci de votre attention !
+
+\end{document}

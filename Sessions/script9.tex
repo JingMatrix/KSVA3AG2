@@ -1,0 +1,253 @@
+\documentclass[12pt]{article}
+
+% --- PAQUETS ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\linespread{1.2}
+\usepackage{xcolor}
+\definecolor{brown}{rgb}{0.64, 0.16, 0.16}
+
+% --- ENVIRONNEMENT PERSONNALISÉ POUR LES MÉTA-INFORMATIONS ---
+\newenvironment{metadata}{%
+    \par\vspace{1ex}
+    \quote\small\color{gray}
+}{%
+    \par\nobreak\vspace{1ex}\centerline{\rule{0.5\linewidth}{0.4pt}}
+    \endquote
+    \vspace{2ex}
+}
+
+% --- COMMANDES PERSONNALISÉES POUR LES NOTES ---
+\newcommand{\slidenote}[1]{%
+    \par\vspace{1.5ex}%
+    \noindent\texttt{\small\color{gray}#1}\par\nopagebreak\vspace{1.5ex}%
+}
+% --- Note pour le professeur ---
+\newcommand{\teachernote}[1]{%
+    \par\vspace{1ex}\noindent\small\textsf{\color{brown}\textbf{Note au professeur :} #1}\par\vspace{1.5ex}%
+}
+
+% --- TITRE ---
+\title{Script Détaillé du Cours Final : Les Tests du Khi-deux et Synthèse du Semestre}
+\author{Jianyu MA}
+\date{Semestre 2025-26}
+
+% --- DÉBUT DU DOCUMENT ---
+\begin{document}
+
+\maketitle
+
+\begin{metadata}
+\subsection*{Plan de la Séance (Temps Estimés)}
+\begin{itemize}
+    \item Introduction : Le Test du Khi-deux, un Outil aux Multiples Facettes (10 min)
+    \item Partie 1 : Le Test du $\chi^2$ d'Homogénéité - Deux Groupes sont-ils les Mêmes ? (45 min)
+        \begin{itemize}
+            \item L'Intuition : Comparer des "Empreintes Digitales"
+            \item Application Guidée : Exercice 2 du TD4 (Groupes Sanguins)
+        \end{itemize}
+    \item Partie 2 : Le Test du $\chi^2$ d'Indépendance - Y a-t-il un Lien ? (45 min)
+        \begin{itemize}
+            \item L'Intuition : Le Monde du Hasard vs. la Réalité
+            \item Application Guidée : Exercice 3 du TD4 (Asthme et Eczéma)
+        \end{itemize}
+    \item Partie 3 : Synthèse du Semestre - Le Chemin Parcouru (15 min)
+    \item Conclusion (5 min)
+\end{itemize}
+\end{metadata}
+
+\section*{Introduction : Le Test du Khi-deux, un Outil aux Multiples Facettes}
+\teachernote{Adoptez un ton professionnel et synthétique. L'objectif est de situer les tests du jour par rapport à celui déjà vu.}
+
+Bonjour à toutes et à tous. Bienvenue à cette dernière séance. Lors de notre dernier cours, nous avons introduit un nouvel outil statistique fondamental : le test du Khi-deux. Nous l'avons utilisé dans le cadre d'un \textbf{test de conformité}, pour répondre à la question : "La répartition observée dans mon échantillon est-elle conforme à une répartition théorique attendue ?".
+
+Aujourd'hui, nous allons découvrir les deux autres applications majeures de ce test, qui répondent à des questions scientifiques encore plus fréquentes en biologie.
+\begin{enumerate}
+    \item \textbf{Le test d'homogénéité :} Il répond à la question "Deux populations ou deux groupes ont-ils la même répartition pour une certaine caractéristique ?". C'est un test de \textbf{comparaison}.
+    \item \textbf{Le test d'indépendance :} Il répond à la question "Deux caractéristiques qualitatives sont-elles liées l'une à l'autre au sein d'une même population ?". C'est un test d'\textbf{association}.
+\end{enumerate}
+La puissance de cet outil est que la mécanique de calcul (la fameuse distance $Q = \sum \frac{(O-E)^2}{E}$) reste la même. Seule la manière de définir et de calculer les "effectifs théoriques" sous l'hypothèse nulle va changer, car l'hypothèse nulle elle-même est différente. Nous allons explorer cela en détail avec les exercices du TD4.
+
+\section*{Partie 1 : Le Test du $\chi^2$ d'Homogénéité (45 min)}
+
+\subsection*{L'Intuition : Comparer des "Empreintes Digitales"}
+\teachernote{Utilisez une analogie forte et visuelle pour asseoir le concept.}
+Avant de plonger dans les calculs, comprenons la philosophie de ce test. Imaginez que la répartition d'une variable qualitative (comme les groupes sanguins A, B, O, AB) constitue l' "empreinte digitale" d'une population. Chaque population a sa propre signature.
+
+Le test d'homogénéité se pose la question : "Est-ce que deux populations ont la même empreinte digitale ?".
+L'hypothèse nulle ($H_0$) est donc : "Oui, les deux populations sont \textbf{homogènes}". Elles partagent la même répartition sous-jacente. Les différences que nous voyons dans nos échantillons ne sont que le fruit du hasard.
+L'hypothèse alternative ($H_1$) est : "Non, leurs empreintes sont différentes".
+
+Comment le test procède-t-il ? C'est une démarche en deux temps :
+\begin{enumerate}
+    \item \textbf{Construire une "empreinte moyenne"} : Si $H_0$ est vraie, alors les deux populations sont identiques. La meilleure estimation que nous ayons de cette empreinte commune est de mélanger nos deux échantillons et de calculer les proportions globales pour chaque catégorie.
+    \item \textbf{Mesurer l'écart à la moyenne} : Ensuite, pour chaque échantillon, on calcule l'effectif théorique que l'on aurait dû observer si sa répartition suivait parfaitement cette "empreinte moyenne". Enfin, on calcule la distance du Khi-deux entre les effectifs réellement observés et ces effectifs théoriques. Si cette distance est grande, cela signifie que les échantillons s'écartent trop de l'empreinte moyenne, et donc, probablement, l'un de l'autre.
+\end{enumerate}
+Appliquons cette logique à l'exercice 2.
+
+\subsection*{Application Guidée : Exercice 2 du TD4 (Groupes Sanguins)}
+\textbf{Contexte :} On compare la répartition des 4 groupes sanguins entre deux populations.
+
+\begin{enumerate}
+    \item \textbf{Identifier les hypothèses et la règle de décision.}
+    \begin{itemize}
+        \item \textbf{Hypothèses :} $H_0$: Les deux populations sont homogènes concernant la répartition des groupes sanguins. $H_1$: Elles ne le sont pas.
+        \item \textbf{Statistique et valeur critique :} Nous utilisons un test du $\chi^2$ d'homogénéité (formulaire, section \textbf{5.2}). Le nombre de degrés de liberté est $(L-1)(C-1)$, où L est le nombre de populations (2) et C le nombre de catégories (4). DDL = $(2-1)(4-1)=3$. Pour un risque $\alpha=0.05$ et 3 ddl, \textbf{la table du $\chi^2$ donne la valeur critique $7.815$}. Règle : \textbf{Si $q_{obs} > 7.815$, on rejette $H_0$}.
+    \end{itemize}
+
+    \item \textbf{Calculer les effectifs théoriques.}
+    \teachernote{Faites ce calcul de manière très méthodique au tableau. C'est le cœur de l'exercice.}
+    D'abord, les totaux.
+    Taille de l'échantillon 1 : $n_1 = 42+45+10+14 = 111$.
+    Taille de l'échantillon 2 : $n_2 = 60+57+18+11 = 146$.
+    Total général : $N = n_1+n_2 = 257$.
+    Totaux par catégorie : Total A = 102, Total O = 102, Total B = 28, Total AB = 25.
+
+    Ensuite, les proportions de "l'empreinte moyenne" :
+    $p_A = 102/257 \approx 0.397$, $p_O = 102/257 \approx 0.397$, $p_B = 28/257 \approx 0.109$, $p_{AB} = 25/257 \approx 0.097$.
+
+    Enfin, les effectifs théoriques. Pour chaque case, la formule est : Effectif Théorique = (Taille de l'échantillon de la ligne) $\times$ (Proportion moyenne de la colonne).
+    Théorique (Éch. 1, Gr. A) = $n_1 \times p_A = 111 \times 0.397 \approx 44.07$.
+    Théorique (Éch. 2, Gr. A) = $n_2 \times p_A = 146 \times 0.397 \approx 57.96$.
+    Et ainsi de suite pour les 8 cases.
+
+    \item \textbf{Calculer la statistique $q_{obs}$ et Conclure.}
+    On applique la formule $Q = \sum \frac{(O-E)^2}{E}$ sur les 8 cases.
+    $q_{obs} = \frac{(42-44.07)^2}{44.07} + \dots + \frac{(11-14.16)^2}{14.16} \approx 2.59$.
+    La valeur calculée, 2.59, est très inférieure à la valeur critique de 7.815. Elle est loin de la zone de rejet.
+    \textbf{Conclusion :} On ne rejette pas $H_0$. Cette étude ne met pas en évidence de différence significative dans la répartition des groupes sanguins entre les deux populations.
+\end{enumerate}
+
+\section*{Partie 2 : Le Test du $\chi^2$ d'Indépendance (45 min)}
+\subsection*{L'Intuition : Le Monde du Hasard vs. la Réalité}
+\teachernote{Utilisez une autre analogie forte pour bien distinguer ce test du précédent.}
+Changeons de question. Ici, nous n'avons qu'\textbf{une seule population}, mais nous mesurons \textbf{deux variables} qualitatives sur chaque individu. La question est : "Ces deux variables sont-elles liées ? Y a-t-il une association entre elles ?".
+
+L'hypothèse nulle ($H_0$) est : "Les deux variables sont \textbf{indépendantes}". Cela signifie que connaître la valeur de la première variable ne nous donne aucune information sur la valeur de la seconde. C'est le monde du "hasard pur".
+L'hypothèse alternative ($H_1$) est : "Les variables sont dépendantes, il y a un lien".
+
+Comment le test fonctionne-t-il ? Il va construire une simulation du "monde parfait de l'indépendance".
+Si deux événements A et B sont indépendants, nous savons que $P(A \cap B) = P(A) \times P(B)$.
+Le test va utiliser cette règle pour calculer les effectifs théoriques que l'on observerait si les deux variables étaient parfaitement indépendantes. Il utilise les proportions marginales (les totaux de lignes et de colonnes) comme estimations de $P(A)$ et $P(B)$.
+Ensuite, il compare la réalité observée à ce monde théorique de l'indépendance. Si l'écart est grand, cela signifie que le modèle de l'indépendance est un mauvais modèle pour décrire nos données. Il y a donc probablement un lien.
+
+\subsection*{Application Guidée : Exercice 3 du TD4 (Asthme et Eczéma)}
+\textbf{Contexte :} Sur 200 enfants, on croise deux variables : intensité de l'asthme (3 modalités) et historique d'eczéma (3 modalités).
+
+\begin{enumerate}
+    \item \textbf{Hypothèses et règle de décision.}
+    \begin{itemize}
+        \item \textbf{Hypothèses :} $H_0$: L'intensité de l'asthme et l'historique d'eczéma sont indépendants. $H_1$: Ils sont dépendants.
+        \item \textbf{Statistique et valeur critique :} C'est un test du $\chi^2$ d'indépendance (formulaire, section \textbf{5.3}). Le ddl est $(L-1)(C-1) = (3-1)(3-1) = 4$. Pour $\alpha=0.05$ et 4 ddl, \textbf{la table du $\chi^2$ donne la valeur critique $9.488$}. Règle : \textbf{Si $q_{obs} > 9.488$, on rejette $H_0$}.
+    \end{itemize}
+    
+    \item \textbf{Calculer les effectifs théoriques de l'indépendance.}
+    La formule est donnée dans le formulaire (implicitement) et est très intuitive :
+    Effectif Théorique (case ij) = $\frac{(\text{Total Ligne i}) \times (\text{Total Colonne j})}{\text{Total Général}}$.
+    Prenons la case ("Eczéma présent", "Asthme fort") :
+    Total de sa ligne = 35. Total de sa colonne = 72. Total général = 200.
+    $E_{11} = \frac{35 \times 72}{200} = 12.6$.
+    Dans un monde d'indépendance, on s'attendrait à 12.6 enfants ici. On en a observé 24. C'est un premier indice fort.
+    On effectue ce calcul pour les 9 cases du tableau.
+
+    \item \textbf{Calculer la statistique $q_{obs}$ et Conclure.}
+    On applique la formule $Q = \sum \frac{(O-E)^2}{E}$ sur les 9 cases. Le calcul complet donne $q_{obs} \approx 28.5$.
+    La valeur calculée, 28.5, est massivement supérieure à la valeur critique de 9.488.
+    \textbf{Conclusion :} On rejette très clairement $H_0$. L'hypothèse d'indépendance est extrêmement improbable au vu des données. Nous concluons qu'il existe un lien statistiquement très significatif entre l'intensité de l'asthme et l'historique d'eczéma.
+\end{enumerate}
+
+\teachernote{Faites la transition en montrant que cet exercice est une généralisation. "Nous avons vu comment comparer deux répartitions avec l'exercice 2, et comment tester un lien entre deux variables avec l'exercice 3. L'exercice 4 va nous montrer que le test du Khi-deux d'homogénéité est aussi l'outil parfait pour répondre à une question très fréquente : comment comparer plus de deux proportions en même temps ?"}
+
+\subsection*{Application Guidée : Exercice 4 du TD4 (Comparaison de k proportions)}
+\textbf{Contexte :} On compare l'efficacité (taux de guérison) de 4 traitements différents appliqués dans 4 hôpitaux. La question est : "ces quatre traitements ont-ils la même efficacité ?".
+
+Ceci est une question de comparaison de 4 proportions. Nous pourrions les comparer deux à deux, mais ce serait long et augmenterait notre risque d'erreur. Le test du $\chi^2$ d'homogénéénéité nous permet de répondre à la question en un seul test.
+
+\begin{enumerate}
+    \item \textbf{Identifier les hypothèses.}
+    L'hypothèse nulle est qu'il n'y a pas de différence d'efficacité. Les 4 traitements ont le même taux de guérison.
+    $H_0: \pi_1 = \pi_2 = \pi_3 = \pi_4$.
+    L'hypothèse alternative est qu'ils ne sont pas tous égaux.
+    $H_1$: Au moins un des taux de guérison est différent des autres.
+
+    \item \textbf{Déclarer la statistique de test.}
+    Nos données sont présentées dans un tableau de contingence 4x2 (4 Hôpitaux, 2 Issues). La question "les 4 groupes sont-ils homogènes par rapport à la proportion de guérison ?" est exactement une question de \textbf{test du $\chi^2$ d'homogénéité}. La statistique est donc $Q = \sum \frac{(O-E)^2}{E}$.
+
+    \item \textbf{Énoncer la règle de décision et expliquer les degrés de liberté.}
+    \teachernote{C'est ici que vous devez prendre le temps d'expliquer l'intuition des ddl de manière très claire.}
+    La statistique $Q$ suit une loi du $\chi^2$ avec $(L-1)(C-1)$ degrés de liberté. Ici, $L=4$ lignes (les hôpitaux) et $C=2$ colonnes (les issues). Le nombre de ddl est donc $(4-1) \times (2-1) = 3 \times 1 = 3$.
+
+    Mais pourquoi 3 ? D'où vient ce chiffre ?
+    Le "degré de liberté" représente le nombre de valeurs que l'on peut fixer "librement" dans le tableau avant que toutes les autres ne soient automatiquement déterminées par les contraintes des totaux.
+    Imaginez notre tableau vide, mais avec les totaux de chaque ligne et chaque colonne déjà calculés et fixés sur les marges.
+    
+    Concentrons-nous sur la colonne "Guérison".
+    \begin{itemize}
+        \item Puis-je choisir librement le nombre de guéris pour l'Hôpital 1 ? Oui. Disons 120.
+        \item Puis-je choisir librement le nombre de guéris pour l'Hôpital 2 ? Oui. Disons 100.
+        \item Puis-je choisir librement le nombre de guéris pour l'Hôpital 3 ? Oui. Disons 150.
+        \item Maintenant, puis-je choisir librement le nombre de guéris pour l'Hôpital 4 ? \textbf{Non}. Le total de la colonne "Guérison" est fixé à 502. Donc, le nombre pour l'Hôpital 4 est obligé d'être $502 - (120+100+150)$. Il n'est pas libre.
+    \end{itemize}
+    Nous n'avions que $L-1 = 3$ choix libres dans cette colonne.
+    
+    Et pour la colonne "Non guérison" ? Une fois que j'ai fixé le nombre de guéris pour l'Hôpital 1 (120), et comme je sais que le total de la ligne pour l'Hôpital 1 est de 151, alors le nombre de non-guéris est obligatoirement $151 - 120 = 31$. Il n'y a aucun choix libre. La deuxième colonne est entièrement déterminée par la première. Nous n'avions que $C-1 = 1$ choix libre de colonne.
+    
+    Au total, le nombre de cases que nous pouvions remplir librement est donc de $(L-1) \times (C-1) = 3 \times 1 = 3$. C'est l'origine des 3 degrés de liberté.
+
+    Pour un risque $\alpha=0.05$ et 3 ddl, \textbf{la table du $\chi^2$ nous donne la valeur critique $7.815$}.
+    Notre règle : \textbf{Si $q_{obs} > 7.815$, on rejette $H_0$}.
+
+    \item \textbf{Calculer la statistique.}
+    D'abord, l'effectif théorique. Sous $H_0$, le taux de guérison est le même partout. On l'estime par la proportion globale :
+    $p = \frac{\text{Total Guéris}}{\text{Total Patients}} = \frac{502}{665} \approx 0.755$.
+    On calcule ensuite les 8 effectifs théoriques. Par exemple :
+    Théorique (Hôpital 1, Guérison) = $n_1 \times p = 151 \times 0.755 \approx 114.0$.
+    Théorique (Hôpital 1, Non guérison) = $n_1 \times (1-p) = 151 \times 0.245 \approx 37.0$.
+    ... et ainsi de suite.
+    
+    Enfin, on calcule $q_{obs} = \sum \frac{(O-E)^2}{E}$ sur les 8 cases. Le calcul donne $q_{obs} \approx 10.1$.
+
+    \item \textbf{Conclure.}
+    Notre valeur calculée $q_{obs} \approx 10.1$ est \textbf{supérieure} à la valeur critique de 7.815. Elle tombe dans la zone de rejet.
+    \textbf{Conclusion :} On rejette l'hypothèse nulle. Il existe une différence statistiquement significative dans l'efficacité des traitements entre les quatre hôpitaux. Tous les traitements n'ont pas le même taux de guérison.
+\end{enumerate}
+
+\section*{Partie 3 : Synthèse du Semestre - Le Chemin Parcouru (15 min)}
+\teachernote{Prenez du recul et montrez-leur la "grande image". C'est le moment de donner du sens à l'ensemble du cours et de les guider pour leurs révisions.}
+
+Nous voici au terme de notre parcours. Je voudrais prendre quelques minutes pour regarder le chemin que nous avons accompli ensemble. Cela vous servira de guide pour vos révisions. Notre cours a été construit comme une pyramide, chaque étape reposant sur la précédente.
+
+\begin{enumerate}
+    \item \textbf{Les Fondations : Probabilités et Variables Aléatoires (Chapitre 1).}
+    C'était notre point de départ. Nous avons appris le langage de l'incertitude.
+    \begin{itemize}
+        \item \textbf{Concepts clés à revoir :} La distinction fondamentale entre variables \textbf{discrètes} (comptage) et \textbf{continues} (mesure).
+        \item \textbf{Lois à maîtriser :} Pour le discret, Binomiale, Poisson. Pour le continu, Uniforme, Exponentielle, et surtout, la loi \textbf{Normale}.
+    \end{itemize}
+
+    \item \textbf{Le Pilier Central : Le Pouvoir du Grand Nombre (Chapitre 2).}
+    Ce chapitre a été le pont entre la théorie et la pratique.
+    \begin{itemize}
+        \item \textbf{Concepts clés à revoir :} La \textbf{Loi des Grands Nombres} et le \textbf{Théorème Central Limite} (pourquoi la loi Normale est reine).
+    \end{itemize}
+
+    \item \textbf{Le Sommet : L'Inférence Statistique (Chapitres 3, 4 et 5).}
+    C'est ici que nous avons utilisé nos outils pour répondre à des questions scientifiques.
+    \begin{itemize}
+        \item \textbf{Estimation :} Revoir la différence entre estimation ponctuelle et \textbf{intervalle de confiance} pour une moyenne et une proportion.
+        \item \textbf{Tests d'hypothèses :} C'est la partie la plus importante. Vous devez maîtriser la \textbf{méthode en 5 étapes}. Pour n'importe quel test, vous devez savoir :
+            \begin{itemize}
+                \item Distinguer $H_0$ de $H_1$, et unilatéral de bilatéral.
+                \item Choisir le bon test : \textbf{Conformité} (1 groupe vs norme) ou \textbf{Homogénéité} (2 groupes entre eux) ? Sur des \textbf{moyennes} ou des \textbf{proportions} ? Avec des \textbf{grands} (loi Normale) ou des \textbf{petits} (loi de Student) échantillons ?
+                \item Le \textbf{test du Khi-deux} comme outil plus général pour comparer des répartitions sur plus de 2 catégories (conformité, homogénéité, indépendance).
+            \end{itemize}
+    \end{itemize}
+\end{enumerate}
+Pour vos révisions, concentrez-vous sur la \textbf{méthode}. Pour chaque exercice, posez-vous les questions : Quelle est la nature de mes données ? Quelle est la question scientifique ? Quel outil du formulaire est adapté pour y répondre ?
+
+\end{document}
+

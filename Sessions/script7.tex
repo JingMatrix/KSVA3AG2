@@ -1,0 +1,196 @@
+\documentclass[12pt, a paper]{article}
+
+% --- PAQUETS ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\linespread{1.2}
+\usepackage{xcolor}
+\definecolor{brown}{rgb}{0.64, 0.16, 0.16}
+
+% --- ENVIRONNEMENT PERSONNALISÉ POUR LES MÉTA-INFORMATIONS ---
+\newenvironment{metadata}{%
+    \par\vspace{1ex}
+    \quote\small\color{gray}
+}{%
+    \par\nobreak\vspace{1ex}\centerline{\rule{0.5\linewidth}{0.4pt}}
+    \endquote
+    \vspace{2ex}
+}
+
+% --- COMMANDES PERSONNALISÉES POUR LES NOTES ---
+\newcommand{\slidenote}[1]{%
+    \par\vspace{1.5ex}%
+    \noindent\texttt{\small\color{gray}#1}\par\nopagebreak\vspace{1.5ex}%
+}
+% --- Note pour le professeur ---
+\newcommand{\teachernote}[1]{%
+    \par\vspace{1ex}\noindent\small\textsf{\color{brown}\textbf{Note au professeur :} #1}\par\vspace{1.5ex}%
+}
+
+% --- TITRE ---
+\title{Script Détaillé du Cours 7 : Correction du QCM et Inférence sur les Proportions}
+\author{Jianyu MA}
+\date{Semestre 2025-26}
+
+% --- DÉBUT DU DOCUMENT ---
+\begin{document}
+
+\maketitle
+
+\begin{metadata}
+\subsection*{Plan de la Séance (Temps Estimés)}
+\begin{itemize}
+    \item Introduction et Correction du QCM (40 min)
+    \item Partie 1 : De la Moyenne à la Proportion - La Logique et le Formulaire (15 min)
+        \begin{itemize}
+            \item Théorie : Estimer une proportion (Diapos 1-3 du Chap. 5)
+            \item Théorie : L'intervalle de confiance (Diapos 4-5)
+        \end{itemize}
+    \item Partie 2 : La Pratique Guidée par le Formulaire (60 min)
+        \begin{itemize}
+            \item Pratique : Exercice 1 du TD3 (Intervalle de confiance)
+            \item Théorie : Le Test de Conformité (Diapos 6-9)
+            \item Pratique : Exercice 2 du TD3 (Test de conformité)
+        \end{itemize}
+    \item Conclusion et Prochaines Étapes (5 min)
+\end{itemize}
+\end{metadata}
+
+\section*{Introduction et Correction du QCM (40 min)}
+\teachernote{Commencez avec le ton que vous avez établi dans votre lettre. C'est un nouveau départ.}
+Bonjour à toutes et à tous. Je suis très heureux de vous voir aujourd'hui. Comme je vous l'ai écrit sur Moodle, notre objectif commun est votre réussite, et cette séance est conçue pour nous remettre tous sur la bonne voie.
+
+Nous allons commencer par quelque chose de très pratique : la correction du QCM.
+\begin{enumerate}
+    \item Tout d'abord, je vais vous distribuer vos copies. Je vous demande de ne pas prendre de photo et de me les rendre à la fin de la séance. L'objectif est de travailler dessus ensemble.
+    \item Ensuite, une information importante : en raison d'un problème d'organisation (un groupe a eu 20 minutes au lieu de 30), nous avons décidé que, par souci d'équité, \textbf{la note de ce QCM ne comptera pas} dans votre évaluation finale. Considérez-le donc comme un examen blanc, un outil de diagnostic pour que vous puissiez voir où sont vos difficultés, sans stress.
+    \item Maintenant, nous allons corriger une version de ce QCM ensemble. Pour chaque question, je ne vais pas seulement donner la réponse. Je vais vous montrer \textbf{comment utiliser le formulaire} que vous aurez à l'examen pour trouver la bonne formule et la bonne méthode. Le formulaire est votre meilleur ami, nous allons apprendre à le lire et à l'utiliser efficacement.
+\end{enumerate}
+
+\teachernote{Passez maintenant à la correction. Pour chaque question, projetez la question, puis verbalisez votre raisonnement en vous référant explicitement au formulaire.}
+
+\subsection*{Correction Détaillée du QCM}
+\begin{itemize}
+    \item \textbf{Question 1 :} "Probabilité qu'une variable normale soit égale à sa moyenne". C'est une question de cours fondamentale. On parle d'une variable continue. Quelle est la probabilité d'un point exact ? Elle est toujours nulle. La bonne réponse est \textbf{0}.
+    
+    \item \textbf{Question 2 :} "Donner une estimation de $\mu$". On a un échantillon de 11 comtés, on nous donne $\sum y_i = 319$.
+    Regardons notre formulaire, page 2, section \textbf{3.1 Estimation de la moyenne}. Il est écrit que la valeur $\overline{x}$ est l'estimation de $\mu$, et la formule est $\overline{x} = \frac{\sum x_i}{n}$.
+    Application : $\overline{y} = \frac{319}{11} = 29$. La bonne réponse est \textbf{29}.
+    
+    \item \textbf{Question 3 :} "Donner une estimation de $\sigma^2$".
+    Toujours dans la section \textbf{3.1}, le formulaire distingue l'estimateur $S_n^2$ de $s_x^2$. C'est l'estimation $s_x^2$ qu'on nous demande. Le formulaire donne deux formules pour $S_n^2$. Pour l'estimation $s_x^2$ sans biais, la formule est $s_x^2 = \frac{1}{n-1} (\sum x_i^2 - n\overline{x}^2)$.
+    Application : $s_y^2 = \frac{1}{10} (9825 - 11 \times 29^2) = \frac{1}{10} (9825 - 9251) = \frac{574}{10} = 57.4$. La bonne réponse est \textbf{57.4}.
+    
+    \item \textbf{Question 4 :} "Loi normale centrée réduite, trouver $m$ tel que $\Pr(X>m) = 0.07$".
+    La table de la loi normale donne $\Pr(X \le m)$. Si l'aire à droite de $m$ est de 0.07, alors l'aire à gauche est $1 - 0.07 = 0.93$. On cherche donc dans la table la valeur qui correspond à 0.93. On trouve que c'est environ 1.48. La bonne réponse est \textbf{1.48}.
+
+    \item \textbf{Question 5 :} "Intervalle de confiance à 95\% de $\mu$". On a un grand échantillon, $n=300$.
+    On regarde le formulaire, page 3, section \textbf{3.1}, la propriété sur la variable $T$ pour $n$ grand. Elle suit une loi Normale. La formule de l'intervalle de confiance pour une moyenne est donc (implicitement) $\overline{x} \pm 1.96 \frac{s_x}{\sqrt{n}}$.
+    Application : $5.4 \pm 1.96 \frac{1.2}{\sqrt{300}} = 5.4 \pm 1.96 \times 0.069 \approx 5.4 \pm 0.135$. L'intervalle est $[5.265, 5.535]$. La réponse la plus proche est \textbf{[5.264; 5.536]}.
+
+    \item \textbf{Question 6 :} "Proportion d'individus supérieure à la moyenne (20 g/dl) pour une loi normale de moyenne 20".
+    Pour une loi Normale, la moyenne est aussi la médiane. Par définition, 50\% des individus sont au-dessus de la médiane, 50\% en dessous. La proportion est donc \textbf{0.5}.
+    
+    \item \textbf{Question 7 :} "Proportion supérieure à 14 g/dl pour $\mathcal{N}(20, 5)$".
+    On cherche $\Pr(X > 14)$. On doit centrer et réduire. On regarde le formulaire, page 2, section \textbf{2.4 Loi normale}. La propriété nous dit comment passer à une loi $\mathcal{N}(0,1)$ : $Y = \frac{X-\mu}{\sigma}$.
+    Application : $\Pr(\frac{X-20}{5} > \frac{14-20}{5}) = \Pr(Z > -1.2)$.
+    Par symétrie, $\Pr(Z > -1.2) = \Pr(Z < 1.2)$. On lit la table pour 1.2, on trouve 0.8849. La réponse est \textbf{0.885}.
+
+    \item \textbf{Question 8 :} "Intervalle centré à 95\% pour $\mathcal{N}(20, 4)$".
+    C'est la formule que nous avons vue en TD : $[\mu - 1.96\sigma, \mu + 1.96\sigma]$.
+    Application : $[20 - 1.96 \times 4, 20 + 1.96 \times 4] = [20 - 7.84, 20 + 7.84] = [12.16, 27.84]$. La réponse la plus proche est \textbf{[12.2; 27.8]}.
+
+    \item \textbf{Question 9 :} "Loi de X+Y avec $X \sim \mathcal{N}(4,3)$ et $Y \sim \mathcal{N}(1,1)$".
+    Attention au piège : la loi normale est notée $\mathcal{N}(\mu, \sigma)$, donc pour X, $\sigma_X=3$. La variance est $\sigma_X^2=9$. Pour Y, $\sigma_Y=1$, la variance est $\sigma_Y^2=1$.
+    On regarde le formulaire, page 2, section \textbf{2.4}, la deuxième propriété sur la somme de deux lois normales. La moyenne de la somme est la somme des moyennes. La variance de la somme est la somme des variances.
+    Moyenne : $\mu_{X+Y} = 4+1 = 5$.
+    Variance : $Var(X+Y) = \sigma_X^2 + \sigma_Y^2 = 9 + 1 = 10$.
+    L'écart-type est donc $\sigma_{X+Y} = \sqrt{10}$.
+    La loi est $\mathcal{N}(5, \sqrt{10})$. La bonne réponse est \textbf{N(5; $\sqrt{10}$)}.
+\end{itemize}
+
+\section*{Partie 1 : Inférence sur les Proportions (15 min)}
+\teachernote{Faites une transition claire. "Maintenant que nous avons révisé ensemble, nous allons appliquer cette méthode de travail à un nouveau sujet : les proportions. Prenez votre formulaire à la page 4."}
+Très bien. J'espère que cette correction vous a montré comment le formulaire peut vous guider. Nous allons maintenant passer au Chapitre 5, sur les proportions. C'est quand nos données sont du type "oui/non".
+
+\slidenote{Référence : Chapitre 5.pdf - Diapositives 1 à 3}
+Regardons notre formulaire, section \textbf{4.1 Estimation de proportions}.
+La logique est la même que pour les moyennes. Pour estimer la vraie proportion $\pi$ dans la population, on utilise la proportion $p$ de notre échantillon.
+Le formulaire nous rappelle que l'estimateur $P_n$ a pour espérance $\pi$ (il est sans biais) et que, si $n$ est grand et $\pi$ pas trop extrême, il suit une loi Normale. C'est la propriété clé qui va nous permettre de tout faire.
+
+\slidenote{Référence : Chapitre 5.pdf - Diapositives 4 \& 5}
+Comment construire un intervalle de confiance ? Exactement comme pour les moyennes ! La formule est \textit{estimation $\pm$ marge d'erreur}.
+La marge d'erreur est $z \times (\text{erreur standard})$. Pour une proportion, l'erreur standard (l'écart-type de l'estimateur) est $\sqrt{\frac{\pi(1-\pi)}{n}}$.
+Comme on ne connaît pas $\pi$, on le remplace par son estimation $p$. La formule devient donc :
+$$ IC_{95\%}(\pi) = \left[ p \pm 1.96 \sqrt{\frac{p(1-p)}{n}} \right] $$
+C'est la formule que nous allons utiliser, si les conditions de l'approximation normale sont vérifiées.
+
+\section*{Partie 2 : La Pratique Guidée par le Formulaire (60 min)}
+Mettons cela en pratique immédiatement avec le TD3.
+
+\subsection*{Pratique : Exercice 1 du TD3 (Sondage)}
+\textbf{Contexte :} $n=960$ personnes. 500 pour A, 460 pour B.
+
+\begin{enumerate}
+    \item \textbf{Estimation et IC pour le candidat A.}
+    \teachernote{Adoptez un rythme lent et méthodique, en annonçant chaque étape.}
+    
+    \textbf{Étape 1 : Calculer l'estimation ponctuelle.}
+    $p_A = \frac{500}{960} \approx 0.521$.
+    
+    \textbf{Étape 2 : Vérifier les conditions pour l'IC.}
+    On va utiliser l'approximation normale. Est-ce qu'on a le droit ?
+    $n=960$, c'est bien $>30$.
+    $np_A = 500 > 5$ et $n(1-p_A) = 460 > 5$. Oui, on peut continuer.
+    
+    \textbf{Étape 3 : Appliquer la formule du formulaire.}
+    La marge d'erreur est $1.96 \sqrt{\frac{p_A(1-p_A)}{n}} = 1.96 \sqrt{\frac{0.521(0.479)}{960}} \approx 1.96 \times 0.016 \approx 0.0315$.
+    L'intervalle de confiance est $[0.521 - 0.0315, 0.521 + 0.0315] = [0.4895, 0.5525]$.
+    
+    \item \textbf{Peut-on annoncer le candidat A gagnant ?}
+    Notre estimation est 52.1\%, ce qui est au-dessus de 50\%. Mais l'intervalle de confiance, notre plage de valeurs plausibles pour la vraie proportion, est [48.95\%, 55.25\%].
+    Cet intervalle contient des valeurs \textbf{inférieures à 50\%}. Il est donc plausible que le vrai score du candidat A soit de 49\%. Nous ne pouvons donc pas affirmer avec 95\% de confiance qu'il va gagner. Le sondage est trop serré pour conclure.
+\end{enumerate}
+
+\slidenote{Référence : Chapitre 5.pdf - Diapositives 6 à 9}
+Maintenant, passons aux tests d'hypothèses. Prenez le formulaire à la section \textbf{4.2 Test de conformité sur les proportions}.
+La logique est identique à celle des tests sur les moyennes. On veut comparer la proportion de notre échantillon $p$ à une proportion de référence $\pi_0$.
+L'hypothèse nulle est $H_0: \pi = \pi_0$.
+Le formulaire nous donne la statistique de test à utiliser sous $H_0$ :
+$$ T = \frac{P_n - \pi_0}{\sqrt{\frac{\pi_0(1-\pi_0)}{n}}} $$
+Si les conditions sont remplies, ce T suit une loi Normale $\mathcal{N}(0,1)$.
+
+\subsection*{Pratique : Exercice 2 du TD3 (Allergie au gluten)}
+\textbf{Contexte :} En France, $\pi_0=18\%$ d'allergiques. Sur $n=250$ citadins, on en trouve 52.
+
+\begin{enumerate}
+    \item \textbf{Étape 1 : Poser les hypothèses.}
+    $H_0$: Les citadins sont comme les autres. $H_0: \pi = 0.18$.
+    $H_1$: Ils sont "différemment exposés". $H_1: \pi \neq 0.18$ (bilatéral).
+
+    \item \textbf{Étape 2 : Calculer p et vérifier les conditions.}
+    $p = \frac{52}{250} = 0.208$.
+    Conditions pour le test (on les vérifie avec $\pi_0$) : $n=250 > 30$. $n\pi_0=250 \times 0.18=45>5$. $n(1-\pi_0)=250 \times 0.82=205>5$. C'est bon.
+
+    \item \textbf{Étape 3 : Appliquer la formule du formulaire.}
+    $t_{obs} = \frac{p - \pi_0}{\sqrt{\frac{\pi_0(1-\pi_0)}{n}}} = \frac{0.208 - 0.18}{\sqrt{\frac{0.18(0.82)}{250}}} \approx 1.15$.
+
+    \item \textbf{Étape 4 : Décision et Conclusion.}
+    Pour un test bilatéral à $\alpha=0.05$, la zone de rejet est en dehors de $[-1.96, 1.96]$.
+    Notre valeur $t_{obs} = 1.15$ est à l'intérieur de cette zone.
+    \textbf{Conclusion :} On ne rejette pas $H_0$. La différence observée (20.8\% vs 18\%) n'est pas statistiquement significative. Cette étude ne permet pas de conclure à une différence de prévalence de l'allergie au gluten chez les citadins.
+\end{enumerate}
+
+\section*{Conclusion et Prochaines Étapes}
+Aujourd'hui, après la correction du QCM, nous avons abordé un nouveau chapitre très important, celui des proportions. Mais j'espère que vous avez vu que ce n'est pas vraiment "nouveau". La logique d'estimation et de test que nous avons pratiquée pour les moyennes s'applique de manière identique. La seule chose qui change est la formule de l'écart-type.
+
+En vous appuyant sur votre formulaire, vous avez appris à construire un intervalle de confiance pour une proportion, et à mener un test de conformité.
+La prochaine fois, nous terminerons le TD3 en appliquant cette même logique à la comparaison de \textbf{deux proportions} entre elles.
+
+Merci de votre attention.
+
+\end{document}

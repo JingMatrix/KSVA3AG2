@@ -1,0 +1,229 @@
+\documentclass[12pt]{article}
+
+% --- PAQUETS ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\linespread{1.2}
+\usepackage{xcolor}
+\definecolor{brown}{rgb}{0.64, 0.16, 0.16}
+
+% --- ENVIRONNEMENT PERSONNALISÉ POUR LES MÉTA-INFORMATIONS ---
+\newenvironment{metadata}{%
+    \par\vspace{1ex}
+    \quote\small\color{gray}
+}{%
+    \par\nobreak\vspace{1ex}\centerline{\rule{0.5\linewidth}{0.4pt}}
+    \endquote
+    \vspace{2ex}
+}
+
+% --- COMMANDES PERSONNALISÉES POUR LES NOTES ---
+\newcommand{\slidenote}[1]{%
+    \par\vspace{1.5ex}%
+    \noindent\texttt{\small\color{gray}#1}\par\nopagebreak\vspace{1.5ex}%
+}
+% --- Note pour le professeur ---
+\newcommand{\teachernote}[1]{%
+    \par\vspace{1ex}\noindent\small\textsf{\color{brown}\textbf{Note au professeur :} #1}\par\vspace{1.5ex}%
+}
+
+% --- TITRE ---
+\title{Script du Cours 8 : La Rigueur et la Puissance des Tests d'Hypothèses}
+\author{Jianyu MA}
+\date{Semestre 2025-26}
+
+% --- DÉBUT DU DOCUMENT ---
+\begin{document}
+
+\maketitle
+
+\begin{metadata}
+\subsection*{Plan de la Séance (Temps Estimés)}
+\begin{itemize}
+    \item Introduction : La Statistique Inférentielle, ou l'Art de Gérer le Doute (15 min)
+    \item Partie 1 : Finalisation du TD3 - Le Test d'Homogénéité pour les Proportions (45 min)
+    \item Partie 2 : Nouveau Chapitre - Le Test du Khi-deux, un Outil aux Multiples Facettes (55 min)
+    \item Conclusion et Perspectives (5 min)
+\end{itemize}
+\end{metadata}
+
+\section*{Introduction : La Statistique Inférentielle, ou l'Art de Gérer le Doute (15 min)}
+Bonjour à toutes et à tous. Aujourd'hui, nous allons entrer au cœur du réacteur de la méthode scientifique moderne. Nous allons parler de la manière dont la science passe d'une observation limitée à une conclusion générale.
+
+Toute expérience, toute étude, est confrontée à un ennemi fondamental : le \textbf{hasard}.
+Si vous observez que 10 patients traités avec un médicament A vont mieux que 10 patients traités avec un placebo, comment pouvez-vous être sûr que ce n'est pas juste "un coup de chance" ? Comment séparer le signal du bruit ? Comment gérer ce doute inhérent à tout échantillonnage ?
+
+La réponse est la \textbf{statistique inférentielle}, et son outil le plus puissant est le \textbf{test d'hypothèse}.
+Un test d'hypothèse n'est pas une simple formule. C'est un cadre de raisonnement, une procédure logique conçue pour nous protéger contre la tentation de voir des effets là où il n'y a que du hasard. C'est une méthode pour rendre nos conclusions scientifiques rigoureuses, objectives et reproductibles.
+
+Aujourd'hui, je vais vous présenter la structure de ce raisonnement. C'est une méthode en 5 étapes, un véritable algorithme de la pensée scientifique que vous pourrez appliquer tout au long de votre carrière, que ce soit pour des moyennes, des proportions, ou des concepts bien plus complexes.
+
+\teachernote{Présentez ces 5 étapes comme les piliers d'une arche. Chaque étape est indispensable pour que la conclusion tienne debout.}
+
+\begin{enumerate}
+    \item \textbf{Étape 1 : Poser les hypothèses.}
+    C'est le fondement philosophique du test. La science progresse en essayant de réfuter des idées, pas en les confirmant directement. C'est le principe de "falsifiabilité" de Karl Popper.
+    C'est pourquoi nous formulons toujours deux hypothèses :
+    \begin{itemize}
+        \item \textbf{L'hypothèse nulle, $H_0$} : C'est l'hypothèse du sceptique, l'hypothèse du "statu quo". Elle affirme qu'il n'y a \textit{pas d'effet}, \textit{pas de différence}, \textit{pas de lien}. C'est le monde où ce que nous observons n'est que le fruit du hasard. Pourquoi cette hypothèse ? Parce qu'elle est simple, précise, et nous permet de faire des calculs. On peut calculer la probabilité des événements dans un monde où "rien ne se passe".
+        \item \textbf{L'hypothèse alternative, $H_1$} : C'est l'hypothèse du chercheur, ce qu'il espère prouver. Elle affirme qu'il y a un effet réel.
+    \end{itemize}
+    Notre but n'est jamais de "prouver" $H_0$. Notre but est de rassembler suffisamment de preuves pour pouvoir, avec une confiance raisonnable, \textbf{rejeter $H_0$}. Le test est conçu pour la destruction, pas pour la confirmation passive.
+
+    \item \textbf{Étape 2 : Choisir la bonne statistique de test.}
+    Une fois les hypothèses posées, nous avons besoin d'un "juge". Ce juge est une variable aléatoire, une fonction de nos données, dont nous connaissons le comportement théorique grâce aux mathématiques.
+    Le choix de ce juge dépend de la nature de la question : comparons-nous des moyennes ou des proportions ? Avons-nous un grand ou un petit échantillon ?
+    La puissance des mathématiques, et notamment du \textbf{Théorème Central Limite}, est qu'elle nous fournit une panoplie de juges fiables (Loi Normale, Loi de Student, Loi du Khi-deux) dont nous connaissons parfaitement le verdict attendu si $H_0$ est vraie.
+
+	\item \textbf{Étape 3 : Énoncer la règle de décision et trouver la valeur critique.} Quelle est la loi de probabilité suivie par notre statistique (Normale, Student, Khi-deux...) ? Quel est le risque $\alpha$ ?
+		\textbf{C'est ici que l'on doit consulter la table de loi} pour trouver la ou les valeurs critiques qui définissent la zone de rejet. C'est une étape cruciale en examen.
+    Avant même de regarder nos données, un bon scientifique définit ce qu'il considérera comme une "preuve suffisante". C'est le \textbf{seuil de significativité $\alpha$}, généralement 5\%.
+    Ce $\alpha=0.05$ signifie : "J'accepte de prendre un risque de 5\% de rejeter $H_0$ à tort (de condamner un innocent)".
+    Cette règle nous donne des valeurs critiques. Par exemple, pour une loi Normale, ces valeurs sont souvent -1.96 et +1.96. Toute observation tombant au-delà de ces bornes sera considérée comme "suffisamment improbable sous $H_0$" pour justifier son rejet.
+
+    \item \textbf{Étape 4 : Le calcul.}
+    C'est seulement maintenant que nous prenons nos données et que nous calculons la valeur de notre statistique de test. C'est l'étape la plus mécanique.
+
+    \item \textbf{Étape 5 : La conclusion.}
+    C'est le verdict. Nous comparons notre valeur calculée à la règle de décision.
+    \begin{itemize}
+        \item Si la valeur tombe dans la zone de rejet : nous avons une "différence statistiquement significative". Nous rejetons $H_0$ et concluons, avec un risque d'erreur contrôlé, que notre hypothèse alternative $H_1$ est plausible.
+        \item Si la valeur ne tombe pas dans la zone de rejet : nous ne pouvons pas rejeter $H_0$. \textbf{Attention ! Cela ne veut pas dire que nous avons prouvé que $H_0$ est vraie !} Cela signifie simplement que nous n'avons pas assez de preuves pour la rejeter. C'est comme dire "non coupable" plutôt que "innocent". L'absence de preuve n'est pas la preuve de l'absence.
+    \end{itemize}
+\end{enumerate}
+Cette démarche est le standard de la rigueur scientifique. Nous allons maintenant l'appliquer pour terminer notre TD sur les proportions.
+
+\section*{Partie 1 : Finalisation du TD3 (45 min)}
+
+\teachernote{Avant d'aborder l'exercice 3 sur la comparaison de deux groupes, commencez par l'exercice 2 pour réactiver les connaissances de la séance précédente sur le test de conformité. C'est un excellent échauffement.}
+
+\subsection*{Exercice 2 : Le Test de Conformité pour les Proportions (Révision)}
+\textbf{Contexte :} On sait que la proportion d'allergiques au gluten en France est de $\pi_0=18\%$. Sur un échantillon de $n=250$ citadins, on en trouve 52. La proportion de citadins allergiques est-elle différente de la norme nationale ?
+
+Appliquons rigoureusement notre recette en 5 étapes.
+
+\begin{enumerate}
+    \item \textbf{Identifier les hypothèses.}
+    On nous demande si la proportion est "différente". On ne nous donne pas de direction. Le test est donc \textbf{bilatéral}.
+    L'hypothèse nulle ($H_0$) est l'absence de différence : les citadins sont comme le reste de la population. $H_0: \pi = 0.18$.
+    L'hypothèse alternative ($H_1$) est qu'ils sont différents. $H_1: \pi \neq 0.18$.
+
+    \item \textbf{Déclarer la statistique de test.}
+    Nous comparons une proportion observée à une proportion théorique. Nous allons sur notre formulaire, page 4, section \textbf{4.2 Test de conformité sur les proportions}. La formule de la statistique est :
+    $T = \frac{P_n - \pi_0}{\sqrt{\frac{\pi_0(1-\pi_0)}{n}}}$.
+
+    \item \textbf{Énoncer la règle de décision et trouver la valeur critique.}
+    L'échantillon est grand ($n=250 > 30$). Le formulaire nous confirme que, si les conditions sont remplies, $T$ suit une loi Normale $\mathcal{N}(0,1)$.
+    Le risque est $\alpha=0.05$ et le test est bilatéral. Nous répartissons le risque des deux côtés. Nous cherchons donc la valeur $z$ telle que $\Pr(|Z| > z) = 0.05$. \textbf{En consultant la table des valeurs extrêmes de la loi normale}, nous trouvons la valeur critique bien connue : $1.96$.
+    Notre règle est donc : \textbf{Si $|t_{obs}| > 1.96$, on rejette $H_0$}.
+
+    \item \textbf{Calculer la statistique.}
+    D'abord, la proportion observée : $p = \frac{52}{250} = 0.208$.
+    Ensuite, on vérifie les conditions d'application avec $\pi_0$ : $n\pi_0 = 250 \times 0.18 = 45 \ge 5$ et $n(1-\pi_0) = 250 \times 0.82 = 205 \ge 5$. Les conditions sont valides.
+    On applique la formule :
+    $t_{obs} = \frac{0.208 - 0.18}{\sqrt{\frac{0.18(1-0.18)}{250}}} = \frac{0.028}{\sqrt{\frac{0.1476}{250}}} \approx \frac{0.028}{0.0243} \approx 1.15$.
+
+    \item \textbf{Conclure.}
+    Notre valeur calculée, $t_{obs} \approx 1.15$, est inférieure à la valeur critique de 1.96. Elle tombe dans la zone de non-rejet.
+    \textbf{Conclusion :} Nous ne rejetons pas l'hypothèse nulle. Bien que la proportion d'allergiques dans notre échantillon (20.8\%) soit plus élevée que la moyenne nationale (18\%), cette différence n'est pas suffisamment grande pour être considérée comme statistiquement significative. Cette étude ne permet pas de conclure que la proportion d'allergiques est différente chez les citadins.
+\end{enumerate}
+
+\subsection*{Exercice 3 : Le Test d'Homogénéité pour les Proportions}
+\textbf{Contexte :} On teste un répulsif à moustiques.
+Groupe 1 (sans répulsif) : $n_1=90$ individus, 63 ont été piqués ($k_1=63$).
+Groupe 2 (avec répulsif) : $n_2=85$ individus, 58 ont été piqués ($k_2=58$).
+La question est : "l'étude a-t-elle mis en évidence l'efficacité du répulsif ?". Appliquons notre méthode.
+
+\begin{enumerate}
+    \item \textbf{Identifier les hypothèses.}
+    Le mot clé est "efficacité". Un répulsif est efficace s'il \textit{diminue} la proportion de personnes piquées. La question est donc orientée. Notre test sera \textbf{unilatéral}.
+    L'hypothèse nulle ($H_0$) est celle de l'inefficacité : le répulsif ne change rien, les proportions de piqués dans les deux populations sont les mêmes. $H_0: \pi_1 = \pi_2$.
+    L'hypothèse alternative ($H_1$) est celle de l'efficacité : la proportion de piqués dans la population traitée (groupe 2) est inférieure à celle de la population non-traitée (groupe 1). $H_1: \pi_2 < \pi_1$, ce qui est équivalent à $\pi_1 > \pi_2$.
+
+    \item \textbf{Déclarer la statistique de test.}
+    Nous comparons deux proportions issues de deux échantillons indépendants. Nous consultons notre formulaire, page 4, section \textbf{4.3 Test d'homogénéité sur les proportions}.
+    La statistique de test est $T = \frac{P_1 - P_2}{\sqrt{P(1-P)(\frac{1}{n_1} + \frac{1}{n_2})}}$, où $P$ est la proportion globale si $H_0$ est vraie.
+
+    \item \textbf{Énoncer la règle de décision.}
+    Les tailles d'échantillons ($n_1=90, n_2=85$) sont grandes. Le formulaire nous confirme que, si les conditions sont remplies, $T$ suit une loi Normale $\mathcal{N}(0,1)$.
+    Notre test est unilatéral à droite ($H_1: \pi_1 > \pi_2$). Nous rejetterons donc $H_0$ uniquement si la différence observée $p_1 - p_2$ est grande et \textit{positive}.
+    Avec un risque $\alpha=0.05$, toute la zone de rejet est dans la queue de droite de la distribution. La valeur critique qui laisse 5\% de l'aire à sa droite est $z_{0.05} = 1.645$.
+    Notre règle est donc : \textbf{Si $t_{obs} > 1.645$, on rejette $H_0$}.
+
+    \item \textbf{Calculer la statistique.}
+    D'abord, les proportions observées dans nos échantillons :
+    $p_1 = k_1/n_1 = 63/90 = 0.70$ (70\% de piqués sans répulsif).
+    $p_2 = k_2/n_2 = 58/85 \approx 0.682$ (68.2\% de piqués avec répulsif).
+    Ensuite, l'estimation de la proportion commune sous $H_0$ :
+    $p = \frac{k_1+k_2}{n_1+n_2} = \frac{63+58}{90+85} = \frac{121}{175} \approx 0.691$.
+    Enfin, on assemble le tout dans la formule du test :
+    $t_{obs} = \frac{0.70 - 0.682}{\sqrt{0.691(1-0.691)(\frac{1}{90} + \frac{1}{85})}} = \frac{0.018}{\sqrt{0.213(0.0111 + 0.0118)}} \approx \frac{0.018}{0.070} \approx 0.257$.
+
+    \item \textbf{Conclure.}
+    Notre valeur calculée, $t_{obs} \approx 0.257$, est très largement inférieure à notre seuil critique de 1.645. Elle tombe en plein dans la zone de non-rejet.
+    \textbf{Conclusion :} Nous ne rejetons pas l'hypothèse nulle. La différence de 1.8\% observée entre les deux groupes est si faible qu'elle est parfaitement compatible avec l'hypothèse que le répulsif n'a en réalité aucun effet. Cette étude n'apporte aucune preuve de l'efficacité du répulsif.
+\end{enumerate}
+
+\section*{Partie 2 : Le Test du Khi-deux (55 min)}
+\teachernote{Faites une transition claire. "Nous avons maîtrisé les tests pour les moyennes et les proportions. Mais ces tests ne fonctionnent que pour des variables avec une ou deux catégories. Que faire si nous voulons comparer une répartition entière sur plusieurs catégories ?"}
+
+Imaginons que nous voulions vérifier si la répartition des groupes sanguins (A, B, AB, O) dans une population correspond à des proportions théoriques. Nous avons 4 catégories. Nos tests précédents sont inutilisables.
+Nous avons besoin d'un outil plus généraliste : le \textbf{test du Khi-deux ($\chi^2$)}.
+
+Prenez votre formulaire à la page 5, section \textbf{5. Tests statistiques sur répartitions}.
+La philosophie du test du Khi-deux est simple et élégante. Il ne regarde pas la différence de moyennes, mais une "distance" globale entre les effectifs que nous avons \textbf{observés} dans notre échantillon et les effectifs que nous aurions dû \textbf{théoriquement} obtenir si l'hypothèse nulle était vraie.
+
+La statistique de test, notée $Q$, est la somme, pour toutes les catégories, de :
+$$ Q = \sum_{\text{catégories}} \frac{(\text{Effectif Observé} - \text{Effectif Théorique})^2}{\text{Effectif Théorique}} $$
+Si $H_0$ est vraie, les observés seront proches des théoriques, et $Q$ sera petit. Si $H_0$ est fausse, l'écart sera grand, et $Q$ sera grand. C'est pourquoi le test du Khi-deux est toujours un test unilatéral à droite.
+
+\subsection*{Application : Exercice 1 du TD4 (Expérience de Mendel)}
+\textbf{Contexte :} Mendel a observé 556 pois et a compté les phénotypes : 315 [CR], 101 [Cr], 108 [cR], 32 [cr]. Sa théorie prédit des proportions de 9/16, 3/16, 3/16, 1/16.
+
+\begin{enumerate}
+    \item \textbf{Identifier les hypothèses.}
+    $H_0$: Les données sont conformes à la théorie. Les proportions dans la population sont bien $\pi_{CR}=9/16, \pi_{Cr}=3/16, \pi_{cR}=3/16, \pi_{cr}=1/16$.
+    $H_1$: La théorie est fausse. Au moins une de ces proportions est incorrecte.
+
+    \item \textbf{Déclarer la statistique de test.}
+    Nous testons la conformité d'une répartition observée à une répartition théorique. C'est un \textbf{test du $\chi^2$ de conformité}. Le formulaire (section \textbf{5.1}) nous donne la statistique $Q$.
+
+    \item \textbf{Énoncer la règle de décision.}
+    Le formulaire nous dit que si les conditions sont remplies, $Q$ suit une loi du $\chi^2$ à $k-1$ degrés de liberté (ddl), où $k$ est le nombre de catégories. Ici, $k=4$, donc nous avons $3$ ddl.
+    Le test est toujours unilatéral à droite. Nous cherchons dans la table du $\chi^2$ la valeur critique pour $\alpha=0.05$ et 3 ddl. La table nous donne $7.815$.
+    Notre règle : \textbf{Si $q_{obs} > 7.815$, on rejette $H_0$}.
+
+    \item \textbf{Calculer la statistique.}
+    D'abord, les effectifs théoriques. Le total est $n=556$.
+    Théorique [CR] = $556 \times 9/16 = 312.75$.
+    Théorique [Cr] = $556 \times 3/16 = 104.25$.
+    Théorique [cR] = $556 \times 3/16 = 104.25$.
+    Théorique [cr] = $556 \times 1/16 = 34.75$.
+    (Condition de validité : tous les effectifs théoriques sont $>5$. C'est le cas ici, donc le test est valide).
+
+    Maintenant, on calcule la "distance" $q_{obs}$ :
+    $q_{obs} = \frac{(315 - 312.75)^2}{312.75} + \frac{(101 - 104.25)^2}{104.25} + \frac{(108 - 104.25)^2}{104.25} + \frac{(32 - 34.75)^2}{34.75}$
+    $q_{obs} \approx 0.016 + 0.101 + 0.135 + 0.217 \approx 0.47$.
+
+    \item \textbf{Conclure.}
+    Notre valeur calculée $q_{obs} = 0.47$ est extraordinairement petite, et très, très loin de la valeur critique de 7.815. Elle est en plein dans la zone de non-rejet.
+    \textbf{Conclusion :} On ne rejette pas l'hypothèse nulle. L'adéquation entre les données observées par Mendel et les prédictions de sa théorie est excellente. L'écart minime observé est parfaitement compatible avec le simple hasard de l'échantillonnage. C'est une confirmation éclatante de son modèle.
+\end{enumerate}
+
+\section*{Conclusion et Prochaines Étapes}
+Aujourd'hui, nous avons solidifié notre méthode de travail pour tous les tests d'hypothèses, et je vous encourage à l'appliquer systématiquement. C'est votre filet de sécurité pour ne jamais vous perdre.
+
+Nous avons vu comment comparer deux proportions, une compétence essentielle. Et nous avons ouvert la porte à un outil encore plus général, le test du Khi-deux, qui permet de comparer des répartitions entières.
+
+La prochaine fois, nous verrons que ce même test du Khi-deux peut être utilisé pour deux autres questions fondamentales en biologie :
+\begin{enumerate}
+    \item Comparer la répartition d'une variable qualitative entre deux populations (test d'homogénéité du Khi-deux).
+    \item Tester s'il existe un lien, une association, entre deux variables qualitatives (test d'indépendance du Khi-deux).
+\end{enumerate}
+Merci de votre attention.
+
+\end{document}

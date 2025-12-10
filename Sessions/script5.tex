@@ -1,0 +1,225 @@
+\documentclass[12pt, a paper]{article}
+
+% --- PAQUETS ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\linespread{1.2}
+\usepackage{xcolor}
+\definecolor{brown}{rgb}{0.64, 0.16, 0.16}
+
+% --- ENVIRONNEMENT PERSONNALISÉ POUR LES MÉTA-INFORMATIONS ---
+\newenvironment{metadata}{%
+    \par\vspace{1ex}
+    \quote\small\color{gray}
+}{%
+    \par\nobreak\vspace{1ex}\centerline{\rule{0.5\linewidth}{0.4pt}}
+    \endquote
+    \vspace{2ex}
+}
+
+% --- COMMANDES PERSONNALISÉES POUR LES NOTES ---
+\newcommand{\slidenote}[1]{%
+    \par\vspace{1.5ex}%
+    \noindent\texttt{\small\color{gray}#1}\par\nopagebreak\vspace{1.5ex}%
+}
+% --- Note pour le professeur ---
+\newcommand{\teachernote}[1]{%
+    \par\vspace{1ex}\noindent\small\textsf{\color{brown}\textbf{Note au professeur :} #1}\par\vspace{1ex}%
+}
+
+% --- TITRE ---
+\title{Script Détaillé du Cours 5 : Les Tests d'Hypothèses en Action}
+\author{Jianyu MA}
+\date{Semestre 2025-26}
+
+% --- DÉBUT DU DOCUMENT ---
+\begin{document}
+
+\maketitle
+
+\begin{metadata}
+\subsection*{Plan de la Séance (Temps Estimés)}
+\begin{itemize}
+    \item Introduction : Devenir des Détectives de Données (5 min)
+    \item Partie 1 : Le Test de Conformité - Un échantillon face à une norme (55 min)
+        \begin{itemize}
+            \item Théorie : La Logique du Test d'Hypothèse (Diapos 13-16)
+            \item Application : Exercice 2, Questions 1 \& 2 (Test bilatéral, risques $\alpha$ et $\beta$)
+            \item Théorie : Le Test Unilatéral (Diapos 27-28)
+            \item Application : Exercice 2, Question 3 (Test unilatéral)
+            \item Théorie : Le Cas des Petits Échantillons (Diapo 25)
+            \item Application : Exercice 2, Question 4 (Test de Student)
+        \end{itemize}
+    \item Partie 2 : Le Test d'Homogénéité - Comparer deux groupes (55 min)
+        \begin{itemize}
+            \item Théorie : La Comparaison de Deux Moyennes (Diapos 29-31)
+            \item Application : Exercice 3 (Grands échantillons indépendants)
+            \item Application : Exercice 4 (Petits échantillons indépendants)
+        \end{itemize}
+    \item Conclusion et Synthèse (5 min)
+\end{itemize}
+\end{metadata}
+
+\section*{Introduction : Devenir des Détectives de Données}
+Bonjour à toutes et à tous. La dernière fois, nous avons vu comment estimer un paramètre inconnu avec un intervalle de confiance, notre première incursion dans le monde de l'inférence. Aujourd'hui, nous allons plus loin. Nous allons apprendre à utiliser les données pour prendre une décision.
+
+La question d'aujourd'hui est : "Comment savoir si une différence que j'observe est réelle, ou si elle est simplement due au hasard ?". Pour répondre à cette question, nous allons devenir des détectives de données, et notre outil principal sera le \textbf{test d'hypothèse}.
+Nous allons suivre une démarche très structurée, et pour chaque nouvelle idée théorique des diapositives, nous l'appliquerons immédiatement en résolvant les exercices du TD2.
+
+\section*{Partie 1 : Le Test de Conformité (55 min)}
+\teachernote{Commencez par la grande image. La logique du test est plus importante que les formules au début. L'analogie du procès judiciaire est très efficace pour cela.}
+
+\slidenote{Référence : Chapitre 3.pdf - Diapositives 13 à 16}
+Alors, quelle est la logique d'un test statistique ? C'est très similaire à un procès au tribunal.
+\begin{enumerate}
+    \item \textbf{L'Hypothèse Nulle ($H_0$)} : C'est le point de départ, le statu quo. C'est l'équivalent de la présomption d'innocence : "l'accusé est innocent jusqu'à preuve du contraire". En science, $H_0$ est toujours l'hypothèse de l'absence d'effet, de l'absence de différence. Par exemple, "$H_0$: ce médicament n'a aucun effet".
+    \item \textbf{L'Hypothèse Alternative ($H_1$)} : C'est ce que le chercheur veut prouver. C'est l'affirmation "l'accusé est coupable". Par exemple, "$H_1$: ce médicament a un effet".
+    \item \textbf{Les Données (l'échantillon)} : Ce sont les preuves que l'on apporte au procès.
+    \item \textbf{La Règle de Décision} : On va se poser la question clé : "Si l'accusé était vraiment innocent (si $H_0$ était vraie), quelle serait la probabilité d'observer des preuves aussi accablantes que les nôtres ?".
+    \item \textbf{Le Verdict} : Si cette probabilité est très faible (inférieure à un seuil qu'on appelle le \textbf{risque $\alpha$}, souvent 5\%), alors on considère qu'on a une preuve "au-delà du doute raisonnable". On \textbf{rejette l'hypothèse nulle} et on conclut en faveur de l'alternative.
+\end{enumerate}
+Appliquons cette logique tout de suite avec l'exercice 2.
+
+\subsection*{Application : Exercice 2, Questions 1 \& 2}
+\textbf{Contexte :} On sait que la moyenne d'hémoglobine dans la population est $\mu_0 = 15$. On observe un échantillon de $n=50$ cyclistes avec une moyenne $\overline{x}=15.8$ et un écart-type $s_x=2.35$.
+\begin{enumerate}
+    \item \textbf{Question 1 : Le taux d'hémoglobine des cyclistes est-il anormal ?}
+    
+    \teachernote{Décomposez la réponse en 5 étapes claires. C'est la méthode que les étudiants doivent acquérir.}
+    
+    \textbf{Étape 1 : Poser les hypothèses.}
+    L'hypothèse nulle ($H_0$) est l'absence d'anomalie : les cyclistes sont comme tout le monde. Donc, $H_0: \mu = 15$.
+    L'hypothèse alternative ($H_1$) est qu'ils sont anormaux, donc différents. On ne sait pas s'ils en ont plus ou moins. C'est donc un test \textbf{bilatéral}. $H_1: \mu \neq 15$.
+
+    \textbf{Étape 2 : Choisir la statistique de test.}
+    Nous avons un grand échantillon ($n=50 > 30$), nous allons donc utiliser la statistique de test qui suit (approximativement) une loi Normale centrée réduite $\mathcal{N}(0,1)$ sous $H_0$.
+    $T = \frac{\overline{X} - \mu_0}{S_x / \sqrt{n}}$.
+
+    \textbf{Étape 3 : Calculer la valeur observée du test.}
+    On remplace par les valeurs de notre échantillon :
+    $t_{obs} = \frac{15.8 - 15}{2.35 / \sqrt{50}} \approx \frac{0.8}{0.332} \approx 2.41$.
+
+    \textbf{Étape 4 : Définir la règle de décision.}
+    On nous donne un risque d'erreur $\alpha = 0.05$. Comme le test est bilatéral, on répartit ce risque des deux côtés de la distribution : 2.5\% à gauche et 2.5\% à droite. Les valeurs critiques qui délimitent cette zone de rejet sont donc $-1.96$ et $+1.96$. Si notre $t_{obs}$ est plus grand que 1.96 ou plus petit que -1.96, on rejette $H_0$.
+
+    \textbf{Étape 5 : Conclure.}
+    Notre valeur est $t_{obs} = 2.41$. Elle est supérieure à 1.96, donc elle tombe dans la zone de rejet.
+    \textbf{Conclusion :} Au risque d'erreur de 5\%, nous rejetons l'hypothèse nulle. Cela signifie que la différence observée entre la moyenne des cyclistes (15.8) et la norme (15) est trop grande pour être due au simple hasard de l'échantillonnage. Nous concluons que le taux d'hémoglobine des cyclistes est significativement différent de celui de la population générale.
+
+    \item \textbf{Question 2 : Représenter les risques $\alpha$ et $\beta$.}
+    
+    \teachernote{C'est un point très conceptuel. Un dessin au tableau est indispensable ici.}
+    
+    Le risque $\alpha$ (risque de 1ère espèce) est la probabilité de rejeter $H_0$ alors qu'elle est vraie. C'est la probabilité de "condamner un innocent". Dans notre dessin de la loi sous $H_0$, c'est la petite aire que nous avons coloriée en rouge dans les queues : notre zone de rejet.
+    
+    Le risque $\beta$ (risque de 2ème espèce) est plus subtil. C'est la probabilité de \textbf{ne pas rejeter} $H_0$ alors qu'elle est fausse. C'est la probabilité "d'acquitter un coupable". Pour le visualiser, il faut imaginer une réalité alternative où $H_1$ est vraie (par exemple, la vraie moyenne des cyclistes est en fait $\mu_1 = 15.7$). On dessine alors la courbe de distribution de nos moyennes d'échantillon centrée sur ce $\mu_1$. Le risque $\beta$ est l'aire de cette deuxième courbe qui tombe dans la zone de non-rejet de $H_0$.
+    
+    Si on rend $\alpha$ très petit (on devient très exigeant pour condamner), notre zone de rejet rétrécit. Mécaniquement, la zone de non-rejet s'agrandit, et donc l'aire $\beta$ (la probabilité d'acquitter un coupable) augmente. Il y a un compromis inévitable entre les deux risques.
+\end{enumerate}
+
+\slidenote{Référence : Chapitre 3.pdf - Diapositives 27-28}
+Parfois, la question scientifique nous oriente. Si on teste un médicament pour \textit{augmenter} une valeur, on ne s'intéresse qu'à une seule direction. C'est un test \textbf{unilatéral}.
+
+\subsection*{Application : Exercice 2, Question 3}
+\textbf{Contexte :} Un produit est censé \textit{augmenter} l'hémoglobine. $n=40$, $\overline{y}=15.6$, $s_y=1.5$.
+\begin{enumerate}
+    \setcounter{enumi}{2}
+    \item \textbf{Le produit est-il efficace ?}
+    
+    \textbf{Étape 1 : Poser les hypothèses.}
+    $H_0$: Le produit est inefficace. $H_0: \tilde{\mu} = 15$.
+    $H_1$: Le produit est efficace, il \textit{augmente} le taux. L'hypothèse alternative est donc dirigée : $H_1: \tilde{\mu} > 15$.
+    
+    \textbf{Étape 2 et 3 : Calculer la statistique de test.}
+    L'échantillon est grand ($n=40>30$). Le calcul est identique :
+    $t_{obs} = \frac{15.6 - 15}{1.5 / \sqrt{40}} \approx 2.53$.
+
+    \textbf{Étape 4 : Règle de décision.}
+    Le test est unilatéral à droite. Tout notre risque $\alpha=0.05$ est concentré dans la queue de droite. La valeur critique qui laisse 5\% à sa droite n'est plus 1.96, mais $1.645$. On rejette $H_0$ si $t_{obs} > 1.645$.
+
+    \textbf{Étape 5 : Conclure.}
+    $2.53 > 1.645$. On rejette $H_0$.
+    \textbf{Conclusion :} Au risque de 5\%, nous concluons que le produit est efficace pour augmenter significativement le taux d'hémoglobine.
+\end{enumerate}
+
+\slidenote{Référence : Chapitre 3.pdf - Diapositive 25}
+Et si l'échantillon est petit ($n < 30$) ? Nous savons déjà ce qu'il faut faire : utiliser la loi de Student.
+
+\subsection*{Application : Exercice 2, Question 4}
+\textbf{Contexte :} On refait la question 1 avec $n=20$ cyclistes.
+\begin{enumerate}
+    \setcounter{enumi}{3}
+    \item \textbf{Hypothèse supplémentaire :} Pour que le test soit valide, nous devons supposer que la distribution de l'hémoglobine chez les cyclistes suit une loi Normale.
+    \item \textbf{Règle de décision :} C'est la seule chose qui change. Au lieu de comparer notre $t_{obs}$ à 1.96, nous le comparons à la valeur critique de la loi de Student pour un test bilatéral à $\alpha=0.05$ avec $n-1=19$ degrés de liberté. La table nous donne $t_{(19;0.05)} = 2.093$. Le seuil est plus élevé, nous sommes plus prudents.
+\end{enumerate}
+
+\section*{Partie 2 : Le Test d'Homogénéité (55 min)}
+\teachernote{Faites une transition claire. "Jusqu'à présent, nous avons comparé un échantillon à une norme théorique. Mais le plus souvent en biologie, on compare deux groupes expérimentaux entre eux. C'est le test d'homogénéité."}
+
+\slidenote{Référence : Chapitre 3.pdf - Diapositives 29 à 31}
+La question devient : "La différence entre les moyennes de mes deux échantillons, $\overline{x_1}$ et $\overline{x_2}$, est-elle assez grande pour que je puisse conclure que les populations dont ils proviennent sont réellement différentes ?".
+
+L'hypothèse nulle est donc presque toujours $H_0: \mu_1 = \mu_2$ (ou $\mu_1 - \mu_2 = 0$).
+La statistique de test est un peu plus compliquée car elle doit tenir compte de la variabilité des deux échantillons, mais la logique reste la même.
+
+\subsection*{Application : Exercice 3}
+\textbf{Contexte :} On compare le temps de réaction de deux groupes : $n_1=52$ jeunes de 30 ans ($m_1=255, s_1=32$) et $n_2=35$ personnes de 55 ans ($m_2=264, s_2=35.5$).
+\begin{enumerate}
+    \item \textbf{Étape 1 : Hypothèses.}
+    $H_0$: L'âge n'a pas d'effet, les temps de réaction moyens sont les mêmes. $H_0: \mu_1 = \mu_2$.
+    $H_1$: L'âge a un effet. $H_1: \mu_1 \neq \mu_2$.
+
+    \item \textbf{Étape 2 : Statistique de test.}
+    Les deux échantillons sont grands ($n_1 > 30, n_2 > 30$). On utilise la statistique de test qui suit une loi Normale :
+    $T = \frac{M_1 - M_2}{\sqrt{\frac{S_1^2}{n_1} + \frac{S_2^2}{n_2}}}$.
+
+    \item \textbf{Étape 3 : Calcul.}
+    $t_{obs} = \frac{255 - 264}{\sqrt{\frac{32^2}{52} + \frac{35.5^2}{35}}} = \frac{-9}{\sqrt{19.69 + 36}} = \frac{-9}{\sqrt{55.69}} \approx \frac{-9}{7.46} \approx -1.206$.
+
+    \item \textbf{Étape 4 : Règle de décision.}
+    Test bilatéral, $\alpha=0.05$. Les valeurs critiques sont -1.96 et +1.96.
+
+    \item \textbf{Étape 5 : Conclusion.}
+    $|t_{obs}| = 1.206$, ce qui est inférieur à 1.96. Notre valeur tombe dans la zone de non-rejet.
+    \textbf{Conclusion :} Bien qu'il y ait une différence dans nos échantillons (255 vs 264), cette différence n'est pas assez grande pour être statistiquement significative. Nous ne pouvons pas rejeter l'hypothèse nulle. Nous n'avons pas prouvé qu'il y a une différence de temps de réaction entre les deux groupes d'âge.
+\end{enumerate}
+
+\subsection*{Application : Exercice 4}
+\textbf{Contexte :} On compare la durée de sommeil de $n_x=15$ chats de campagne et $n_y=16$ chats de ville.
+Ce sont des petits échantillons ! Nous savons que nous aurons besoin de la loi de Student et des hypothèses qui vont avec (normalité des populations et égalité des variances).
+
+\begin{enumerate}
+    \item \textbf{Étape 1 : Calculs préliminaires pour les chats de ville.}
+    $\overline{y} = \frac{310}{16} = 19.375$ heures.
+    $s_y^2 = \frac{1}{15} (6128 - 16 \times 19.375^2) \approx 9.31$. $s_y \approx 3.05$ heures.
+
+    \item \textbf{Étape 2 : Le test d'homogénéité.}
+    \textbf{Hypothèses :} $H_0: \mu_x = \mu_y$ vs $H_1: \mu_x \neq \mu_y$.
+    \textbf{Statistique de test :} Comme les échantillons sont petits, on utilise le test de Student pour échantillons indépendants. Il faut d'abord calculer une estimation de la variance commune ("variance poolée") :
+    $s_p^2 = \frac{(n_x-1)s_x^2 + (n_y-1)s_y^2}{n_x+n_y-2} = \frac{14 \times 2.9^2 + 15 \times 9.31}{15+16-2} = \frac{117.74 + 139.65}{29} \approx 8.875$.
+    Ensuite, on calcule $t_{obs}$:
+    $t_{obs} = \frac{\overline{x} - \overline{y}}{\sqrt{s_p^2 (\frac{1}{n_x} + \frac{1}{n_y})}} = \frac{16.44 - 19.375}{\sqrt{8.875 (\frac{1}{15} + \frac{1}{16})}} \approx \frac{-2.935}{\sqrt{1.14}} \approx -2.75$.
+
+    \textbf{Règle de décision :} On cherche la valeur critique dans la table de Student avec $n_x+n_y-2 = 29$ ddl pour $\alpha=0.05$ (bilatéral). La table nous donne $t_{(29;0.05)} = 2.045$.
+
+    \textbf{Conclusion :} $|t_{obs}| = 2.75$, ce qui est supérieur à 2.045. On rejette $H_0$.
+    \textbf{Conclusion :} Au risque de 5\%, nous concluons qu'il y a une différence significative dans la durée de sommeil entre les chats de ville et les chats de campagne.
+\end{enumerate}
+
+\section*{Conclusion et Synthèse}
+Aujourd'hui, nous avons fait un travail de détective. Nous avons appris la méthode rigoureuse pour utiliser des données afin de prendre des décisions.
+
+Retenez la structure :
+\begin{itemize}
+    \item \textbf{Quelle est la question ?} Comparer un groupe à une norme (test de conformité) ou deux groupes entre eux (test d'homogénéité) ?
+    \item \textbf{Quelle est la taille des échantillons ?} Grands (Loi Normale) ou petits (Loi de Student, avec des hypothèses plus fortes) ?
+    \item \textbf{Quelle est l'alternative ?} Cherche-t-on une différence quelconque (bilatéral) ou dans une direction précise (unilatéral) ?
+\end{itemize}
+En répondant à ces trois questions, vous saurez toujours quel outil utiliser.
+La prochaine fois, nous verrons que toute cette logique s'applique de manière presque identique lorsque nous ne travaillons plus avec des moyennes, mais avec des pourcentages et des proportions, ce qui nous amènera au Chapitre 4.
+
+\end{document}

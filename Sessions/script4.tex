@@ -1,0 +1,253 @@
+\documentclass[12pt, a4paper]{article}
+
+% --- PAQUETS ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\linespread{1.2}
+\usepackage{xcolor}
+\definecolor{brown}{rgb}{0.64, 0.16, 0.16}
+
+% --- ENVIRONNEMENT PERSONNALISÉ POUR LES MÉTA-INFORMATIONS ---
+\newenvironment{metadata}{%
+    \par\vspace{1ex}
+    \quote\small\color{gray}
+}{%
+    \par\nobreak\vspace{1ex}\centerline{\rule{0.5\linewidth}{0.4pt}}
+    \endquote
+    \vspace{2ex}
+}
+
+% --- COMMANDES PERSONNALISÉES POUR LES NOTES ---
+\newcommand{\slidenote}[1]{%
+    \par\vspace{1.5ex}%
+    \noindent\texttt{\small\color{gray}#1}\par\nopagebreak\vspace{1.5ex}%
+}
+% --- Note pour le professeur ---
+\newcommand{\teachernote}[1]{%
+    \par\vspace{1ex}\noindent\small\textsf{\color{brown}\textbf{Note au professeur :} #1}\par\vspace{1ex}%
+}
+
+% --- TITRE ---
+\title{Script Détaillé du Cours 4 : L'Inférence Statistique en Pratique}
+\author{Jianyu MA}
+\date{Semestre 2025-26}
+
+% --- DÉBUT DU DOCUMENT ---
+\begin{document}
+
+\maketitle
+
+\begin{metadata}
+\subsection*{Plan de la Séance (Temps Estimés)}
+\begin{itemize}
+    \item Introduction : La Mission d'Aujourd'hui (5 min)
+    \item Partie 1 : L'Estimation et la Marge d'Erreur (55 min)
+        \begin{itemize}
+            \item Théorie : De la population à l'échantillon (Diapos 2-6)
+            \item Pratique : Exercice 1, Question 1 (Estimation ponctuelle)
+            \item Théorie : L'intervalle de confiance pour grands échantillons (Diapo 11)
+            \item Pratique : Exercice 1, Question 2 (IC à 95\% et 98\%)
+            \item Théorie : Le cas des petits échantillons et la loi de Student (Diapo 12)
+            \item Pratique : Exercice 1, Question 3 (IC avec la loi de Student)
+        \end{itemize}
+    \item Partie 2 : Prendre une Décision avec les Données - Les Tests d'Hypothèses (55 min)
+        \begin{itemize}
+            \item Théorie : La logique du test d'hypothèse (Diapos 13-16)
+            \item Pratique : Exercice 2, Question 1 (Test de conformité bilatéral)
+            \item Théorie : Tests unilatéraux (Diapos 27-28)
+            \item Pratique : Exercice 2, Question 3 (Test unilatéral)
+            \item Théorie : Le cas des petits échantillons (Diapo 25)
+            \item Pratique : Exercice 2, Question 4 (Test avec la loi de Student)
+        \end{itemize}
+    \item Conclusion et Prochaines Étapes (5 min)
+\end{itemize}
+\end{metadata}
+
+\section*{Introduction : La Mission d'Aujourd'hui}
+Bonjour à toutes et à tous. La semaine dernière, nous avons construit un pont entre le monde des probabilités et celui de la statistique. Aujourd'hui, nous allons traverser ce pont.
+
+Notre mission est de transformer la théorie en pratique. Nous allons apprendre les deux activités principales du statisticien :
+\begin{enumerate}
+    \item \textbf{Estimer :} Comment donner une valeur plausible pour un paramètre inconnu, avec une marge d'erreur honnête ? C'est le rôle des \textbf{intervalles de confiance}.
+    \item \textbf{Décider :} Comment utiliser des données pour valider ou rejeter une affirmation scientifique ? C'est le rôle des \textbf{tests d'hypothèses}.
+\end{enumerate}
+Pour chaque concept théorique que nous verrons sur les diapositives, nous l'appliquerons immédiatement en résolvant un exercice du TD2.
+
+\section*{Partie 1 : L'Estimation et la Marge d'Erreur (55 min)}
+
+\slidenote{Référence : Chapitre 3.pdf - Diapositives 2 à 6}
+\teachernote{Commencez par poser le décor. La distinction population/échantillon est le concept fondamental de toute la statistique.}
+
+Alors, commençons par le début. Quel est le problème fondamental de la statistique ? C'est simple : nous voulons connaître une vérité sur une \textbf{population} immense et inaccessible. Par exemple, le taux moyen d'acide palmitique, $\mu$, dans la bosse de TOUS les dromadaires du monde. C'est impossible à mesurer.
+
+Alors, que faisons-nous ? Nous prenons un \textbf{échantillon}, un petit groupe que nous espérons représentatif. Sur cet échantillon, nous pouvons tout calculer : la moyenne $\overline{x}$, l'écart-type $s_x$.
+
+Le passage de $\overline{x}$ à $\mu$ est ce qu'on appelle l'inférence. Pour faire ce saut de manière rigoureuse, nous avons besoin de vocabulaire précis.
+\begin{itemize}
+    \item Le \textbf{paramètre} ($\mu$, $\sigma$) : La vérité inconnue dans la population. C'est notre cible.
+    \item L'\textbf{estimation} ($\overline{x}$, $s_x$) : Un \textbf{nombre} concret, calculé à partir de notre échantillon. C'est notre "meilleur tir".
+    \item L'\textbf{estimateur} ($\overline{X}$ ou $M_n$) : C'est le processus, la "recette de cuisine". C'est une variable aléatoire qui dit : "Prends un échantillon de taille $n$ et calcule sa moyenne". Notre $\overline{x}$ est juste un résultat possible de cette recette.
+\end{itemize}
+Pourquoi cette distinction est-elle si importante ? Parce que c'est sur l'estimateur $\overline{X}$ que nos beaux théorèmes du chapitre 2 s'appliquent ! Nous savons que $\overline{X}$ suit une loi normale si $n$ est grand. C'est la clé de tout.
+
+\teachernote{Transition vers le TD.}
+Appliquons cela immédiatement. Regardons l'exercice 1.
+
+\subsection*{Pratique : Exercice 1, Question 1 (Estimation ponctuelle)}
+On nous dit qu'on a un échantillon de $n=120$ dromadaires. On nous donne deux informations : $\sum x_k = 36$ et $\sum x_k^2 = 12$. La question est de donner une estimation de $\mu$ et $\sigma$.
+
+\begin{itemize}
+    \item \textbf{Estimation de $\mu$ :} L'estimateur naturel de la moyenne de la population $\mu$ est la moyenne de l'échantillon $\overline{x}$.
+    $\overline{x} = \frac{1}{n}\sum x_k = \frac{36}{120} = 0.3$.
+    Notre meilleure estimation pour le taux moyen d'acide palmitique dans la population de tous les dromadaires est donc de 0.3. On appelle cela une \textbf{estimation ponctuelle}.
+    
+    \item \textbf{Estimation de $\sigma$ :} Pour estimer l'écart-type de la population $\sigma$, nous devons d'abord estimer la variance $\sigma^2$.
+    \slidenote{Référence : Chapitre 3.pdf - Diapositives 8 \& 9}
+    Nous utilisons l'estimateur \textbf{sans biais} de la variance, noté $s_x^2$ (ou $S_n^2$ dans le cours). La formule est $s_x^2 = \frac{1}{n-1} \left( \sum x_k^2 - n\overline{x}^2 \right)$. Le $\frac{1}{n-1}$ au lieu de $\frac{1}{n}$ est une "correction" mathématique pour s'assurer que notre estimateur vise juste en moyenne.
+    
+    Appliquons la formule :
+    $s_x^2 = \frac{1}{120-1} \left( 12 - 120 \times (0.3)^2 \right) = \frac{1}{119} (12 - 120 \times 0.09) = \frac{1}{119} (12 - 10.8) = \frac{1.2}{119} \approx 0.01008$.
+    
+    Ceci est l'estimation de la variance. Pour l'écart-type, on prend la racine carrée :
+    $s_x = \sqrt{0.01008} \approx 0.1004$.
+\end{itemize}
+
+\slidenote{Référence : Chapitre 3.pdf - Diapositive 11}
+\teachernote{Transition vers l'intervalle de confiance.}
+Nous avons donc notre meilleure estimation : $\mu \approx 0.3$. Mais sommes-nous sûrs que la vraie valeur est exactement 0.3 ? Certainement pas. C'est juste le résultat de notre échantillon. Un autre échantillon aurait donné 0.29 ou 0.31. Nous avons besoin d'une marge d'erreur. C'est le rôle de l'intervalle de confiance.
+
+La logique est la suivante : puisque $n=120$ est grand, le TCL nous dit que la distribution de toutes les moyennes d'échantillons possibles $\overline{X}$ suit une loi normale. Nous savons donc que 95\% de ces moyennes se trouvent dans l'intervalle $[\mu \pm 1.96 \frac{\sigma}{\sqrt{n}}]$.
+En retournant cet argument, on peut construire un intervalle autour de notre $\overline{x}$ qui a 95\% de chances de "capturer" la vraie moyenne $\mu$. La formule est :
+$\displaystyle IC_{95\%}(\mu) = \left[\overline{x} \pm 1.96 \frac{s_x}{\sqrt{n}}\right]$.
+
+\subsection*{Pratique : Exercice 1, Question 2 (IC à 95\% et 98\%)}
+\begin{itemize}
+    \item \textbf{Intervalle de confiance à 95\% :}
+    Nous avons tout ce qu'il nous faut : $\overline{x}=0.3$, $s_x \approx 0.1004$, $n=120$. Le $z_{\alpha/2}$ pour 95\% est 1.96.
+    La marge d'erreur est $1.96 \times \frac{0.1004}{\sqrt{120}} \approx 1.96 \times \frac{0.1004}{10.95} \approx 0.0179$.
+    L'intervalle est donc $[0.3 - 0.0179, 0.3 + 0.0179] = [0.2821, 0.3179]$.
+    \textbf{Interprétation :} Nous sommes confiants à 95\% que le vrai taux moyen d'acide palmitique pour tous les dromadaires se situe entre 28.2\% et 31.8\%.
+
+    \item \textbf{Intervalle de confiance à 98\% :}
+    Si nous voulons être plus confiants, nous devons prendre une marge plus grande. Pour 98\% de confiance, il reste 2\% à l'extérieur, soit 1\% dans chaque queue. Nous cherchons le $z$ tel que $\Pr(Z > z) = 0.01$, soit $\Pr(Z \le z)=0.99$. La table nous donne $z_{0.01} \approx 2.33$.
+    La nouvelle marge d'erreur est $2.33 \times \frac{0.1004}{\sqrt{120}} \approx 0.0213$.
+    L'intervalle est $[0.3 - 0.0213, 0.3 + 0.0213] = [0.2787, 0.3213]$.
+    L'intervalle est plus large, ce qui est logique : pour être plus sûr de capturer la vraie valeur, il faut un filet plus grand.
+\end{itemize}
+
+\slidenote{Référence : Chapitre 3.pdf - Diapositive 12}
+\teachernote{C'est un point crucial. Insistez sur le 'prix à payer' pour avoir un petit échantillon.}
+Très bien, mais que se passe-t-il si notre échantillon est petit ? Si $n < 30$, le Théorème Central Limite ne nous garantit plus que la distribution de $\overline{X}$ est normale. De plus, notre estimation de l'écart-type $s_x$ est moins fiable. Nous avons deux incertitudes : celle sur la moyenne et celle sur l'écart-type.
+
+Pour gérer cette double incertitude, nous ne pouvons plus utiliser la loi Normale. Nous devons utiliser une loi qui lui ressemble mais qui est plus "prudente", avec des queues plus épaisses pour tenir compte de l'incertitude supplémentaire. Cette loi est la \textbf{loi de Student}.
+
+Elle dépend d'un paramètre appelé "degrés de liberté", qui est $n-1$. La formule de l'intervalle de confiance est presque la même, on remplace juste le $z$ de la loi Normale par le $t$ de la loi de Student :
+$\displaystyle IC(\mu) = \left[\overline{x} \pm t_{(n-1;\alpha)} \frac{s_x}{\sqrt{n}}\right]$.
+
+\subsection*{Pratique : Exercice 1, Question 3 (Petit échantillon)}
+On imagine maintenant un petit échantillon de $n=17$ dromadaires. $\sum x_k = 5.4$ et $\sum x_k^2 = 2.23$. On suppose que la loi de base est normale.
+
+\begin{itemize}
+    \item \textbf{Étape 1 : Calculer $\overline{x}$ et $s_x$}
+    $\overline{x} = \frac{5.4}{17} \approx 0.3176$.
+    $s_x^2 = \frac{1}{16} \left( 2.23 - 17 \times (0.3176)^2 \right) \approx \frac{1}{16} (2.23 - 1.714) \approx 0.03225$.
+    $s_x = \sqrt{0.03225} \approx 0.1796$.
+
+    \item \textbf{Étape 2 : Trouver la valeur de t dans la table de Student}
+    Nous voulons un IC à 95\%. Le risque $\alpha$ est de 5\%. Les degrés de liberté (ddl) sont $n-1=16$.
+    On cherche dans la table de Student la valeur pour $\alpha=0.05$ et 16 ddl. La table nous donne $t_{(16;0.05)} = 2.120$.
+    Remarquez que 2.120 est plus grand que 1.96. C'est le "prix de la prudence" que nous payons pour avoir un petit échantillon.
+
+    \item \textbf{Étape 3 : Calculer l'intervalle}
+    Marge d'erreur : $2.120 \times \frac{0.1796}{\sqrt{17}} \approx 2.120 \times \frac{0.1796}{4.123} \approx 0.0922$.
+    Intervalle : $[0.3176 - 0.0922, 0.3176 + 0.0922] = [0.2254, 0.4098]$.
+\end{itemize}
+
+\section*{Partie 2 : Prendre une Décision - Les Tests d'Hypothèses (55 min)}
+
+\slidenote{Référence : Chapitre 3.pdf - Diapositives 13 à 16}
+\teachernote{Utilisez l'analogie du procès judiciaire. C'est extrêmement efficace.}
+Maintenant, passons au deuxième grand outil de l'inférence. L'intervalle de confiance nous donne une plage de valeurs plausibles. Le test d'hypothèse nous permet de prendre une décision sur une affirmation précise.
+
+La logique d'un test statistique est très similaire à celle d'un procès judiciaire.
+\begin{itemize}
+    \item On a une hypothèse de base, qu'on appelle \textbf{l'hypothèse nulle ($H_0$)}. C'est l'équivalent de "l'accusé est innocent". C'est le statu quo, l'absence d'effet. Par exemple, "$H_0$: le nouveau traitement n'a aucun effet".
+    \item On a une \textbf{hypothèse alternative ($H_1$)}, qui est ce que le chercheur espère prouver. C'est l'équivalent de "l'accusé est coupable". Par exemple, "$H_1$: le traitement a un effet".
+    \item On collecte des données (l'échantillon), qui sont les "preuves".
+    \item On va ensuite calculer la probabilité d'observer des preuves aussi "extrêmes" que les nôtres, \textbf{SI l'hypothèse nulle était vraie}. C'est la fameuse p-valeur.
+    \item Si cette probabilité est très faible (typiquement, moins de 5\%), on se dit que nos données sont trop improbables sous $H_0$. On \textbf{rejette $H_0$} et on conclut en faveur de $H_1$. On a une "preuve au-delà du doute raisonnable".
+\end{itemize}
+La démarche est toujours la même : on pose les hypothèses, on calcule une statistique de test à partir des données, et on la compare à une valeur critique pour prendre une décision.
+
+\subsection*{Pratique : Exercice 2, Question 1 (Test de conformité bilatéral)}
+Le contexte : le taux d'hémoglobine moyen chez l'homme est $\mu_0=15$. Un échantillon de $n=50$ cyclistes a une moyenne $\overline{x}=15.8$ et un écart-type $s_x=2.35$. Les cyclistes sont-ils "anormaux" ?
+
+\begin{itemize}
+    \item \textbf{Étape 1 : Poser les hypothèses}
+    $H_0$: "Les cyclistes sont normaux", c'est-à-dire que leur moyenne est la même que celle de la population générale. $H_0: \mu = 15$.
+    $H_1$: "Les cyclistes sont anormaux", leur moyenne est différente. $H_1: \mu \neq 15$. C'est un test \textbf{bilatéral}, on ne préjuge pas si c'est plus ou moins.
+
+    \item \textbf{Étape 2 : Calculer la statistique de test}
+    Puisque $n=50$ est grand, on utilise la statistique $Z$ (ou $T$ qui suit une loi normale) :
+    $t_{obs} = \frac{\overline{x} - \mu_0}{s_x / \sqrt{n}} = \frac{15.8 - 15}{2.35 / \sqrt{50}} = \frac{0.8}{2.35 / 7.07} \approx \frac{0.8}{0.332} \approx 2.41$.
+
+    \item \textbf{Étape 3 : Règle de décision}
+    On fixe un risque $\alpha = 0.05$. Pour un test bilatéral, la zone de rejet est aux deux extrêmes de la loi normale. Les valeurs critiques sont -1.96 et +1.96. Si notre $t_{obs}$ tombe en dehors de cet intervalle, on rejette $H_0$.
+
+    \item \textbf{Étape 4 : Conclusion}
+    Notre valeur observée est $t_{obs}=2.41$. C'est plus grand que 1.96. Notre résultat tombe dans la zone de rejet.
+    \textbf{Conclusion :} Au risque de 5\%, nous rejetons l'hypothèse nulle. Les données suggèrent que le taux d'hémoglobine moyen des cyclistes est significativement différent de celui de la population générale.
+\end{itemize}
+
+\slidenote{Référence : Chapitre 3.pdf - Diapositives 27-28}
+Parfois, une question scientifique n'est pas "est-ce différent ?" mais "est-ce meilleur ?" ou "est-ce pire ?". Dans ce cas, l'hypothèse alternative n'est plus bilatérale ($\neq$), mais \textbf{unilatérale} ($>$ ou $<$). La zone de rejet n'est alors plus répartie dans les deux queues, mais concentrée d'un seul côté.
+
+\subsection*{Pratique : Exercice 2, Question 3 (Test unilatéral)}
+Un chercheur teste un produit censé \textit{augmenter} le taux d'hémoglobine. $n=40$, $\overline{y}=15.6$, $s_y=1.5$. Le produit est-il efficace ?
+
+\begin{itemize}
+    \item \textbf{Étape 1 : Poser les hypothèses}
+    $H_0$: Le produit est inefficace. $H_0: \tilde{\mu} = 15$.
+    $H_1$: Le produit est efficace, il augmente le taux. $H_1: \tilde{\mu} > 15$. Le choix de cette hypothèse alternative est dicté par la question scientifique.
+
+    \item \textbf{Étape 2 : Calculer la statistique de test}
+    $t_{obs} = \frac{15.6 - 15}{1.5 / \sqrt{40}} = \frac{0.6}{1.5 / 6.32} \approx \frac{0.6}{0.237} \approx 2.53$.
+
+    \item \textbf{Étape 3 : Règle de décision}
+    Pour un test unilatéral à droite avec $\alpha=0.05$, toute la zone de rejet de 5\% est dans la queue de droite. La valeur critique n'est plus 1.96, mais la valeur $z$ qui laisse 5\% à sa droite, soit $z=1.645$.
+
+    \item \textbf{Étape 4 : Conclusion}
+    Notre valeur observée est $t_{obs}=2.53$. C'est plus grand que 1.645. On rejette $H_0$.
+    \textbf{Conclusion :} Au risque de 5\%, les données supportent l'hypothèse que le produit est efficace pour augmenter le taux d'hémoglobine.
+\end{itemize}
+
+\slidenote{Référence : Chapitre 3.pdf - Diapositive 25}
+Et si l'échantillon est petit ($n < 30$) ? C'est la même logique que pour les intervalles de confiance. On doit utiliser la loi de Student et sa table.
+
+\subsection*{Pratique : Exercice 2, Question 4 (Test avec la loi de Student)}
+On refait la question 1 avec seulement $n=20$ cyclistes.
+
+\begin{itemize}
+    \item \textbf{Hypothèse supplémentaire :} Pour utiliser la loi de Student, on doit supposer que la distribution du taux d'hémoglobine dans la population des cyclistes est (approximativement) normale.
+    \item \textbf{Hypothèses :} $H_0: \mu = 15$ vs $H_1: \mu \neq 15$.
+    \item \textbf{Statistique de test :} Le calcul de $t_{obs}$ est le même (en supposant les mêmes $\overline{x}$ et $s_x$).
+    \item \textbf{Règle de décision :} C'est ici que ça change. On cherche la valeur critique dans la table de Student pour un test bilatéral à $\alpha=0.05$, avec $n-1=19$ degrés de liberté. La table nous donne $t_{(19;0.05)} = 2.093$.
+    \item \textbf{Conclusion :} Si notre $t_{obs}$ est supérieur à 2.093 ou inférieur à -2.093, on rejette $H_0$. Remarquez que le seuil est plus exigeant qu'avec la loi normale (2.093 vs 1.96), car on est plus incertain.
+\end{itemize}
+
+\section*{Conclusion et Prochaines Étapes}
+Aujourd'hui, nous avons mis en pratique les concepts les plus importants de l'inférence statistique. Vous avez appris à :
+\begin{enumerate}
+    \item Calculer une estimation ponctuelle et un intervalle de confiance pour une moyenne.
+    \item Comprendre la différence cruciale entre un grand échantillon (Loi Normale) et un petit échantillon (Loi de Student).
+    \item Mener un test d'hypothèse pour décider si la moyenne d'un échantillon est significativement différente d'une valeur de référence.
+\end{enumerate}
+Ce sont des compétences fondamentales. La prochaine fois, nous continuerons le TD2 et nous étendrons cette logique pour comparer les moyennes de \textbf{deux} échantillons entre elles (Exercices 3 et 4). C'est une situation que vous rencontrerez constamment en biologie.
+
+Merci de votre attention, et n'hésitez pas à commencer à regarder les exercices suivants.
+
+\end{document}
