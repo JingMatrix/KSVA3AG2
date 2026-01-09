@@ -1,0 +1,385 @@
+\documentclass[11pt, a4paper]{amsart}
+
+% --- PREAMBLE SIMPLIFIÉ ---
+\usepackage[french]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{geometry}
+\usepackage{eurosym} % For the euro symbol if needed, good practice.
+
+% Page geometry
+\geometry{
+    a4paper,
+    left=2cm,
+    right=2cm,
+    top=2.5cm,
+    bottom=2.5cm
+}
+
+% Theorem-like environments for definitions, theorems, etc.
+\newtheorem{thm}{Théorème}[section]
+\newtheorem{cor}[thm]{Corollaire}
+\newtheorem{lem}[thm]{Lemme}
+\newtheorem{prop}[thm]{Proposition}
+\theoremstyle{definition}
+\newtheorem{defn}[thm]{Définition}
+\theoremstyle{remark}
+\newtheorem{rem}[thm]{Remarque}
+\numberwithin{equation}{section}
+\newtheorem{example}[thm]{Exemple}
+
+% Custom environment for solutions
+\newenvironment{sol}
+    {\par\vspace{10pt}\noindent\rule{\linewidth}{0.4pt}\par\nobreak\textbf{\large Correction :}\par\nobreak}
+    {\par\noindent\rule{\linewidth}{0.4pt}\par\vspace{10pt}}
+
+% Math commands
+\newcommand{\D}{\displaystyle}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+
+
+%-----------------------------------------------------------------------------
+\begin{document}
+
+\noindent Université Paul Sabatier -- Toulouse III \hfill L2 BCP - Année 2025-2026 \\
+\noindent Introduction aux statistiques
+
+\vspace{1.5cm}
+
+\begin{center}
+    {\huge\bfseries Corrigé de l'Examen de Mathématiques}\\
+    \vspace{0.5cm}
+    {\large Mardi 6 janvier 2026} \\
+    {\bf Durée 1h30}
+\end{center}
+
+\vspace{1cm}
+
+\begin{center}
+\fbox{
+\begin{minipage}{0.9\linewidth}
+\centering
+\textbf{\large Barème de correction (Total sur 20 points)}
+\vspace{5pt}
+
+\begin{itemize}
+    \item \textbf{Exercice 1 : 3.5 points}
+        \begin{itemize}
+            \item Question 1 : 2 pts
+            \item Question 2 : 0.5 pt
+            \item Question 3 : 1 pt
+        \end{itemize}
+    \item \textbf{Exercice 2 : 3.5 points}
+        \begin{itemize}
+            \item Question 1 : 1.5 pts
+            \item Question 2 : 0.5 pt
+            \item Question 3 : 1.5 pts
+        \end{itemize}
+    \item \textbf{Exercice 3 : 4.5 points}
+        \begin{itemize}
+            \item Question 1 (Hypothèses) : 1.5 pts
+            \item Question 2 (Loi de la variable de test) : 0.5 pt
+            \item Question 3 (Zone critique) : 1 pt
+            \item Question 4 (Calcul du paramètre) : 0.5 pt
+            \item Question 5 (Conclusion + p-valeur) : 1 pt
+            \item \textit{Note : Un test bilatéral correct et cohérent rapporte la moitié des points (2.25/4.5).}
+        \end{itemize}
+    \item \textbf{Exercice 4 : 4 points}
+        \begin{itemize}
+            \item Hypothèses : 0.5 pt
+            \item Calcul de $\hat{p}$ et des proportions : 0.5 pt
+            \item Calcul de $t$ : 0.5 pt
+            \item Conditions de validité : 0.5 pt
+            \item Seuil critique : 0.5 pt
+            \item Conclusion (rejet H0 + interprétation) : 1 pt
+            \item Degré de signification : 0.5 pt
+        \end{itemize}
+    \item \textbf{Exercice 5 : 4.5 points}
+        \begin{itemize}
+            \item Hypothèses : 0.5 pt
+            \item Effectifs théoriques/observés : 1 pt
+            \item Conditions de validité : 0.5 pt
+            \item ddl et seuil critique : 0.5 pt
+            \item Calcul de $\chi^2$ : 1 pt
+            \item Conclusion : 0.5 pt
+            \item Degré de signification : 0.5 pt
+        \end{itemize}
+\end{itemize}
+\end{minipage}
+}
+\end{center}
+
+\newpage
+
+%-----------------------------------------------------------------------------
+%                            SUJET
+%-----------------------------------------------------------------------------
+
+\noindent {\bf Exercice 1 : }
+On note $X$ la variable aléatoire qui représente la teneur en vitamine C (en $mg$)  
+d'une orange (de n'importe quelle variété) prise au hasard. 
+On note $\mu$ et $\sigma$ la moyenne et l'écart-type de $X$. On sait que
+$\mu = 53.2$ et $\sigma = 5.1$.
+On suppose que $X$ suit une loi normale $\mathcal{N}(\mu ; \sigma)$.
+
+\noindent {\bf 1)} Calculer la probabilité qu'une orange prise au hasard ait une teneur en vitamine C 
+comprise entre $46\, mg$ et $55 \,mg$.
+
+\noindent {\bf 2)} Que vaut la probabilité qu'une orange prise au hasard ait une teneur en vitamine C égale à $53.2\, mg$ (justifier) ?
+
+\noindent {\bf 3)}  On sait qu'il faut en général 3 oranges pour faire un verre de jus d'orange.
+On note $Y$ la variable aléatoire qui représente la teneur en vitamine C d'un verre de jus d'orange  pris 
+au hasard (les trois oranges étant prises de façon indépendante). 
+Quelle est la loi de probabilité de $Y$ (justifier) ? Précisez les paramètres de cette loi. \\
+
+\begin{sol}
+\noindent {\bf 1)} On cherche $P(46 \le X \le 55)$ avec $X \sim \mathcal{N}(53.2, 5.1)$. On centre et on réduit la variable :
+\[ Z = \frac{X - \mu}{\sigma} = \frac{X - 53.2}{5.1} \sim \mathcal{N}(0, 1) \]
+On a donc :
+\begin{align*}
+P(46 \le X \le 55) &= P\left(\frac{46 - 53.2}{5.1} \le Z \le \frac{55 - 53.2}{5.1}\right) \\
+&= P(-1.41 \le Z \le 0.35) \\
+&= P(Z \le 0.35) - P(Z \le -1.41) \\
+&= P(Z \le 0.35) - (1 - P(Z \le 1.41))
+\end{align*}
+En utilisant la table de la loi normale centrée réduite, on trouve $\Phi(0.35) \approx 0.6368$ et $\Phi(1.41) \approx 0.9207$.
+\[ P(46 \le X \le 55) \approx 0.6368 - (1 - 0.9207) = 0.6368 - 0.0793 = 0.5575 \]
+La probabilité est d'environ $55.75\,\%$.
+
+\noindent {\bf 2)} La variable aléatoire $X$ suit une loi normale, qui est une loi de probabilité continue. Pour une variable aléatoire continue, la probabilité qu'elle prenne une valeur exacte est nulle.
+\[ P(X = 53.2) = 0 \]
+
+\noindent {\bf 3)} Soient $X_1, X_2, X_3$ les variables aléatoires représentant la teneur en vitamine C de trois oranges prises indépendamment. Elles suivent toutes la même loi $\mathcal{N}(53.2, 5.1)$.
+La variable aléatoire $Y$ est la somme de ces trois variables : $Y = X_1 + X_2 + X_3$.
+Une propriété de la loi normale est que la somme de variables aléatoires normales indépendantes suit également une loi normale.
+L'espérance de $Y$ est la somme des espérances :
+\[ E[Y] = E[X_1] + E[X_2] + E[X_3] = 3 \times \mu = 3 \times 53.2 = 159.6 \, mg \]
+La variance de $Y$ est la somme des variances (car les variables sont indépendantes) :
+\[ V(Y) = V(X_1) + V(X_2) + V(X_3) = 3 \times \sigma^2 = 3 \times (5.1)^2 = 3 \times 26.01 = 78.03 \]
+L'écart-type de $Y$ est donc $\sigma_Y = \sqrt{78.03} = \sigma \sqrt{3} \approx 8.83 \, mg$.
+La loi de $Y$ est donc une loi normale de paramètres $\mu_Y = 159.6$ et $\sigma_Y \approx 8.83$.
+\[ Y \sim \mathcal{N}(159.6, 8.83) \]
+\end{sol}
+
+\bigskip
+
+
+\noindent {\bf Exercice 2 : }
+On note $Z$ la variable aléatoire qui représente le pH d'un jus d'orange. On notera $\mu$ et $\sigma$ la
+moyenne et l'écart-type de $Z$. On suppose que $Z$ suit une loi normale. 
+On note $M$ et $S$ les estimateurs de $\mu$ et $\sigma$ sur des échantillons de taille $n=19$.
+
+On a mesuré le pH de 19 jus d'orange, ce qui a donné la série statistique $z_1,\hdots, z_{19}$.
+On a ensuite calculé 
+$\displaystyle \sum_{k=1}^{19} z_k \approx 78$ et $\displaystyle \sum_{k=1}^{19} z_k^2 \approx 331$.
+
+\noindent {\bf 1)} Calculer une estimation de $\mu$ et $\sigma$.
+
+\noindent {\bf 2)} Quelle est la loi de probabilité de la variable aléatoire 
+$\displaystyle T=\frac{M-\mu}{S/\sqrt{19}}$ ?
+
+\noindent {\bf 3)} Déterminer un intervalle de confiance à $95\%$ de $\mu$.\\
+
+\begin{sol}
+\noindent {\bf 1)} L'estimation ponctuelle de la moyenne $\mu$ est la moyenne empirique $m$ :
+\[ m = \frac{1}{n} \sum_{k=1}^{19} z_k = \frac{78}{19} \approx 4.105 \]
+L'estimation ponctuelle (non biaisée) de l'écart-type $\sigma$ est l'écart-type empirique corrigé $s$ :
+\[ s^2 = \frac{1}{n-1} \left( \sum_{k=1}^{19} z_k^2 - n \cdot m^2 \right) = \frac{1}{18} \left( 331 - 19 \times \left(\frac{78}{19}\right)^2 \right) = \frac{1}{18} \left( 331 - \frac{78^2}{19} \right) \]
+\[ s^2 = \frac{1}{18} (331 - 319.158) \approx \frac{11.842}{18} \approx 0.658 \]
+\[ s = \sqrt{0.658} \approx 0.811 \]
+
+\noindent {\bf 2)} La variable aléatoire $Z$ suit une loi normale, mais son écart-type $\sigma$ est inconnu et estimé à partir de l'échantillon. La taille de l'échantillon $n=19$ est petite ($<30$). Dans ces conditions, la variable de test normalisée suit une loi de Student à $n-1$ degrés de liberté.
+\[ T=\frac{M-\mu}{S/\sqrt{19}} \sim \mathcal{T}_{n-1} = \mathcal{T}_{18} \]
+
+\noindent {\bf 3)} L'intervalle de confiance pour $\mu$ à $95\%$ est donné par :
+\[ I_C = \left[ m - t_{crit} \frac{s}{\sqrt{n}}, m + t_{crit} \frac{s}{\sqrt{n}} \right] \]
+Où $t_{crit}$ est la valeur critique de la loi de Student $\mathcal{T}_{18}$ pour un risque $\alpha=0.05$ (bilatéral). On cherche $t_{0.05, 18}$ dans la table, qui vaut $2.101$.
+\[ I_C = \left[ 4.105 - 2.101 \times \frac{0.811}{\sqrt{19}}, 4.105 + 2.101 \times \frac{0.811}{\sqrt{19}} \right] \]
+\[ I_C = \left[ 4.105 - 2.101 \times 0.186, 4.105 + 2.101 \times 0.186 \right] \]
+\[ I_C = [4.105 - 0.391, 4.105 + 0.391] \]
+\[ I_C \approx [3.714, 4.496] \]
+On est confiant à $95\%$ que la vraie moyenne $\mu$ du pH des jus d'orange se situe dans cet intervalle.
+\end{sol}
+
+
+\noindent {\bf Exercice 3 : }
+On sait que la vitamine C des oranges qu'on consomme se retrouve ensuite forcément dans le sang. 
+On souhaite savoir à quel point ce phénomène est important. On se demande si la consommation régulière d'une orange
+par jour augmente réellement la teneur en vitamine C dans le sang (en $mg/l$).
+
+On note $\mu_1$ la teneur moyenne en vitamine C dans le sang des individus qui consomment une orange par jour, et
+ $\mu_2$ la teneur moyenne en vitamine C dans le sang des individus qui ne consomment pas d'orange.
+
+On a considéré un échantillon de 49 individus qui ont consommé une orange chaque jour pendant un mois. On a alors 
+calculé la teneur moyenne en vitamine C dans le sang $m_1=32$ et un écart-type empirique $s_1=6,2$.
+
+On a considéré un second échantillon de  45 individus qui ont eu la même alimentation mais sans consommer d'orange.
+On a alors calculé la teneur moyenne en vitamine C dans le sang $m_2=30$ et un écart-type empirique $s_2=6,6$.
+
+\noindent {\bf 1)} Quel type de test va-t-on faire ? Donner l'hypothèse testée ainsi que l'hypothèse alternative.
+
+\noindent {\bf 2)} Quelle est la loi de probabilité de la variable aléatoire du test (justifiez) ?
+
+\noindent {\bf 3)} Au risque d'erreur 0.05, quelle est la zone critique ?
+
+\noindent {\bf 4)} Calculer le paramètre $t$ du test.
+
+\noindent {\bf 5)} Quelle est la conclusion du test ? Donner le degré de signification si nécessaire.
+
+\begin{sol}
+\noindent {\bf 1)} On compare les moyennes de deux échantillons indépendants de grande taille ($n_1=49 > 30$ et $n_2=45 > 30$). On va donc effectuer un test de comparaison de deux moyennes. La question est de savoir si la consommation d'oranges "augmente" la teneur, ce qui suggère un test unilatéral.
+\begin{itemize}
+    \item \textbf{Hypothèse nulle ($H_0$)} : La consommation d'une orange par jour n'a pas d'effet sur la teneur moyenne en vitamine C.
+    \[ H_0: \mu_1 = \mu_2 \quad (\text{ou } \mu_1 - \mu_2 = 0) \]
+    \item \textbf{Hypothèse alternative ($H_1$)} : La consommation d'une orange par jour augmente la teneur moyenne en vitamine C.
+    \[ H_1: \mu_1 > \mu_2 \quad (\text{ou } \mu_1 - \mu_2 > 0) \]
+\end{itemize}
+
+\noindent {\bf 2)} Les tailles des échantillons $n_1$ et $n_2$ sont grandes. D'après le théorème central limite, la variable de test suit approximativement une loi normale centrée réduite $\mathcal{N}(0, 1)$.
+\[ T = \frac{(m_1 - m_2) - (\mu_1 - \mu_2)}{\sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}} \approx \mathcal{N}(0, 1) \text{ sous } H_0 \]
+
+\noindent {\bf 3)} Pour un test unilatéral à droite avec un risque $\alpha = 0.05$, la zone critique (ou zone de rejet de $H_0$) est déterminée par la valeur critique $z_{1-\alpha}$ de la loi $\mathcal{N}(0, 1)$.
+\[ z_{0.95} \approx 1.645 \]
+La zone critique est donc $W = [1.645, +\infty[$.
+
+\noindent {\bf 4)} On calcule la valeur de la statistique de test $t_{obs}$ :
+\[ t_{obs} = \frac{m_1 - m_2}{\sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}} = \frac{32 - 30}{\sqrt{\frac{6.2^2}{49} + \frac{6.6^2}{45}}} = \frac{2}{\sqrt{\frac{38.44}{49} + \frac{43.56}{45}}} \]
+\[ t_{obs} = \frac{2}{\sqrt{0.7845 + 0.968}} = \frac{2}{\sqrt{1.7525}} \approx \frac{2}{1.3238} \approx 1.511 \]
+
+\noindent {\bf 5)} La valeur observée $t_{obs} \approx 1.511$ n'appartient pas à la zone critique $W = [1.645, +\infty[$.
+On ne rejette donc pas l'hypothèse nulle $H_0$ au seuil de $5\%$.
+\textbf{Conclusion} : L'étude n'a pas mis en évidence une augmentation statistiquement significative de la teneur en vitamine C dans le sang chez les consommateurs d'oranges, au risque d'erreur de $5\%$.
+\textbf{Degré de signification (p-valeur)} : La p-valeur pour ce test unilatéral est $P(Z > t_{obs}) = P(Z > 1.511)$.
+\[ p\text{-valeur} = 1 - \Phi(1.511) \approx 1 - 0.9345 = 0.0655 \]
+Comme la p-valeur ($6.55\%$) est supérieure au risque $\alpha$ ($5\%$), on confirme la décision de ne pas rejeter $H_0$. Le résultat n'est pas significatif à $5\%$, mais il le serait à un seuil de $10\%$.
+\end{sol}
+
+
+\noindent {\bf Exercice 4 : }
+Les oranges sanguines présentent une coloration rouge due à la présence d'un colorant, l'anthocyanine. On en produit beaucoup en Sicile, par exemple. On soupçonne que la présence de ce colorant dans les oranges vient du sol mais ce n'est peut-être pas le seul facteur. On a ainsi comparé les oranges venant de deux endroits de Sicile dont les sols sont similaires mais qui ne présentent pas exactement les mêmes caractéristiques météorologiques.
+
+Sur la partie nord de l'île, l'évolution de la température est assez douce et régulière et les écarts de température restent raisonnables. On a pris un échantillon de 120 oranges de cette région. Dans cet échantillon, 65 oranges étaient sanguines.
+Sur la partie sud de l'île, le climat est plus incertain et on constate de forts écarts de température, en particulier entre le jour très chaud et la nuit assez froide. On a pris  un échantillon de 110 oranges de cette région. Dans cet échantillon, 80 oranges étaient sanguines.
+
+En utilisant un test statistique (dont vous préciserez correctement l'hypothèse), dites si cette étude a mis en évidence une différence significative de la production d'oranges sanguines entre ces deux régions de Sicile. Si oui, précisez le climat qui semble favoriser la production des oranges sanguines. Précisez le degré de signification si nécessaire.
+
+\begin{sol}
+On effectue un test de comparaison de deux proportions sur des échantillons indépendants. Soit $p_1$ la proportion d'oranges sanguines dans le nord et $p_2$ celle dans le sud.
+
+\textbf{1. Hypothèses}
+On cherche une "différence significative", donc on fait un test bilatéral.
+\begin{itemize}
+    \item $H_0$: La proportion d'oranges sanguines est la même dans les deux régions ($p_1 = p_2$).
+    \item $H_1$: Les proportions sont différentes ($p_1 \neq p_2$).
+\end{itemize}
+
+\textbf{2. Calcul des proportions observées}
+\begin{itemize}
+    \item Échantillon 1 (Nord) : $n_1 = 120$, $k_1 = 65$. Fréquence $f_1 = \frac{65}{120} \approx 0.542$.
+    \item Échantillon 2 (Sud) : $n_2 = 110$, $k_2 = 80$. Fréquence $f_2 = \frac{80}{110} \approx 0.727$.
+\end{itemize}
+Sous $H_0$, on estime la proportion commune $\hat{p}$ :
+\[ \hat{p} = \frac{k_1 + k_2}{n_1 + n_2} = \frac{65 + 80}{120 + 110} = \frac{145}{230} \approx 0.630 \]
+
+\textbf{3. Conditions de validité}
+On vérifie que les effectifs théoriques sont suffisants (généralement $>5$).
+$n_1\hat{p} = 120 \times 0.63 = 75.6$, $n_1(1-\hat{p}) = 44.4$.
+$n_2\hat{p} = 110 \times 0.63 = 69.3$, $n_2(1-\hat{p}) = 40.7$.
+Toutes les valeurs sont $>5$, les conditions sont remplies.
+
+\textbf{4. Statistique de test}
+La statistique de test suit une loi $\mathcal{N}(0,1)$ sous $H_0$.
+\[ t_{obs} = \frac{f_1 - f_2}{\sqrt{\hat{p}(1-\hat{p})\left(\frac{1}{n_1} + \frac{1}{n_2}\right)}} = \frac{0.542 - 0.727}{\sqrt{0.630 \times 0.370 \left(\frac{1}{120} + \frac{1}{110}\right)}} \]
+\[ t_{obs} = \frac{-0.185}{\sqrt{0.2331 (0.00833 + 0.00909)}} = \frac{-0.185}{\sqrt{0.2331 \times 0.01742}} = \frac{-0.185}{\sqrt{0.00406}} \approx \frac{-0.185}{0.0637} \approx -2.904 \]
+
+\textbf{5. Zone critique et décision}
+Pour un test bilatéral au risque $\alpha = 0.05$, la zone de rejet est $W = ]-\infty, -1.96] \cup [1.96, +\infty[$.
+Notre valeur $t_{obs} \approx -2.904$ est dans la zone de rejet. On rejette donc $H_0$.
+
+\textbf{6. Conclusion}
+L'étude a mis en évidence une différence statistiquement significative de la production d'oranges sanguines entre les deux régions au seuil de $5\%$.
+La proportion observée dans le sud ($f_2 \approx 72.7\%$) est supérieure à celle du nord ($f_1 \approx 54.2\%$). Le climat du sud, avec de forts écarts de température, semble donc favoriser la production d'oranges sanguines.
+
+\textbf{7. Degré de signification (p-valeur)}
+$p = 2 \times P(Z > |t_{obs}|) = 2 \times P(Z > 2.904)$.
+\[ p = 2 \times (1 - \Phi(2.90)) \approx 2 \times (1 - 0.9981) = 0.0038 \]
+La p-valeur est très faible ($0.38\%$), bien inférieure à $1\%$. Le résultat est donc très significatif.
+\end{sol}
+
+\bigskip
+
+\noindent {\bf Exercice 5 : }
+On distingue quatre groupes d'oranges : le oranges {\it douces}, les {\it navelines}, les {\it pigmentées} et les oranges 
+{\it sans acidité}.
+On sait qu'en Italie, la répartition des préférences des consommateurs est la suivante :
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Orange & douce  & naveline & pigmentée & sans acidité \\ \hline
+Pourcentage & $45\,\%$  & $36\,\%$  & $13\,\%$ & $6\,\%$ \\\hline
+\end{tabular}
+\end{center}
+
+Sur un échantillon de 321 individus vivant au Portugal, on a mesuré la répartition des préférences :
+120 individus préfèrent les oranges douces, 136 préfèrent les navelines, 
+51 préfèrent les pigmentées, et enfin 14 préfèrent les oranges sans acidité.
+
+A l'aide d'un test statistique (dont vous préciserez correctement l'hypothèse), dites si les préférences des oranges sont différentes entre l'Italie et le Portugal. Préciser le degré de signification si nécessaire.
+
+\begin{sol}
+On effectue un test d'ajustement du Chi-deux ($\chi^2$) pour comparer la distribution observée au Portugal à la distribution théorique italienne.
+
+\textbf{1. Hypothèses}
+\begin{itemize}
+    \item $H_0$ : Les préférences des consommateurs au Portugal suivent la même répartition qu'en Italie.
+    \item $H_1$ : Les préférences des consommateurs au Portugal sont différentes de celles en Italie.
+\end{itemize}
+
+\textbf{2. Effectifs observés et théoriques}
+Taille de l'échantillon : $n = 120 + 136 + 51 + 14 = 321$.
+\begin{center}
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+Catégorie & Douce & Naveline & Pigmentée & Sans acidité \\ \hline
+\textbf{Observés (O)} & 120 & 136 & 51 & 14 \\ \hline
+\textbf{Théoriques (E)} & $321 \times 0.45$ & $321 \times 0.36$ & $321 \times 0.13$ & $321 \times 0.06$ \\
+ & $=144.45$ & $=115.56$ & $=41.73$ & $=19.26$ \\ \hline
+\end{tabular}
+\end{center}
+
+\textbf{3. Conditions de validité}
+Tous les effectifs théoriques $E_i$ sont supérieurs à 5. La condition d'application du test du $\chi^2$ est respectée.
+
+\textbf{4. Statistique de test}
+La statistique de test est : $\chi^2_{obs} = \sum_{i=1}^k \frac{(O_i - E_i)^2}{E_i}$
+\begin{align*}
+\chi^2_{obs} &= \frac{(120 - 144.45)^2}{144.45} + \frac{(136 - 115.56)^2}{115.56} + \frac{(51 - 41.73)^2}{41.73} + \frac{(14 - 19.26)^2}{19.26} \\
+&= \frac{(-24.45)^2}{144.45} + \frac{(20.44)^2}{115.56} + \frac{(9.27)^2}{41.73} + \frac{(-5.26)^2}{19.26} \\
+&= 4.137 + 3.615 + 2.057 + 1.436 \\
+&= 11.245
+\end{align*}
+
+\textbf{5. Zone critique et décision}
+Le nombre de degrés de liberté (ddl) est $k-1 = 4-1 = 3$.
+Au seuil de risque $\alpha = 0.05$, la valeur critique dans la table du $\chi^2$ à 3 ddl est $\chi^2_{0.05, 3} = 7.815$.
+La zone critique est $W = [7.815, +\infty[$.
+Notre valeur $\chi^2_{obs} \approx 11.245$ est dans la zone critique. On rejette donc $H_0$.
+
+\textbf{6. Conclusion}
+Au risque d'erreur de $5\%$, on peut conclure que les préférences des consommateurs d'oranges au Portugal sont significativement différentes de celles des consommateurs en Italie.
+
+\textbf{7. Degré de signification (p-valeur)}
+On regarde la table du $\chi^2$ pour 3 ddl :
+$\chi^2_{0.025, 3} = 9.348$
+$\chi^2_{0.01, 3} = 11.345$
+Notre valeur (11.245) est entre ces deux seuils.
+La p-valeur est donc comprise entre $0.01$ et $0.025$.
+Le résultat est très significatif.
+\end{sol}
+
+\end{document}
